@@ -365,13 +365,13 @@ __exportStar(require("./SearchFilter"), exports);
 },{"./Chapter":5,"./ChapterDetails":6,"./Constants":7,"./DynamicUI":23,"./HomeSection":24,"./Languages":25,"./Manga":26,"./MangaTile":27,"./MangaUpdate":28,"./PagedResults":29,"./RawData":30,"./RequestHeaders":31,"./RequestInterceptor":32,"./RequestManager":33,"./RequestObject":34,"./ResponseObject":35,"./SearchField":36,"./SearchFilter":37,"./SearchRequest":38,"./SourceInfo":39,"./SourceManga":40,"./SourceStateManager":41,"./SourceTag":42,"./TagSection":43,"./TrackedManga":44,"./TrackedMangaChapterReadAction":45,"./TrackerActionQueue":46}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nettruyen = exports.NetTruyenInfo = void 0;
+exports.Nettruyen = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = 'https://nettruyen.live/';
-exports.NetTruyenInfo = {
+exports.NettruyenInfo = {
     version: '1.0.0',
     name: 'NetTruyen',
-    icon: 'icon.png',
+    icon: 'icon.jpg',
     author: 'Hoang3409',
     authorWebsite: 'https://github.com/hoang3402',
     description: 'Extension that pulls manga from NetTruyen.',
@@ -410,6 +410,25 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             }
         });
     }
+    async getHomePageSections(sectionCallback) {
+        let newAdded = createHomeSection({
+            id: 'new_added',
+            title: "Truyện Mới Thêm Gần Đây",
+            view_more: true,
+        });
+        //Load empty sections
+        sectionCallback(newAdded);
+        //New Updates
+        let url = `${DOMAIN}`;
+        let request = createRequestObject({
+            url: url,
+            method: "GET",
+        });
+        let data = await this.requestManager.schedule(request, 1);
+        let $ = this.cheerio.load(data.data);
+        newAdded.items = this.parseNewUpdatedSection($);
+        sectionCallback(newAdded);
+    }
     getMangaDetails(mangaId) {
         throw new Error("Method not implemented.");
     }
@@ -421,6 +440,24 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     getSearchResults(query, metadata) {
         throw new Error("Method not implemented.");
+    }
+    parseNewUpdatedSection($) {
+        let newUpdatedItems = [];
+        for (let manga of $('div.item', 'div.row').toArray().splice(0, 20)) {
+            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
+            const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
+            const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
+            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
+            if (!id || !title)
+                continue;
+            newUpdatedItems.push(createMangaTile({
+                id: id,
+                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
+                title: createIconText({ text: title }),
+                subtitleText: createIconText({ text: subtitle }),
+            }));
+        }
+        return newUpdatedItems;
     }
 }
 exports.Nettruyen = Nettruyen;
