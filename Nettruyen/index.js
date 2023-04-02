@@ -486,7 +486,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     parseViewMoreItems($) {
         let newUpdatedItems = [];
-        for (let item of $('div.row div.item')) {
+        for (let item of $('div.row', 'div.item').toArray()) {
             const title = $('figure.clearfix > figcaption > h3 > a', item).first().text();
             const id = $('figure.clearfix > div.image > a', item).attr('href')?.split('/').pop();
             const image = $('figure.clearfix > div.image > a > img', item).first().attr('data-original');
