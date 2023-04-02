@@ -369,7 +369,7 @@ exports.Nettruyen = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = 'https://www.nettruyenvt.com/';
 exports.NettruyenInfo = {
-    version: '1.0.2',
+    version: '1.0.3',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
@@ -487,7 +487,18 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     parseViewMoreItems($) {
         let newUpdatedItems = [];
         for (let item of $('div.row div.item')) {
-            console.log(item.find("a > img"));
+            const title = $('figure.clearfix > figcaption > h3 > a', item).first().text();
+            const id = $('figure.clearfix > div.image > a', item).attr('href')?.split('/').pop();
+            const image = $('figure.clearfix > div.image > a > img', item).first().attr('data-original');
+            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", item).last().text().trim();
+            if (!id || !title)
+                continue;
+            newUpdatedItems.push(createMangaTile({
+                id: id,
+                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
+                title: createIconText({ text: title }),
+                subtitleText: createIconText({ text: subtitle }),
+            }));
         }
         return newUpdatedItems;
     }
