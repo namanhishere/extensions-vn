@@ -369,7 +369,7 @@ exports.Nettruyen = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = 'https://www.nettruyenvt.com/';
 exports.NettruyenInfo = {
-    version: '1.0.1',
+    version: '1.0.2',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
@@ -413,7 +413,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
             id: 'new_added',
-            title: "Truyện Mới Thêm Gần Đây",
+            title: "Truyện Mới Thêm",
             view_more: true,
         });
         //Load empty sections
@@ -443,7 +443,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     parseNewUpdatedSection($) {
         let newUpdatedItems = [];
-        for (let manga of $('div.item', 'div.row').toArray().splice(0, 20)) {
+        for (let manga of $('div.item', 'div.row').toArray().splice(0, 10)) {
             const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
             const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
             const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
@@ -456,6 +456,38 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                 title: createIconText({ text: title }),
                 subtitleText: createIconText({ text: subtitle }),
             }));
+        }
+        return newUpdatedItems;
+    }
+    async getViewMoreItems(homepageSectionId, metadata) {
+        let page = metadata?.page ?? 1;
+        let param = "";
+        let url = "";
+        switch (homepageSectionId) {
+            case "new_added":
+                param = `?status=-1&sort=15&page=${page}`;
+                url = `${DOMAIN}tim-truyen`;
+                break;
+            default:
+                throw new Error("Requested to getViewMoreItems for a section ID which doesn't exist");
+        }
+        const request = createRequestObject({
+            url,
+            method: 'GET',
+            param,
+        });
+        const response = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(response.data);
+        const manga = this.parseViewMoreItems($);
+        return createPagedResults({
+            results: manga,
+            metadata
+        });
+    }
+    parseViewMoreItems($) {
+        let newUpdatedItems = [];
+        for (let item of $('div.row div.item')) {
+            console.log(item.find("a > img"));
         }
         return newUpdatedItems;
     }
