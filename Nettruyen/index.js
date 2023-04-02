@@ -444,7 +444,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     parseNewUpdatedSection($) {
         let newUpdatedItems = [];
         for (let manga of $('div.item', 'div.row').toArray().splice(0, 10)) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
+            const title = manga.find('figcaption > h3 > a').text();
             const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
             const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
             const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
@@ -488,7 +488,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         let newUpdatedItems = [];
         for (let item of $('div.row', 'div.item').toArray()) {
             const title = item.find('figcaption > h3 > a').text();
-            const id = $('figure.clearfix > div.image > a', item).attr('href')?.split('/').pop();
+            const id = item.find('ul.comic-item').attr('data-id');
             const image = $('figure.clearfix > div.image > a > img', item).first().attr('data-original');
             if (!id || !title)
                 continue;
