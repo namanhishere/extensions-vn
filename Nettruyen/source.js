@@ -479,6 +479,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         const response = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(response.data);
         const manga = this.parseViewMoreItems($);
+        console.log(manga);
         return createPagedResults({
             results: manga,
             metadata
