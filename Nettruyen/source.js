@@ -367,9 +367,9 @@ __exportStar(require("./SearchFilter"), exports);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Nettruyen = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
-const DOMAIN = 'https://nettruyen.live/';
+const DOMAIN = 'https://www.nettruyenvt.com/';
 exports.NettruyenInfo = {
-    version: '1.0.0',
+    version: '1.0.1',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
@@ -419,7 +419,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         //Load empty sections
         sectionCallback(newAdded);
         //New Updates
-        let url = `${DOMAIN}`;
+        let url = `${DOMAIN}hot`;
         let request = createRequestObject({
             url: url,
             method: "GET",
