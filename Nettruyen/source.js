@@ -369,7 +369,7 @@ exports.Nettruyen = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = 'https://www.nettruyenvt.com';
 exports.NettruyenInfo = {
-    version: '1.0.1',
+    version: '1.0.3',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
@@ -413,7 +413,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
             id: 'new_added',
-            title: "Truyện Mới Thêm Gần Đây",
+            title: "Truyện Mới Thêm",
             view_more: true,
         });
         //Load empty sections
@@ -489,37 +489,105 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         }
     }
     async getChapterDetails(mangaId, chapterId) {
-        try {
-            const request = createRequestObject({
-                url: DOMAIN,
-                param: chapterId,
-                method: "GET",
-            });
-            const data = await this.requestManager.schedule(request, 1);
-            let $ = this.cheerio.load(data.data);
-            const pages = [];
-            for (let image of $('.page-chapter').toArray()) {
-                var link = $('div.page-chapter > img', image).attr('data-original');
-                if (link.indexOf('http') === -1) { //nếu link ko có 'http'
-                    pages.push('http:' + link);
-                }
-                else {
-                    pages.push(link);
-                }
+        const request = createRequestObject({
+            url: DOMAIN,
+            param: chapterId,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        let $ = this.cheerio.load(data.data);
+        const pages = [];
+        for (let image of $('.page-chapter').toArray()) {
+            var link = $('div.page-chapter > img', image).attr('data-original');
+            if (link.indexOf('http') === -1) { //nếu link ko có 'http'
+                pages.push('http:' + link);
             }
-            return createChapterDetails({
-                pages: pages,
-                longStrip: false,
-                id: chapterId,
-                mangaId: mangaId,
-            });
+            else {
+                pages.push(link);
+            }
         }
-        catch (e) {
-            throw new Error("Error: " + e);
-        }
+        return createChapterDetails({
+            pages: pages,
+            longStrip: false,
+            id: chapterId,
+            mangaId: mangaId,
+        });
     }
     async getSearchResults(query, metadata) {
-        throw new Error("Method not implemented.");
+        const tiles = [];
+        const request = createRequestObject({
+            url: `${DOMAIN}/Comic/Services/SuggestSearch.ashx`,
+            param: `?q=${encodeURIComponent(query.title)}`,
+            method: "GET",
+        });
+        let data;
+        try {
+            data = await this.requestManager.schedule(request, 1);
+        }
+        catch (error) {
+            console.log(`searchRequest failed with error: ${error}`);
+            return createPagedResults({
+                results: getServerUnavailableMangaTiles(),
+            });
+        }
+        let $ = this.cheerio.load(data.data);
+        for (let item of $('li').toArray()) {
+            tiles.push(createMangaTile({
+                id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, ''),
+                title: createIconText({ text: $('a > h3', item).text() }),
+                image: 'http:' + $('a > img', item).attr('src')
+            }));
+        }
+        if (tiles.length == 0) {
+            tiles.push(createMangaTile({
+                id: '',
+                title: createIconText({ text: $('ul > li').toArray().toString() }),
+                image: ''
+            }));
+            return createPagedResults({
+                results: tiles
+            });
+        }
+        return createPagedResults({
+            results: tiles,
+            metadata: metadata,
+        });
+    }
+    async getViewMoreItems(homepageSectionId, metadata) {
+        const page = metadata?.page ?? 1;
+        switch (homepageSectionId) {
+            case 'new_added':
+                break;
+            default:
+                throw new Error('Làm gì có page này?!');
+        }
+        const request = createRequestObject({
+            url: `${DOMAIN}/tim-truyen-nang-cao`,
+            param: `?page=${page}`,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+        const tiles = [];
+        for (let manga of $('div.item', 'div.row').toArray()) {
+            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
+            const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
+            const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
+            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
+            if (!id || !title)
+                continue;
+            tiles.push(createMangaTile({
+                id: id,
+                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
+                title: createIconText({ text: title }),
+                subtitleText: createIconText({ text: subtitle }),
+            }));
+        }
+        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
+        return createPagedResults({
+            results: tiles,
+            metadata: metadata,
+        });
     }
     parseNewUpdatedSection($) {
         let newUpdatedItems = [];
@@ -541,6 +609,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
 }
 exports.Nettruyen = Nettruyen;
+function getServerUnavailableMangaTiles() {
+    throw new Error("Function not implemented.");
+}
 
 },{"paperback-extensions-common":4}]},{},[48])(48)
 });
