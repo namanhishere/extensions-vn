@@ -466,7 +466,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         switch (homepageSectionId) {
             case "new_added":
                 param = `?status=-1&sort=15&page=${page}`;
-                url = `${DOMAIN}tim-truyen`;
+                url = `${DOMAIN}tim-truyen-nang-cao`;
                 break;
             default:
                 throw new Error("Requested to getViewMoreItems for a section ID which doesn't exist");
@@ -487,17 +487,15 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     parseViewMoreItems($) {
         let newUpdatedItems = [];
         for (let item of $('div.row', 'div.item').toArray()) {
-            const title = $('figure.clearfix > figcaption > h3 > a', item).first().text();
+            const title = item.find('figcaption > h3 > a').text();
             const id = $('figure.clearfix > div.image > a', item).attr('href')?.split('/').pop();
             const image = $('figure.clearfix > div.image > a > img', item).first().attr('data-original');
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", item).last().text().trim();
             if (!id || !title)
                 continue;
             newUpdatedItems.push(createMangaTile({
                 id: id,
                 image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
                 title: createIconText({ text: title }),
-                subtitleText: createIconText({ text: subtitle }),
             }));
         }
         return newUpdatedItems;
