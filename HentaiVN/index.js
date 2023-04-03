@@ -3054,7 +3054,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        for (const item of $('img')) {
+        for (const item of $('img').toArray()) {
             listUrlImage.push(item.attribs.src);
         }
         return createChapterDetails({
