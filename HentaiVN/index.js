@@ -2968,18 +2968,22 @@ __exportStar(require("./RawData"), exports);
 },{"./Chapter":10,"./ChapterDetails":12,"./Constants":13,"./DynamicUI":44,"./HomeSection":46,"./Languages":47,"./Manga":49,"./MangaTile":51,"./MangaUpdate":53,"./PagedResults":55,"./RawData":57,"./RequestHeaders":58,"./RequestInterceptor":59,"./RequestManager":61,"./RequestObject":63,"./ResponseObject":64,"./SearchField":66,"./SearchRequest":67,"./SourceInfo":68,"./SourceManga":70,"./SourceStateManager":72,"./SourceTag":73,"./TagSection":75,"./TrackedManga":77,"./TrackedMangaChapterReadAction":78,"./TrackerActionQueue":79}],82:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HentaiVN = exports.NettruyenInfo = void 0;
+exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = "https://hentaivn.tv";
-exports.NettruyenInfo = {
-    version: "1.0.0",
+exports.HentaiVNInfo = {
+    version: "1.0.1",
     name: "HentaiVN",
-    icon: "icon.jpg",
+    icon: "icon.png",
     author: "Hoang3409",
+    authorWebsite: 'https://github.com/hoang3402',
     description: "Extension that pulls manga from HentaiVN.",
     contentRating: paperback_extensions_common_1.ContentRating.ADULT,
     websiteBaseURL: DOMAIN,
-    sourceTags: [{ text: 'Hentai', type: paperback_extensions_common_1.TagType.RED }]
+    sourceTags: [{
+            text: 'Hentai',
+            type: paperback_extensions_common_1.TagType.RED
+        }]
 };
 class HentaiVN extends paperback_extensions_common_1.Source {
     constructor() {
