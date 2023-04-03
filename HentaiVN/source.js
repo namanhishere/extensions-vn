@@ -382,7 +382,7 @@ exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.0.2",
+    version: "1.0.4",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -417,19 +417,65 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             }
         });
     }
-    getMangaDetails(mangaId) {
+    async getMangaDetails(mangaId) {
+        const request = createRequestObject({
+            url: `${DOMAIN}${mangaId}`,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        let $ = this.cheerio.load(data.data);
+        return createManga({
+            id: mangaId.split('-')[0].replace('/', ''),
+            titles: [
+                $('div.page-info > h1 > a').text().trim()
+            ],
+            image: $('div.page-ava > img').attr('src'),
+            status: paperback_extensions_common_1.MangaStatus.ONGOING
+        });
+    }
+    async getChapters(mangaId) {
+        const idNumber = mangaId.split("-")[0].replace('/', '');
+        const chapters = [];
+        const request = createRequestObject({
+            url: `${DOMAIN}/list-showchapter.php`,
+            param: `?idchapshow=${idNumber}`,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        let $ = this.cheerio.load(data.data);
+        for (const item of $('tr')) {
+            chapters.push(createChapter({
+                id: $('a', item).attr('href').split('-')[1],
+                mangaId: idNumber,
+                chapNum: Number.parseInt($('h2', item).text().split(' ')[1]),
+                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
+            }));
+        }
+        return chapters;
+    }
+    async getChapterDetails(mangaId, chapterId) {
+        const listUrlImage = [];
+        const request = createRequestObject({
+            url: `${DOMAIN}/ajax_load_server.php`,
+            data: `server_id=${chapterId}&server_type=3`,
+            method: "POST",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        let $ = this.cheerio.load(data.data);
+        for (const item of $('img')) {
+            listUrlImage.push(item.attribs.src);
+        }
+        return createChapterDetails({
+            id: chapterId,
+            mangaId: mangaId,
+            pages: listUrlImage,
+            longStrip: false
+        });
+    }
+    async getSearchResults(query, metadata) {
         throw new Error("Method not implemented.");
     }
-    getChapters(mangaId) {
-        throw new Error("Method not implemented.");
-    }
-    getChapterDetails(mangaId, chapterId) {
-        throw new Error("Method not implemented.");
-    }
-    getSearchResults(query, metadata) {
-        throw new Error("Method not implemented.");
-    }
-    // 
+    // Sections
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
             id: 'new_added',
