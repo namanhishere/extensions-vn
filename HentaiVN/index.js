@@ -2968,30 +2968,20 @@ __exportStar(require("./RawData"), exports);
 },{"./Chapter":10,"./ChapterDetails":12,"./Constants":13,"./DynamicUI":44,"./HomeSection":46,"./Languages":47,"./Manga":49,"./MangaTile":51,"./MangaUpdate":53,"./PagedResults":55,"./RawData":57,"./RequestHeaders":58,"./RequestInterceptor":59,"./RequestManager":61,"./RequestObject":63,"./ResponseObject":64,"./SearchField":66,"./SearchRequest":67,"./SourceInfo":68,"./SourceManga":70,"./SourceStateManager":72,"./SourceTag":73,"./TagSection":75,"./TrackedManga":77,"./TrackedMangaChapterReadAction":78,"./TrackerActionQueue":79}],82:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nettruyen = exports.NettruyenInfo = void 0;
+exports.HentaiVN = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
-const DOMAIN = 'https://www.nettruyenvt.com';
+const DOMAIN = "https://hentaivn.tv";
 exports.NettruyenInfo = {
-    version: '1.0.3',
-    name: 'NetTruyen',
-    icon: 'icon.jpg',
-    author: 'Hoang3409',
-    authorWebsite: 'https://github.com/hoang3402',
-    description: 'Extension that pulls manga from NetTruyen.',
+    version: "1.0.0",
+    name: "HentaiVN",
+    icon: "icon.jpg",
+    author: "Hoang3409",
+    description: "Extension that pulls manga from HentaiVN.",
+    contentRating: paperback_extensions_common_1.ContentRating.ADULT,
     websiteBaseURL: DOMAIN,
-    contentRating: paperback_extensions_common_1.ContentRating.MATURE,
-    sourceTags: [
-        {
-            text: "Recommended",
-            type: paperback_extensions_common_1.TagType.BLUE
-        },
-        {
-            text: 'Notifications',
-            type: paperback_extensions_common_1.TagType.GREEN
-        }
-    ]
+    sourceTags: [{ text: 'Hentai', type: paperback_extensions_common_1.TagType.RED }]
 };
-class Nettruyen extends paperback_extensions_common_1.Source {
+class HentaiVN extends paperback_extensions_common_1.Source {
     constructor() {
         super(...arguments);
         this.requestManager = createRequestManager({
@@ -3013,18 +3003,30 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             }
         });
     }
+    getMangaDetails(mangaId) {
+        throw new Error("Method not implemented.");
+    }
+    getChapters(mangaId) {
+        throw new Error("Method not implemented.");
+    }
+    getChapterDetails(mangaId, chapterId) {
+        throw new Error("Method not implemented.");
+    }
+    getSearchResults(query, metadata) {
+        throw new Error("Method not implemented.");
+    }
+    // 
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
             id: 'new_added',
-            title: "Truyện Mới Thêm",
+            title: "Truyện Mới Cập Nhật",
             view_more: true,
         });
         //Load empty sections
         sectionCallback(newAdded);
         //New Updates
-        let url = `${DOMAIN}`;
         let request = createRequestObject({
-            url: url,
+            url: `${DOMAIN}/list-new2.php`,
             method: "GET",
         });
         let data = await this.requestManager.schedule(request, 1);
@@ -3032,184 +3034,19 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         newAdded.items = this.parseNewUpdatedSection($);
         sectionCallback(newAdded);
     }
-    async getMangaDetails(mangaId) {
-        try {
-            const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
-            const request = createRequestObject({
-                url: url,
-                method: "GET",
-            });
-            const data = await this.requestManager.schedule(request, 1);
-            let $ = this.cheerio.load(data.data);
-            var temp = $('#item-detail > div.detail-info > div > div.col-xs-4.col-image > img');
-            var image = 'http:' + temp.attr('src');
-            var titles = temp.attr('alt');
-            var des = $('#item-detail > div.detail-content > p').text();
-            var id = $('#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div').attr('data-id');
-            // var rating = $('div.star').attr('data-rating')!;
-            return createManga({
-                id: id,
-                author: "Nettruyen ăn cắp của ai đó",
-                artist: 'chịu á',
-                desc: des,
-                titles: [titles, id],
-                image: image,
-                status: 1,
-                rating: 5,
-                hentai: false,
-                tags: [],
-            });
-        }
-        catch (e) {
-            throw new Error("Error: " + e);
-        }
-    }
-    async getChapters(mangaId) {
-        const chapters = [];
-        const request = createRequestObject({
-            url: 'https://www.nettruyenvt.com/Comic/Services/ComicService.asmx/ProcessChapterList',
-            param: `?comicId=${mangaId}`,
-            method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1);
-        let list = typeof data.data === "string"
-            ? JSON.parse(data.data)
-            : data.data;
-        for (let chapter of list.chapters) {
-            chapters.push(createChapter({
-                id: chapter.url,
-                name: chapter.name,
-                mangaId: mangaId,
-                chapNum: Number.parseInt(String(chapter.name).split(' ').at(1)),
-                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
-            }));
-        }
-        return chapters;
-    }
-    async getChapterDetails(mangaId, chapterId) {
-        const request = createRequestObject({
-            url: DOMAIN,
-            param: chapterId,
-            method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1);
-        let $ = this.cheerio.load(data.data);
-        const pages = [];
-        for (let image of $('.page-chapter').toArray()) {
-            var link = $('div.page-chapter > img', image).attr('data-original');
-            if (link.indexOf('http') === -1) { //nếu link ko có 'http'
-                pages.push('http:' + link);
-            }
-            else {
-                pages.push(link);
-            }
-        }
-        return createChapterDetails({
-            pages: pages,
-            longStrip: false,
-            id: chapterId,
-            mangaId: mangaId,
-        });
-    }
-    async getSearchResults(query, metadata) {
-        const tiles = [];
-        const request = createRequestObject({
-            url: `${DOMAIN}/Comic/Services/SuggestSearch.ashx`,
-            param: `?q=${encodeURIComponent(query.title)}`,
-            method: "GET",
-        });
-        let data;
-        try {
-            data = await this.requestManager.schedule(request, 1);
-        }
-        catch (error) {
-            console.log(`searchRequest failed with error: ${error}`);
-            return createPagedResults({
-                results: getServerUnavailableMangaTiles(),
-            });
-        }
-        let $ = this.cheerio.load(data.data);
-        for (let item of $('li').toArray()) {
-            tiles.push(createMangaTile({
-                id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, ''),
-                title: createIconText({ text: $('a > h3', item).text() }),
-                image: 'http:' + $('a > img', item).attr('src')
-            }));
-        }
-        if (tiles.length == 0) {
-            tiles.push(createMangaTile({
-                id: '',
-                title: createIconText({ text: $('ul > li').toArray().toString() }),
-                image: ''
-            }));
-            return createPagedResults({
-                results: tiles
-            });
-        }
-        return createPagedResults({
-            results: tiles,
-            metadata: metadata,
-        });
-    }
-    async getViewMoreItems(homepageSectionId, metadata) {
-        const page = metadata?.page ?? 1;
-        switch (homepageSectionId) {
-            case 'new_added':
-                break;
-            default:
-                throw new Error('Làm gì có page này?!');
-        }
-        const request = createRequestObject({
-            url: `${DOMAIN}/tim-truyen-nang-cao`,
-            param: `?page=${page}`,
-            method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1);
-        const $ = this.cheerio.load(data.data);
-        const tiles = [];
-        for (let manga of $('div.item', 'div.row').toArray()) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
-            const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
-            const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
-            if (!id || !title)
-                continue;
-            tiles.push(createMangaTile({
-                id: id,
-                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
-                title: createIconText({ text: title }),
-                subtitleText: createIconText({ text: subtitle }),
-            }));
-        }
-        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
-        return createPagedResults({
-            results: tiles,
-            metadata: metadata,
-        });
-    }
     parseNewUpdatedSection($) {
-        let newUpdatedItems = [];
-        for (let manga of $('div.item', 'div.row').toArray().splice(0, 10)) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
-            const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
-            const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
-            if (!id || !title)
-                continue;
-            newUpdatedItems.push(createMangaTile({
-                id: id,
-                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
-                title: createIconText({ text: title }),
-                subtitleText: createIconText({ text: subtitle }),
+        const items = [];
+        for (let item of $('ul.page-random').toArray()) {
+            items.push(createMangaTile({
+                id: $('div.img-same > a', item).attr('href'),
+                title: createIconText({ text: '' }),
+                image: ""
             }));
         }
-        return newUpdatedItems;
+        return items;
     }
 }
-exports.Nettruyen = Nettruyen;
-function getServerUnavailableMangaTiles() {
-    throw new Error("Function not implemented.");
-}
+exports.HentaiVN = HentaiVN;
 
 },{"paperback-extensions-common":8}]},{},[82])(82)
 });
