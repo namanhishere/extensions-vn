@@ -453,7 +453,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         for (let item of $('ul.page-random').toArray()) {
             items.push(createMangaTile({
                 id: $('div.img-same > a', item).attr('href'),
-                title: createIconText({ text: '' }),
+                title: createIconText({ text: $('h2 > b').text() }),
                 image: ""
             }));
         }
