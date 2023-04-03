@@ -19,7 +19,7 @@ describe("HentaiVN", function () {
     })
     describe("getChapters()", function () {
         it('Get Chapters', async () => {
-            var data = await hentaivn.getChapters('29301');
+            var data = await hentaivn.getChapters('33390');
             expect(data, 'Null').to.be.not.empty
             // console.debug(data);
         })
