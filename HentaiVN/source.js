@@ -434,11 +434,10 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
     }
     async getChapters(mangaId) {
-        const idNumber = mangaId.split("-")[0].replace('/', '');
         const chapters = [];
         const request = createRequestObject({
             url: `${DOMAIN}/list-showchapter.php`,
-            param: `?idchapshow=${idNumber}`,
+            param: `?idchapshow=${mangaId}`,
             method: "GET",
         });
         const data = await this.requestManager.schedule(request, 1);
@@ -447,7 +446,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             var idChap = $('a', item).attr('href').split('-')[1];
             chapters.push(createChapter({
                 id: idChap,
-                mangaId: idNumber,
+                mangaId: mangaId,
                 name: $('h2', item).text(),
                 chapNum: 0,
                 langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
