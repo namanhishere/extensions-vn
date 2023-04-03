@@ -462,31 +462,26 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         }
     }
     async getChapters(mangaId) {
-        try {
-            const chapters = [];
-            const request = createRequestObject({
-                url: 'https://www.nettruyenvt.com/Comic/Services/ComicService.asmx/ProcessChapterList',
-                param: `?comicId=${mangaId}`,
-                method: "GET",
-            });
-            const data = await this.requestManager.schedule(request, 1);
-            let list = typeof data.data === "string"
-                ? JSON.parse(data.data)
-                : data.data;
-            for (let chapter of list.chapters) {
-                chapters.push(createChapter({
-                    id: chapter.url,
-                    name: chapter.name,
-                    mangaId: mangaId,
-                    chapNum: Number.parseInt(String(chapter.name).split(' ').at(1)),
-                    langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
-                }));
-            }
-            return chapters;
+        const chapters = [];
+        const request = createRequestObject({
+            url: 'https://www.nettruyenvt.com/Comic/Services/ComicService.asmx/ProcessChapterList',
+            param: `?comicId=${mangaId}`,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        let list = typeof data.data === "string"
+            ? JSON.parse(data.data)
+            : data.data;
+        for (let chapter of list.chapters) {
+            chapters.push(createChapter({
+                id: chapter.url,
+                name: chapter.name,
+                mangaId: mangaId,
+                chapNum: Number.parseInt(String(chapter.name).split(' ').at(1)),
+                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
+            }));
         }
-        catch (e) {
-            throw new Error("Error: " + e);
-        }
+        return chapters;
     }
     async getChapterDetails(mangaId, chapterId) {
         const request = createRequestObject({
