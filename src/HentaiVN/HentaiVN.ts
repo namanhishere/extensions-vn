@@ -69,11 +69,10 @@ export class HentaiVN extends Source {
         });
     }
     override async getChapters(mangaId: string): Promise<Chapter[]> {
-        const idNumber = mangaId.split("-")[0]!.replace('/', '');
         const chapters: Chapter[] = []
         const request = createRequestObject({
             url: `${DOMAIN}/list-showchapter.php`,
-            param: `?idchapshow=${idNumber}`,
+            param: `?idchapshow=${mangaId}`,
             method: "GET",
         });
         const data = await this.requestManager.schedule(request, 1);
@@ -82,7 +81,7 @@ export class HentaiVN extends Source {
             var idChap = $('a', item).attr('href').split('-')[1];
             chapters.push(createChapter({
                 id: idChap,
-                mangaId: idNumber,
+                mangaId: mangaId,
                 name: $('h2', item).text(),
                 chapNum: 0,
                 langCode: LanguageCode.VIETNAMESE
