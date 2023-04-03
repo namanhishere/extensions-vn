@@ -3033,11 +3033,13 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        for (const item of $('tr')) {
+        for (var item of $('tr').toArray()) {
+            var idChap = $('a', item).attr('href').split('-')[1];
             chapters.push(createChapter({
-                id: $('a', item).attr('href').split('-')[1],
+                id: idChap,
                 mangaId: idNumber,
-                chapNum: Number.parseInt($('h2', item).text().split(' ')[1]),
+                name: $('h2', item).text(),
+                chapNum: 0,
                 langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
             }));
         }
