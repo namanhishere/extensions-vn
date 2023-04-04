@@ -13,13 +13,14 @@ import {
     ContentRating,
     TagType,
     MangaStatus,
-    LanguageCode
+    LanguageCode,
+    TagSection
 } from "paperback-extensions-common";
 
 const DOMAIN = "https://hentaivn.tv";
 
 export const HentaiVNInfo: SourceInfo = {
-    version: "1.0.4",
+    version: "1.0.7",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -35,7 +36,7 @@ export const HentaiVNInfo: SourceInfo = {
 
 export class HentaiVN extends Source {
     requestManager = createRequestManager({
-        requestsPerSecond: 5,
+        requestsPerSecond: 3,
         requestTimeout: 20000,
         interceptor: {
             interceptRequest: async (request: Request): Promise<Request> => {
@@ -140,5 +141,71 @@ export class HentaiVN extends Source {
             }))
         }
         return items;
+    }
+    override async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults> {
+        const page: number = metadata?.page ?? 1;
+
+        switch (homepageSectionId) {
+            case 'new_added':
+                break;
+            default:
+                throw new Error('Làm gì có page này?!');
+        }
+
+        const request = createRequestObject({
+            url: `${DOMAIN}/list-moicapnhat-doc.php`,
+            param: `?page=${page}`,
+            method: "GET",
+        });
+
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+        const tiles: MangaTile[] = [];
+
+        for (let item of $('li.item > ul').toArray()) {
+            tiles.push(createMangaTile({
+                id: $('a', item).attr('href'),
+                title: createIconText({ text: $('img', item).attr('alt') }),
+                image: $('img', item).attr('src')
+            }))
+        }
+
+        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
+
+        return createPagedResults({
+            results: tiles,
+            metadata: metadata,
+        });
+    }
+    override async getSearchTags(): Promise<TagSection[]> {
+        // This function is called on the homepage and should not throw if the server is unavailable
+        let genresResponse: Response
+
+        try {
+            const request = createRequestObject({
+                url: `${DOMAIN}/tag_box.php`,
+                method: "GET"
+            })
+            genresResponse = await this.requestManager.schedule(request, 1);
+        } catch (e) {
+            console.log(`getTags failed with error: ${e}`);
+            return [
+                createTagSection({ id: "-1", label: "Server unavailable", tags: [] }),
+            ];
+        }
+
+        const genresResult = this.cheerio.load(genresResponse.data);
+        const tagSections: TagSection[] = [
+            createTagSection({ id: "0", label: "Thể loại", tags: [] })
+        ];
+
+        for (const item of genresResult('li').toArray()) {
+            tagSections[0]!.tags.push(createTag({
+                id: genresResult('a', item).attr('href').split('-')[2],
+                label: genresResult('a', item).text()
+            }))
+        }
+
+        return tagSections;
     }
 }
