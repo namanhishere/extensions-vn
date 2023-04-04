@@ -3142,7 +3142,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             ];
         }
         const genresResult = this.cheerio.load(genresResponse.data);
-        const tagSections = [
+        let tagSections = [
             createTagSection({ id: "0", label: "Thể loại", tags: [] })
         ];
         for (const item of genresResult('li').toArray()) {
