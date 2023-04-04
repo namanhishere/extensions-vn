@@ -14,13 +14,14 @@ import {
     TagType,
     MangaStatus,
     LanguageCode,
-    TagSection
+    TagSection,
+    Tag
 } from "paperback-extensions-common";
 
 const DOMAIN = "https://hentaivn.tv";
 
 export const HentaiVNInfo: SourceInfo = {
-    version: "1.0.8",
+    version: "1.1.1",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -110,7 +111,31 @@ export class HentaiVN extends Source {
         })
     }
     override async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
-        throw new Error("Method not implemented.");
+        const page: number = metadata?.page ?? 1;
+
+        const request = createRequestObject({
+            url: `${DOMAIN}/forum/search-plus.php`,
+            param: `?name=${query.title}&dou=&char=&search=&page=${page}`,
+            method: "GET",
+        });
+        for (const item of query.includedTags!) {
+            request.param += `&tag[]=${item.id}`
+        }
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+        const tiles: MangaTile[] = []
+        for (let item of $('li.search-li').toArray()) {
+            tiles.push(createMangaTile({
+                id: $('div.search-img > a', item).attr('href'),
+                title: createIconText({ text: $('b', item).first().text() }),
+                image: $('img', item).attr('src')
+            }))
+        }
+        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
+        return createPagedResults({
+            results: tiles,
+            metadata: metadata,
+        });
     }
     // Sections
     override async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
@@ -177,7 +202,7 @@ export class HentaiVN extends Source {
             metadata: metadata,
         });
     }
-    override async getTags(): Promise<TagSection[]> {
+    override async getSearchTags(): Promise<TagSection[]> {
         // This function is called on the homepage and should not throw if the server is unavailable
         let genresResponse: Response
 
@@ -188,17 +213,17 @@ export class HentaiVN extends Source {
             })
             genresResponse = await this.requestManager.schedule(request, 1);
             const genresResult = this.cheerio.load(genresResponse.data);
-            let tagSections: TagSection[] = [
+            const tagSections: TagSection[] = [
                 createTagSection({ id: "0", label: "Thể loại", tags: [] })
             ];
-
+            var temp: Tag[] = []
             for (const item of genresResult('li').toArray()) {
-                tagSections[0]!.tags.push(createTag({
+                temp.push(createTag({
                     id: genresResult('a', item).attr('href').split('-')[2],
                     label: genresResult('a', item).text()
                 }))
             }
-
+            tagSections[0]!.tags = temp
             return tagSections;
         } catch (e) {
             console.log(`getTags failed with error: ${e}`);

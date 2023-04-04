@@ -1,4 +1,4 @@
-import { Source } from 'paperback-extensions-common';
+import { SearchRequest, Source } from 'paperback-extensions-common';
 import { HentaiVN } from './HentaiVN';
 import * as cheerio from 'cheerio';
 import { expect } from 'chai';
@@ -38,11 +38,22 @@ describe("HentaiVN", function () {
             // console.debug(data);
         })
     })
-    describe("getTags()", function () {
+    describe("getSearchTags()", function () {
         it('Get Search Tags', async () => {
-            var data = await hentaivn.getTags();
+            var data = await hentaivn.getSearchTags();
             expect(data[0]!.tags, 'Null').to.be.not.empty
             // console.debug(data[0]!.tags);
+        })
+    })
+    describe("getSearchResults()", function () {
+        it('Get Search Tags', async () => {
+            var Srequest: SearchRequest = {
+                parameters: {},
+                title: 'one'
+            }
+            var data = await hentaivn.getSearchResults(Srequest, '');
+            expect(data, 'Null').to.be.not.empty
+            // console.debug(data);
         })
     })
 })
