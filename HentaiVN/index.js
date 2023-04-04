@@ -2972,7 +2972,7 @@ exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.0.7",
+    version: "1.0.8",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -3125,7 +3125,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             metadata: metadata,
         });
     }
-    async getSearchTags() {
+    async getTags() {
         // This function is called on the homepage and should not throw if the server is unavailable
         let genresResponse;
         try {
@@ -3134,6 +3134,17 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                 method: "GET"
             });
             genresResponse = await this.requestManager.schedule(request, 1);
+            const genresResult = this.cheerio.load(genresResponse.data);
+            let tagSections = [
+                createTagSection({ id: "0", label: "Thể loại", tags: [] })
+            ];
+            for (const item of genresResult('li').toArray()) {
+                tagSections[0].tags.push(createTag({
+                    id: genresResult('a', item).attr('href').split('-')[2],
+                    label: genresResult('a', item).text()
+                }));
+            }
+            return tagSections;
         }
         catch (e) {
             console.log(`getTags failed with error: ${e}`);
@@ -3141,17 +3152,6 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                 createTagSection({ id: "-1", label: "Server unavailable", tags: [] }),
             ];
         }
-        const genresResult = this.cheerio.load(genresResponse.data);
-        let tagSections = [
-            createTagSection({ id: "0", label: "Thể loại", tags: [] })
-        ];
-        for (const item of genresResult('li').toArray()) {
-            tagSections[0].tags.push(createTag({
-                id: genresResult('a', item).attr('href').split('-')[2],
-                label: genresResult('a', item).text()
-            }));
-        }
-        return tagSections;
     }
 }
 exports.HentaiVN = HentaiVN;
