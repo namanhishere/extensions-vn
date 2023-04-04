@@ -2972,7 +2972,7 @@ exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.0.4",
+    version: "1.0.7",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -2989,7 +2989,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     constructor() {
         super(...arguments);
         this.requestManager = createRequestManager({
-            requestsPerSecond: 5,
+            requestsPerSecond: 3,
             requestTimeout: 20000,
             interceptor: {
                 interceptRequest: async (request) => {
@@ -3095,6 +3095,63 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             }));
         }
         return items;
+    }
+    async getViewMoreItems(homepageSectionId, metadata) {
+        const page = metadata?.page ?? 1;
+        switch (homepageSectionId) {
+            case 'new_added':
+                break;
+            default:
+                throw new Error('Làm gì có page này?!');
+        }
+        const request = createRequestObject({
+            url: `${DOMAIN}/list-moicapnhat-doc.php`,
+            param: `?page=${page}`,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+        const tiles = [];
+        for (let item of $('li.item > ul').toArray()) {
+            tiles.push(createMangaTile({
+                id: $('a', item).attr('href'),
+                title: createIconText({ text: $('img', item).attr('alt') }),
+                image: $('img', item).attr('src')
+            }));
+        }
+        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
+        return createPagedResults({
+            results: tiles,
+            metadata: metadata,
+        });
+    }
+    async getSearchTags() {
+        // This function is called on the homepage and should not throw if the server is unavailable
+        let genresResponse;
+        try {
+            const request = createRequestObject({
+                url: `${DOMAIN}/tag_box.php`,
+                method: "GET"
+            });
+            genresResponse = await this.requestManager.schedule(request, 1);
+        }
+        catch (e) {
+            console.log(`getTags failed with error: ${e}`);
+            return [
+                createTagSection({ id: "-1", label: "Server unavailable", tags: [] }),
+            ];
+        }
+        const genresResult = this.cheerio.load(genresResponse.data);
+        const tagSections = [
+            createTagSection({ id: "0", label: "Thể loại", tags: [] })
+        ];
+        for (const item of genresResult('li').toArray()) {
+            tagSections[0].tags.push(createTag({
+                id: genresResult('a', item).attr('href').split('-')[2],
+                label: genresResult('a', item).text()
+            }));
+        }
+        return tagSections;
     }
 }
 exports.HentaiVN = HentaiVN;

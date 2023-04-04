@@ -378,7 +378,7 @@ __exportStar(require("./RawData"), exports);
 },{"./Chapter":6,"./ChapterDetails":7,"./Constants":8,"./DynamicUI":24,"./HomeSection":25,"./Languages":26,"./Manga":27,"./MangaTile":28,"./MangaUpdate":29,"./PagedResults":30,"./RawData":31,"./RequestHeaders":32,"./RequestInterceptor":33,"./RequestManager":34,"./RequestObject":35,"./ResponseObject":36,"./SearchField":37,"./SearchRequest":38,"./SourceInfo":39,"./SourceManga":40,"./SourceStateManager":41,"./SourceTag":42,"./TagSection":43,"./TrackedManga":44,"./TrackedMangaChapterReadAction":45,"./TrackerActionQueue":46}],48:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nettruyen = exports.NettruyenInfo = void 0;
+exports.getServerUnavailableMangaTiles = exports.Nettruyen = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = 'https://www.nettruyenvt.com';
 exports.NettruyenInfo = {
@@ -618,8 +618,17 @@ class Nettruyen extends paperback_extensions_common_1.Source {
 }
 exports.Nettruyen = Nettruyen;
 function getServerUnavailableMangaTiles() {
-    throw new Error("Function not implemented.");
+    // This tile is used as a placeholder when the server is unavailable
+    return [
+        createMangaTile({
+            id: "placeholder-id",
+            title: createIconText({ text: "Server" }),
+            image: "",
+            subtitleText: createIconText({ text: "unavailable" }),
+        }),
+    ];
 }
+exports.getServerUnavailableMangaTiles = getServerUnavailableMangaTiles;
 
 },{"paperback-extensions-common":5}]},{},[48])(48)
 });
