@@ -38,11 +38,11 @@ describe("HentaiVN", function () {
             // console.debug(data);
         })
     })
-    describe("getSearchTags()", function () {
+    describe("getTags()", function () {
         it('Get Search Tags', async () => {
-            var data = await hentaivn.getSearchTags();
-            expect(data, 'Null').to.be.not.empty
-            // console.debug(data);
+            var data = await hentaivn.getTags();
+            expect(data[0]!.tags, 'Null').to.be.not.empty
+            // console.debug(data[0]!.tags);
         })
     })
 })
