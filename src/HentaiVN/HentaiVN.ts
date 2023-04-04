@@ -195,7 +195,7 @@ export class HentaiVN extends Source {
         }
 
         const genresResult = this.cheerio.load(genresResponse.data);
-        const tagSections: TagSection[] = [
+        let tagSections: TagSection[] = [
             createTagSection({ id: "0", label: "Thể loại", tags: [] })
         ];
 
