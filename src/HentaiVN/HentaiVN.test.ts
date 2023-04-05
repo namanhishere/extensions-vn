@@ -59,7 +59,7 @@ describe("HentaiVN", function () {
         it('Get Search Tags', async () => {
             var Srequest: SearchRequest = {
                 parameters: {},
-                title: 'one',
+                title: 'đây là một đoạn tét',
                 includedTags: []
             }
             var data = await hentaivn.getSearchResults(Srequest, '');

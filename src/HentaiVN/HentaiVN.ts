@@ -130,7 +130,7 @@ export class HentaiVN extends Source {
 
         const request = createRequestObject({
             url: `${DOMAIN}/forum/search-plus.php`,
-            param: `?name=${query.title}&dou=&char=&search=&page=${page}`,
+            param: `?name=${encodeURIComponent(query.title!)}&dou=&char=&search=&page=${page}`,
             method: "GET",
         });
         for (const item of query.includedTags!) {
