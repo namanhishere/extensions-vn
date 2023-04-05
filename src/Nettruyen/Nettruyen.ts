@@ -41,6 +41,8 @@ export const NettruyenInfo: SourceInfo = {
 }
 
 export class Nettruyen extends Source {
+
+
     requestManager = createRequestManager({
         requestsPerSecond: 5,
         requestTimeout: 20000,
@@ -86,6 +88,7 @@ export class Nettruyen extends Source {
 
     override async getMangaDetails(mangaId: string): Promise<Manga> {
         try {
+            const Tags = await this.getSearchTags();
             const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
             const request = createRequestObject({
                 url: url,
@@ -99,6 +102,16 @@ export class Nettruyen extends Source {
             var titles = temp.attr('alt')!;
             var des = $('#item-detail > div.detail-content > p').text();
             var id = $('#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div').attr('data-id')!;
+            var tags: TagSection[] = [];
+            for (let tag of $('.kind.row > .col-xs-8 > a').toArray()) {
+                const label = $(tag).text();
+                const id = Tags[0]!.tags.find(tag => tag.label == label);
+                tags.push(createTagSection({
+                    id: id!.id,
+                    label: label,
+                    tags: []
+                }))
+            }
             // var rating = $('div.star').attr('data-rating')!;
 
             return createManga({
@@ -111,7 +124,7 @@ export class Nettruyen extends Source {
                 status: 1,
                 rating: 5,
                 hentai: false,
-                tags: [],
+                tags: tags,
             });
         } catch (e) {
             throw new Error("Error: " + e);
@@ -122,7 +135,7 @@ export class Nettruyen extends Source {
         const chapters: Chapter[] = [];
 
         const request = createRequestObject({
-            url: 'https://www.nettruyenvt.com/Comic/Services/ComicService.asmx/ProcessChapterList',
+            url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
             param: `?comicId=${mangaId}`,
             method: "GET",
         });
@@ -161,7 +174,7 @@ export class Nettruyen extends Source {
         const pages: string[] = [];
         for (let image of $('.page-chapter').toArray()) {
             var link = $('div.page-chapter > img', image).attr('data-original')!;
-            if (link.indexOf('http') === -1) {//nếu link ko có 'http'
+            if (link.indexOf('http') === -1) {
                 pages.push('http:' + link);
             } else {
                 pages.push(link);
