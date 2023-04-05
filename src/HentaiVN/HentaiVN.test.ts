@@ -49,7 +49,8 @@ describe("HentaiVN", function () {
         it('Get Search Tags', async () => {
             var Srequest: SearchRequest = {
                 parameters: {},
-                title: 'one'
+                title: 'one',
+                includedTags: []
             }
             var data = await hentaivn.getSearchResults(Srequest, '');
             expect(data, 'Null').to.be.not.empty
