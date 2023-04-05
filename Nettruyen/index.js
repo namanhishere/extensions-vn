@@ -2972,7 +2972,7 @@ exports.getServerUnavailableMangaTiles = exports.Nettruyen = exports.NettruyenIn
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = 'https://www.nettruyenvt.com';
 exports.NettruyenInfo = {
-    version: '1.0.4',
+    version: '1.0.5',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',

@@ -382,7 +382,7 @@ exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.1.1",
+    version: "1.1.2",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -399,7 +399,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     constructor() {
         super(...arguments);
         this.requestManager = createRequestManager({
-            requestsPerSecond: 3,
+            requestsPerSecond: 5,
             requestTimeout: 20000,
             interceptor: {
                 interceptRequest: async (request) => {
@@ -551,7 +551,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const tiles = [];
         for (let item of $('li.item > ul').toArray()) {
             tiles.push(createMangaTile({
-                id: $('a', item).attr('href'),
+                id: encodeURIComponent($('a', item).attr('href')).replace('%2F', '/'),
                 title: createIconText({ text: $('img', item).attr('alt') }),
                 image: $('img', item).attr('src')
             }));
