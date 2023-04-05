@@ -444,6 +444,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     async getMangaDetails(mangaId) {
         try {
+            const Tags = await this.getSearchTags();
             const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
             const request = createRequestObject({
                 url: url,
@@ -456,6 +457,16 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             var titles = temp.attr('alt');
             var des = $('#item-detail > div.detail-content > p').text();
             var id = $('#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div').attr('data-id');
+            var tags = [];
+            for (let tag of $('.kind.row > .col-xs-8 > a').toArray()) {
+                const label = $(tag).text();
+                const id = Tags[0].tags.find(tag => tag.label == label);
+                tags.push(createTagSection({
+                    id: id.id,
+                    label: label,
+                    tags: []
+                }));
+            }
             // var rating = $('div.star').attr('data-rating')!;
             return createManga({
                 id: id,
@@ -467,7 +478,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                 status: 1,
                 rating: 5,
                 hentai: false,
-                tags: [],
+                tags: tags,
             });
         }
         catch (e) {
@@ -477,7 +488,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     async getChapters(mangaId) {
         const chapters = [];
         const request = createRequestObject({
-            url: 'https://www.nettruyenvt.com/Comic/Services/ComicService.asmx/ProcessChapterList',
+            url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
             param: `?comicId=${mangaId}`,
             method: "GET",
         });
@@ -507,7 +518,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         const pages = [];
         for (let image of $('.page-chapter').toArray()) {
             var link = $('div.page-chapter > img', image).attr('data-original');
-            if (link.indexOf('http') === -1) { //nếu link ko có 'http'
+            if (link.indexOf('http') === -1) {
                 pages.push('http:' + link);
             }
             else {
