@@ -232,11 +232,12 @@ export class Nettruyen extends Source {
         }
 
         if (tiles.length == 0) {
-            metadata = tiles.length === 0 ? undefined : { page: page + 1 };
             return createPagedResults({
                 results: getServerUnavailableMangaTiles()
             });
         }
+
+        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
 
         return createPagedResults({
             results: tiles,
