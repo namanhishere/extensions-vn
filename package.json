@@ -1,7 +1,7 @@
 {
   "name": "extensions-vn",
   "version": "1.0.1",
-  "description": "The source for Hoang",
+  "description": "The source for Viet Nam",
   "main": "index.js",
   "scripts": {
     "test": "node_modules\\.bin\\mocha --timeout 300000 -r ts-node/register src/**/*.test.ts",
@@ -10,8 +10,11 @@
     "serve": "paperback serve",
     "deploy": "gh-pages -d bundles"
   },
-  "author": "Faizan Durrani",
-  "license": "ISC",
+  "author": "Hoang3409 & Faizan Durrani",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hoang3402/extensions-vn/issues"
+  },
   "devDependencies": {
     "@types/chai": "^4.3.4",
     "@types/cheerio": "^0.22.31",
