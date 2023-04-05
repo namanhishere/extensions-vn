@@ -6,3 +6,7 @@ Vietnamese sources for Paperback
 ```
 https://hoang3402.github.io/extensions-vn/
 ```
+| Name      | Link                    |
+|-----------|-------------------------|
+| NetTruyen | https://nettruyen.live/ |
+| HentaiVN  | https://hentaivn.tv/    |
