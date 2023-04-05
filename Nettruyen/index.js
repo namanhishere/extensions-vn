@@ -3131,7 +3131,6 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             param: param,
             method: "GET",
         });
-        console.debug(request);
         let data;
         try {
             data = await this.requestManager.schedule(request, 1);
