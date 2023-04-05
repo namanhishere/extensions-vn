@@ -461,10 +461,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             for (let tag of $('.kind.row > .col-xs-8 > a').toArray()) {
                 const label = $(tag).text();
                 const id = Tags[0].tags.find(tag => tag.label == label);
-                tags.push(createTagSection({
+                tags.push(createTag({
                     id: id.id,
-                    label: label,
-                    tags: []
+                    label: label
                 }));
             }
             // var rating = $('div.star').attr('data-rating')!;
@@ -478,7 +477,11 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                 status: 1,
                 rating: 5,
                 hentai: false,
-                tags: tags,
+                tags: [createTagSection({
+                        id: "0",
+                        label: "Thể loại",
+                        tags: tags
+                    })],
             });
         }
         catch (e) {
