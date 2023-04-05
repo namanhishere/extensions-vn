@@ -382,7 +382,7 @@ exports.getServerUnavailableMangaTiles = exports.Nettruyen = exports.NettruyenIn
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = 'https://www.nettruyenvt.com';
 exports.NettruyenInfo = {
-    version: '1.0.3',
+    version: '1.0.4',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
@@ -522,6 +522,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         });
     }
     async getSearchResults(query, metadata) {
+        const page = metadata?.page ?? 1;
         let advanced;
         const tiles = [];
         let url = '';
@@ -529,7 +530,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         if (query.includedTags.length > 0) {
             advanced = true;
             url = `${DOMAIN}/tim-truyen-nang-cao`;
-            param = `?genres=${query.includedTags.map(tag => tag.id).join(',')}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
+            param = `?genres=${query.includedTags.map(tag => tag.id).join(',')}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0?page=${page}`;
         }
         else {
             advanced = false;
@@ -575,6 +576,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             }
         }
         if (tiles.length == 0) {
+            metadata = tiles.length === 0 ? undefined : { page: page + 1 };
             return createPagedResults({
                 results: getServerUnavailableMangaTiles()
             });
