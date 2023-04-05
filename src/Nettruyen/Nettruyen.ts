@@ -20,7 +20,7 @@ import {
 const DOMAIN = 'https://www.nettruyenvt.com';
 
 export const NettruyenInfo: SourceInfo = {
-    version: '1.0.3',
+    version: '1.0.4',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
@@ -177,6 +177,7 @@ export class Nettruyen extends Source {
     }
 
     override async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
+        const page: number = metadata?.page ?? 1;
         let advanced: boolean;
         const tiles: MangaTile[] = [];
         let url = '';
@@ -185,7 +186,7 @@ export class Nettruyen extends Source {
         if (query.includedTags!.length > 0) {
             advanced = true;
             url = `${DOMAIN}/tim-truyen-nang-cao`;
-            param = `?genres=${query.includedTags!.map(tag => tag.id).join(',')}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
+            param = `?genres=${query.includedTags!.map(tag => tag.id).join(',')}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0?page=${page}`;
         } else {
             advanced = false;
             url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
@@ -231,6 +232,7 @@ export class Nettruyen extends Source {
         }
 
         if (tiles.length == 0) {
+            metadata = tiles.length === 0 ? undefined : { page: page + 1 };
             return createPagedResults({
                 results: getServerUnavailableMangaTiles()
             });
