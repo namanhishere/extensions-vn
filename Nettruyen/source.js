@@ -576,11 +576,11 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             }
         }
         if (tiles.length == 0) {
-            metadata = tiles.length === 0 ? undefined : { page: page + 1 };
             return createPagedResults({
                 results: getServerUnavailableMangaTiles()
             });
         }
+        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
         return createPagedResults({
             results: tiles,
             metadata: metadata,
