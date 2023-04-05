@@ -3121,15 +3121,19 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     }
     async getViewMoreItems(homepageSectionId, metadata) {
         const page = metadata?.page ?? 1;
+        let url = '';
+        let param = '';
         switch (homepageSectionId) {
             case 'new_added':
+                url = `${DOMAIN}/list-moicapnhat-doc.php`;
+                param = `?page=${page}`;
                 break;
             default:
                 throw new Error('Làm gì có page này?!');
         }
         const request = createRequestObject({
-            url: `${DOMAIN}/list-moicapnhat-doc.php`,
-            param: `?page=${page}`,
+            url: url,
+            param: param,
             method: "GET",
         });
         const data = await this.requestManager.schedule(request, 1);
