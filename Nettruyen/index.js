@@ -3115,9 +3115,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         const tiles = [];
         let url = '';
         let param = '';
-        if (query.includedTags) {
+        if (query.includedTags.length > 0) {
             url = `${DOMAIN}/`;
-            param = `?genres=37&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
+            param = `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
         }
         else {
             url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
