@@ -177,18 +177,17 @@ export class Nettruyen extends Source {
     }
 
     override async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
+        let advanced: boolean;
         const tiles: MangaTile[] = [];
         let url = '';
         let param = '';
 
         if (query.includedTags!.length > 0) {
-            let temp: string = ``;
-            for (let genre of query.includedTags!) {
-                temp += `,${genre.id}`;
-            }
+            advanced = true;
             url = `${DOMAIN}/`;
-            param = `?genres=${temp}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
+            param = `?genres=${query.includedTags!.map(tag => tag.id).join(',')}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
         } else {
+            advanced = false;
             url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
             param = `?q=${encodeURIComponent(query.title!)}`;
         }
@@ -210,12 +209,22 @@ export class Nettruyen extends Source {
         }
         let $ = this.cheerio.load(data.data);
 
-        for (let item of $('li').toArray()) {
-            tiles.push(createMangaTile({
-                id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, '')!,
-                title: createIconText({ text: $('a > h3', item).text() }),
-                image: 'http:' + $('a > img', item).attr('src')!
-            }));
+        if (advanced) {
+            for (let item of $('.item').toArray()) {
+                tiles.push(createMangaTile({
+                    id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, '')!,
+                    title: createIconText({ text: $('h3 > a', item).text() }),
+                    image: 'http:' + $('img', item).attr('data-original')!
+                }));
+            }
+        } else {
+            for (let item of $('li').toArray()) {
+                tiles.push(createMangaTile({
+                    id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, '')!,
+                    title: createIconText({ text: $('a > h3', item).text() }),
+                    image: 'http:' + $('a > img', item).attr('src')!
+                }));
+            }
         }
 
         if (tiles.length == 0) {

@@ -37,7 +37,10 @@ describe("NetTruyen", function () {
             var query: SearchRequest = {
                 title: 'One',
                 parameters: {},
-                includedTags: []
+                includedTags: [createTag({
+                    id: "27",
+                    label: ""
+                })]
             }
             const data = await nettruyen.getSearchResults(query, meta);
             expect(data, 'Null').to.be.not.empty
