@@ -3067,7 +3067,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const page = metadata?.page ?? 1;
         const request = createRequestObject({
             url: `${DOMAIN}/forum/search-plus.php`,
-            param: `?name=${query.title}&dou=&char=&search=&page=${page}`,
+            param: `?name=${encodeURIComponent(query.title)}&dou=&char=&search=&page=${page}`,
             method: "GET",
         });
         for (const item of query.includedTags) {
