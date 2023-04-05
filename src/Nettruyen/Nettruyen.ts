@@ -211,10 +211,14 @@ export class Nettruyen extends Source {
 
         if (advanced) {
             for (let item of $('.item').toArray()) {
+                var img = $('img', item).attr('data-original')!;
+                if (img === undefined) {
+                    img = $('img', item).attr('src')!;
+                }
                 tiles.push(createMangaTile({
                     id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, '')!,
                     title: createIconText({ text: $('h3 > a', item).text() }),
-                    image: 'http:' + $('img', item).attr('data-original')!
+                    image: 'http:' + img
                 }));
             }
         } else {
