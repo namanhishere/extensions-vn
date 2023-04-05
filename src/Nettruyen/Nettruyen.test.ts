@@ -27,7 +27,7 @@ describe("NetTruyen", function () {
         it('Get Tags', async () => {
             const data = await nettruyen.getSearchTags();
             expect(data, 'Null').to.be.not.empty
-            console.debug(data[0]?.tags);
+            // console.debug(data[0]?.tags);
         })
     });
 
@@ -36,13 +36,12 @@ describe("NetTruyen", function () {
             var meta = ''
             var query: SearchRequest = {
                 title: 'One',
-                parameters: {
-                    includedTags: []
-                }
+                parameters: {},
+                includedTags: []
             }
             const data = await nettruyen.getSearchResults(query, meta);
             expect(data, 'Null').to.be.not.empty
-            // console.log(data);
+            console.log(data);
         })
     });
 });

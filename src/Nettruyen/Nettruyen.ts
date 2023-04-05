@@ -181,9 +181,9 @@ export class Nettruyen extends Source {
         let url = '';
         let param = '';
 
-        if (query.includedTags) {
+        if (query.includedTags!.length > 0) {
             url = `${DOMAIN}/`;
-            param = `?genres=37&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
+            param = `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
         } else {
             url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
             param = `?q=${encodeURIComponent(query.title!)}`;
@@ -304,7 +304,7 @@ export class Nettruyen extends Source {
         });
         const data = await this.requestManager.schedule(request, 1)
         const $ = this.cheerio.load(data.data)
-        for (const item of $('.row > .col-md-3.col-sm-4.col-xs-6.mrb10')) {
+        for (const item of $('.row > .col-md-3.col-sm-4.col-xs-6.mrb10').toArray()) {
             tags.push(createTag({
                 id: $('span', item).attr('data-id'),
                 label: $('.genre-item', item).text().replace('\n\n', '')
