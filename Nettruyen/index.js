@@ -3113,9 +3113,19 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     async getSearchResults(query, metadata) {
         const tiles = [];
+        let url = '';
+        let param = '';
+        if (query.includedTags) {
+            url = `${DOMAIN}/`;
+            param = `?genres=37&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
+        }
+        else {
+            url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
+            param = `?q=${encodeURIComponent(query.title)}`;
+        }
         const request = createRequestObject({
-            url: `${DOMAIN}/Comic/Services/SuggestSearch.ashx`,
-            param: `?q=${encodeURIComponent(query.title)}`,
+            url: url,
+            param: param,
             method: "GET",
         });
         let data;
@@ -3137,13 +3147,8 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             }));
         }
         if (tiles.length == 0) {
-            tiles.push(createMangaTile({
-                id: '',
-                title: createIconText({ text: $('ul > li').toArray().toString() }),
-                image: ''
-            }));
             return createPagedResults({
-                results: tiles
+                results: getServerUnavailableMangaTiles()
             });
         }
         return createPagedResults({
@@ -3204,6 +3209,30 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             }));
         }
         return newUpdatedItems;
+    }
+    async getSearchTags() {
+        const tagSections = [
+            createTagSection({
+                id: "0",
+                label: "Thể loại",
+                tags: []
+            })
+        ];
+        var tags = [];
+        const request = createRequestObject({
+            url: `${DOMAIN}/tim-truyen-nang-cao`,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+        for (const item of $('.row > .col-md-3.col-sm-4.col-xs-6.mrb10')) {
+            tags.push(createTag({
+                id: $('span', item).attr('data-id'),
+                label: $('.genre-item', item).text().replace('\n\n', '')
+            }));
+        }
+        tagSections[0].tags = tags;
+        return tagSections;
     }
 }
 exports.Nettruyen = Nettruyen;
