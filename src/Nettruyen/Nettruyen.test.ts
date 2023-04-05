@@ -38,7 +38,7 @@ describe("NetTruyen", function () {
                 title: 'One',
                 parameters: {},
                 includedTags: [createTag({
-                    id: "27",
+                    id: "15",
                     label: ""
                 })]
             }
