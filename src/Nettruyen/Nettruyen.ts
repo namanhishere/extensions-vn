@@ -102,14 +102,13 @@ export class Nettruyen extends Source {
             var titles = temp.attr('alt')!;
             var des = $('#item-detail > div.detail-content > p').text();
             var id = $('#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div').attr('data-id')!;
-            var tags: TagSection[] = [];
+            var tags: Tag[] = [];
             for (let tag of $('.kind.row > .col-xs-8 > a').toArray()) {
                 const label = $(tag).text();
                 const id = Tags[0]!.tags.find(tag => tag.label == label);
-                tags.push(createTagSection({
+                tags.push(createTag({
                     id: id!.id,
-                    label: label,
-                    tags: []
+                    label: label
                 }))
             }
             // var rating = $('div.star').attr('data-rating')!;
@@ -124,7 +123,11 @@ export class Nettruyen extends Source {
                 status: 1,
                 rating: 5,
                 hentai: false,
-                tags: tags,
+                tags: [createTagSection({
+                    id: "0",
+                    label: "Thể loại",
+                    tags: tags
+                })],
             });
         } catch (e) {
             throw new Error("Error: " + e);
