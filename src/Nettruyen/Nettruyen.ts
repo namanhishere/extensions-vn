@@ -182,8 +182,12 @@ export class Nettruyen extends Source {
         let param = '';
 
         if (query.includedTags!.length > 0) {
+            let temp: string = ``;
+            for (let genre of query.includedTags!) {
+                temp += `,${genre.id}`;
+            }
             url = `${DOMAIN}/`;
-            param = `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
+            param = `?genres=${temp}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
         } else {
             url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
             param = `?q=${encodeURIComponent(query.title!)}`;
