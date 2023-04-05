@@ -197,7 +197,6 @@ export class Nettruyen extends Source {
             param: param,
             method: "GET",
         });
-        console.debug(request)
         let data: Response;
         try {
             data = await this.requestManager.schedule(request, 1);

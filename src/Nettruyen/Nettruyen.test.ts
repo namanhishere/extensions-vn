@@ -44,7 +44,7 @@ describe("NetTruyen", function () {
             }
             const data = await nettruyen.getSearchResults(query, meta);
             expect(data, 'Null').to.be.not.empty
-            console.log(data);
+            // console.log(data);
         })
     });
 });
