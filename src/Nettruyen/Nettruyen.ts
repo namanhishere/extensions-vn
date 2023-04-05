@@ -20,7 +20,7 @@ import {
 const DOMAIN = 'https://www.nettruyenvt.com';
 
 export const NettruyenInfo: SourceInfo = {
-    version: '1.0.4',
+    version: '1.0.5',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',

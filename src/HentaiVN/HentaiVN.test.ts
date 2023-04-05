@@ -17,6 +17,8 @@ describe("HentaiVN", function () {
             // console.debug(data);
         })
     })
+
+
     describe("getChapters()", function () {
         it('Get Chapters', async () => {
             var data = await hentaivn.getChapters('33390');
@@ -24,6 +26,8 @@ describe("HentaiVN", function () {
             // console.debug(data);
         })
     })
+
+
     describe("getChapterDetails()", function () {
         it('Get Chapters Details', async () => {
             var data = await hentaivn.getChapterDetails('29301', '61703');
@@ -31,6 +35,8 @@ describe("HentaiVN", function () {
             // console.debug(data);
         })
     })
+
+
     describe("getViewMoreItems()", function () {
         it('Get View More Items', async () => {
             var data = await hentaivn.getViewMoreItems('new_added', '');
@@ -38,6 +44,8 @@ describe("HentaiVN", function () {
             // console.debug(data);
         })
     })
+
+
     describe("getSearchTags()", function () {
         it('Get Search Tags', async () => {
             var data = await hentaivn.getSearchTags();
@@ -45,6 +53,8 @@ describe("HentaiVN", function () {
             // console.debug(data[0]!.tags);
         })
     })
+
+
     describe("getSearchResults()", function () {
         it('Get Search Tags', async () => {
             var Srequest: SearchRequest = {

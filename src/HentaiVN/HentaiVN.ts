@@ -21,7 +21,7 @@ import {
 const DOMAIN = "https://hentaivn.tv";
 
 export const HentaiVNInfo: SourceInfo = {
-    version: "1.1.1",
+    version: "1.1.2",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -36,8 +36,10 @@ export const HentaiVNInfo: SourceInfo = {
 }
 
 export class HentaiVN extends Source {
+
+
     requestManager = createRequestManager({
-        requestsPerSecond: 3,
+        requestsPerSecond: 5,
         requestTimeout: 20000,
         interceptor: {
             interceptRequest: async (request: Request): Promise<Request> => {
@@ -49,11 +51,14 @@ export class HentaiVN extends Source {
                 }
                 return request
             },
+
             interceptResponse: async (response: Response): Promise<Response> => {
                 return response
             }
         }
     });
+
+
     override async getMangaDetails(mangaId: string): Promise<Manga> {
         const request = createRequestObject({
             url: `${DOMAIN}${mangaId}`,
@@ -61,6 +66,7 @@ export class HentaiVN extends Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
+
         return createManga({
             id: mangaId.split('-')[0]!.replace('/', ''),
             titles: [
@@ -70,6 +76,8 @@ export class HentaiVN extends Source {
             status: MangaStatus.ONGOING
         });
     }
+
+
     override async getChapters(mangaId: string): Promise<Chapter[]> {
         const chapters: Chapter[] = []
         const request = createRequestObject({
@@ -79,6 +87,7 @@ export class HentaiVN extends Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
+
         for (var item of $('tr').toArray()) {
             var idChap = $('a', item).attr('href').split('-')[1];
             chapters.push(createChapter({
@@ -91,6 +100,8 @@ export class HentaiVN extends Source {
         }
         return chapters;
     }
+
+
     override async getChapterDetails(mangaId: string, chapterId: string): Promise<ChapterDetails> {
         const listUrlImage: string[] = []
         const request = createRequestObject({
@@ -100,9 +111,11 @@ export class HentaiVN extends Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
+
         for (const item of $('img').toArray()) {
             listUrlImage.push(item.attribs.src)
         }
+
         return createChapterDetails({
             id: chapterId,
             mangaId: mangaId,
@@ -110,6 +123,8 @@ export class HentaiVN extends Source {
             longStrip: false
         })
     }
+
+
     override async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
         const page: number = metadata?.page ?? 1;
 
@@ -137,6 +152,8 @@ export class HentaiVN extends Source {
             metadata: metadata,
         });
     }
+
+
     // Sections
     override async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
         let newAdded: HomeSection = createHomeSection({
@@ -156,6 +173,8 @@ export class HentaiVN extends Source {
         newAdded.items = await this.parseNewUpdatedSection($);
         sectionCallback(newAdded);
     }
+
+
     async parseNewUpdatedSection($: any): Promise<import("paperback-extensions-common").MangaTile[]> {
         const items: MangaTile[] = [];
         for (let item of $('ul.page-random').toArray()) {
@@ -167,6 +186,8 @@ export class HentaiVN extends Source {
         }
         return items;
     }
+
+    
     override async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults> {
         const page: number = metadata?.page ?? 1;
         let url = ''
@@ -193,7 +214,7 @@ export class HentaiVN extends Source {
 
         for (let item of $('li.item > ul').toArray()) {
             tiles.push(createMangaTile({
-                id: $('a', item).attr('href'),
+                id: encodeURIComponent($('a', item).attr('href')).replace('%2F', '/'),
                 title: createIconText({ text: $('img', item).attr('alt') }),
                 image: $('img', item).attr('src')
             }))
@@ -206,6 +227,8 @@ export class HentaiVN extends Source {
             metadata: metadata,
         });
     }
+
+
     override async getSearchTags(): Promise<TagSection[]> {
         // This function is called on the homepage and should not throw if the server is unavailable
         let genresResponse: Response
@@ -215,11 +238,13 @@ export class HentaiVN extends Source {
                 url: `${DOMAIN}/tag_box.php`,
                 method: "GET"
             })
+
             genresResponse = await this.requestManager.schedule(request, 1);
             const genresResult = this.cheerio.load(genresResponse.data);
             const tagSections: TagSection[] = [
                 createTagSection({ id: "0", label: "Thể loại", tags: [] })
             ];
+
             var temp: Tag[] = []
             for (const item of genresResult('li').toArray()) {
                 temp.push(createTag({
@@ -227,10 +252,13 @@ export class HentaiVN extends Source {
                     label: genresResult('a', item).text()
                 }))
             }
+
             tagSections[0]!.tags = temp
+
             return tagSections;
         } catch (e) {
             console.log(`getTags failed with error: ${e}`);
+
             return [
                 createTagSection({ id: "-1", label: "Server unavailable", tags: [] }),
             ];
