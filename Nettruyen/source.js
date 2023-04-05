@@ -528,7 +528,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         let param = '';
         if (query.includedTags.length > 0) {
             advanced = true;
-            url = `${DOMAIN}/`;
+            url = `${DOMAIN}/tim-truyen-nang-cao`;
             param = `?genres=${query.includedTags.map(tag => tag.id).join(',')}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0`;
         }
         else {
@@ -541,6 +541,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             param: param,
             method: "GET",
         });
+        console.debug(request);
         let data;
         try {
             data = await this.requestManager.schedule(request, 1);
