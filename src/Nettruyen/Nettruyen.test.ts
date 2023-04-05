@@ -23,6 +23,14 @@ describe("NetTruyen", function () {
         })
     });
 
+    describe("getSearchTags()", function () {
+        it('Get Tags', async () => {
+            const data = await nettruyen.getSearchTags();
+            expect(data, 'Null').to.be.not.empty
+            console.debug(data[0]?.tags);
+        })
+    });
+
     describe("getSearchResults()", function () {
         it('Get Search', async () => {
             var meta = ''
