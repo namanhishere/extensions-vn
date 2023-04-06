@@ -2967,23 +2967,29 @@ __exportStar(require("./RawData"), exports);
 
 },{"./Chapter":10,"./ChapterDetails":12,"./Constants":13,"./DynamicUI":44,"./HomeSection":46,"./Languages":47,"./Manga":49,"./MangaTile":51,"./MangaUpdate":53,"./PagedResults":55,"./RawData":57,"./RequestHeaders":58,"./RequestInterceptor":59,"./RequestManager":61,"./RequestObject":63,"./ResponseObject":64,"./SearchField":66,"./SearchRequest":67,"./SourceInfo":68,"./SourceManga":70,"./SourceStateManager":72,"./SourceTag":73,"./TagSection":75,"./TrackedManga":77,"./TrackedMangaChapterReadAction":78,"./TrackerActionQueue":79}],82:[function(require,module,exports){
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
+const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.1.4",
+    version: "1.1.5",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
-    authorWebsite: 'https://github.com/hoang3402',
+    authorWebsite: "https://github.com/hoang3402",
     description: "Extension that pulls manga from HentaiVN.",
     contentRating: paperback_extensions_common_1.ContentRating.ADULT,
     websiteBaseURL: DOMAIN,
-    sourceTags: [{
-            text: 'Hentai',
-            type: paperback_extensions_common_1.TagType.RED
-        }],
+    sourceTags: [
+        {
+            text: "Hentai",
+            type: paperback_extensions_common_1.TagType.RED,
+        },
+    ],
 };
 class HentaiVN extends paperback_extensions_common_1.Source {
     constructor() {
@@ -2996,15 +3002,15 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                     request.headers = {
                         ...(request.headers ?? {}),
                         ...{
-                            'referer': DOMAIN
-                        }
+                            referer: DOMAIN,
+                        },
                     };
                     return request;
                 },
                 interceptResponse: async (response) => {
                     return response;
-                }
-            }
+                },
+            },
         });
     }
     async getMangaDetails(mangaId) {
@@ -3014,23 +3020,25 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        let tags = $('.tag').toArray().map((e) => createTag({
-            id: $(e).attr('href').split('-')[2],
+        let tags = $(".tag")
+            .toArray()
+            .map((e) => createTag({
+            id: $(e).attr("href").split("-")[2],
             label: $(e).text(),
         }));
         return createManga({
-            id: mangaId.split('-')[0].replace('/', ''),
-            titles: [
-                $('div.page-info > h1 > a').text().trim()
-            ],
-            image: $('div.page-ava > img').attr('src'),
+            id: mangaId.split("-")[0].replace("/", ""),
+            titles: [$("div.page-info > h1 > a").text().trim()],
+            image: $("div.page-ava > img").attr("src"),
             status: paperback_extensions_common_1.MangaStatus.ONGOING,
             hentai: true,
-            tags: [createTagSection({
+            tags: [
+                createTagSection({
                     id: "0",
                     label: "Thể loại",
-                    tags: tags
-                })]
+                    tags: tags,
+                }),
+            ],
         });
     }
     async getChapters(mangaId) {
@@ -3042,13 +3050,13 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        const arr = $('tr').toArray();
+        const arr = $("tr").toArray();
         for (var item of arr) {
-            var idChap = $('a', item).attr('href').split('-')[1];
+            var idChap = $("a", item).attr("href").split("-")[1];
             chapters.push(createChapter({
                 id: idChap,
                 mangaId: mangaId,
-                name: $('h2', item).text(),
+                name: $("h2", item).text(),
                 chapNum: arr.length - arr.indexOf(item),
                 langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
             }));
@@ -3064,7 +3072,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        for (const item of $('img').toArray()) {
+        for (const item of $("img").toArray()) {
             listUrlImage.push(item.attribs.src);
         }
         return createChapterDetails({
@@ -3087,11 +3095,11 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
         const tiles = [];
-        for (let item of $('li.search-li').toArray()) {
+        for (let item of $("li.search-li").toArray()) {
             tiles.push(createMangaTile({
-                id: $('div.search-img > a', item).attr('href'),
-                title: createIconText({ text: $('b', item).first().text() }),
-                image: $('img', item).attr('src')
+                id: $("div.search-img > a", item).attr("href"),
+                title: createIconText({ text: $("b", item).first().text() }),
+                image: $("img", item).attr("src"),
             }));
         }
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };
@@ -3103,7 +3111,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     // Sections
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
-            id: 'new_added',
+            id: "new_added",
             title: "Truyện Mới Cập Nhật",
             view_more: true,
         });
@@ -3121,26 +3129,28 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     }
     async parseNewUpdatedSection($) {
         const items = [];
-        for (let item of $('ul.page-random').toArray()) {
+        for (let item of $("ul.page-random").toArray()) {
             items.push(createMangaTile({
-                id: $('div.img-same > a', item).attr('href'),
-                title: createIconText({ text: $('b', item).first().text() }),
-                image: $('div[style*=background]', item).attr('style').match(/background:url\((.+)\);/)[1]
+                id: $("div.img-same > a", item).attr("href"),
+                title: createIconText({ text: $("b", item).first().text() }),
+                image: $("div[style*=background]", item)
+                    .attr("style")
+                    .match(/background:url\((.+)\);/)[1],
             }));
         }
         return items;
     }
     async getViewMoreItems(homepageSectionId, metadata) {
         const page = metadata?.page ?? 1;
-        let url = '';
-        let param = '';
+        let url = "";
+        let param = "";
         switch (homepageSectionId) {
-            case 'new_added':
+            case "new_added":
                 url = `${DOMAIN}/list-moicapnhat-doc.php`;
                 param = `?page=${page}`;
                 break;
             default:
-                throw new Error('Làm gì có page này?!');
+                throw new Error("Làm gì có page này?!");
         }
         const request = createRequestObject({
             url: url,
@@ -3150,11 +3160,11 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
         const tiles = [];
-        for (let item of $('li.item > ul').toArray()) {
+        for (let item of $("li.item > ul").toArray()) {
             tiles.push(createMangaTile({
-                id: encodeURIComponent($('a', item).attr('href')).replace('%2F', '/'),
-                title: createIconText({ text: $('img', item).attr('alt') }),
-                image: $('img', item).attr('src')
+                id: encodeURIComponent($("a", item).attr("href")).replace("%2F", "/"),
+                title: createIconText({ text: $("img", item).attr("alt") }),
+                image: $("img", item).attr("src"),
             }));
         }
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };
@@ -3165,36 +3175,726 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     }
     async getSearchTags() {
         // This function is called on the homepage and should not throw if the server is unavailable
-        let genresResponse;
-        try {
-            const request = createRequestObject({
-                url: `${DOMAIN}/tag_box.php`,
-                method: "GET"
-            });
-            genresResponse = await this.requestManager.schedule(request, 1);
-            const genresResult = this.cheerio.load(genresResponse.data);
-            const tagSections = [
-                createTagSection({ id: "0", label: "Thể loại", tags: [] })
-            ];
-            var temp = [];
-            for (const item of genresResult('li').toArray()) {
-                temp.push(createTag({
-                    id: genresResult('a', item).attr('href').split('-')[2],
-                    label: genresResult('a', item).text()
-                }));
-            }
-            tagSections[0].tags = temp;
-            return tagSections;
-        }
-        catch (e) {
-            console.log(`getTags failed with error: ${e}`);
-            return [
-                createTagSection({ id: "-1", label: "Server unavailable", tags: [] }),
-            ];
-        }
+        // let genresResponse: Response
+        // try {
+        //     const request = createRequestObject({
+        //         url: `${DOMAIN}/tag_box.php`,
+        //         method: "GET"
+        //     })
+        //     genresResponse = await this.requestManager.schedule(request, 1);
+        //     const genresResult = this.cheerio.load(genresResponse.data);
+        //     const tagSections: TagSection[] = [
+        //         createTagSection({ id: "0", label: "Thể loại", tags: [] })
+        //     ];
+        //     var temp: Tag[] = []
+        //     for (const item of genresResult('li').toArray()) {
+        //         temp.push(createTag({
+        //             id: genresResult('a', item).attr('href').split('-')[2],
+        //             label: genresResult('a', item).text()
+        //         }))
+        //     }
+        //     tagSections[0]!.tags = temp
+        //     return tagSections;
+        // } catch (e) {
+        //     console.log(`getTags failed with error: ${e}`);
+        //     return [
+        //         createTagSection({ id: "-1", label: "Server unavailable", tags: [] }),
+        //     ];
+        // }
+        return [
+            createTagSection({
+                id: "0",
+                label: "Thể loại",
+                tags: tags_json_1.default.map((e) => createTag(e)),
+            }),
+        ];
     }
 }
 exports.HentaiVN = HentaiVN;
 
-},{"paperback-extensions-common":8}]},{},[82])(82)
+},{"./tags.json":83,"paperback-extensions-common":8}],83:[function(require,module,exports){
+module.exports=[
+    {
+        "id": "3",
+        "label": "3D Hentai"
+    },
+    {
+        "id": "5",
+        "label": "Action"
+    },
+    {
+        "id": "116",
+        "label": "Adult"
+    },
+    {
+        "id": "203",
+        "label": "Adventure"
+    },
+    {
+        "id": "20",
+        "label": "Ahegao"
+    },
+    {
+        "id": "21",
+        "label": "Anal"
+    },
+    {
+        "id": "249",
+        "label": "Angel"
+    },
+    {
+        "id": "131",
+        "label": "Ảnh động"
+    },
+    {
+        "id": "127",
+        "label": "Animal"
+    },
+    {
+        "id": "22",
+        "label": "Animal girl"
+    },
+    {
+        "id": "279",
+        "label": "Áo Dài"
+    },
+    {
+        "id": "277",
+        "label": "Apron"
+    },
+    {
+        "id": "115",
+        "label": "Artist CG"
+    },
+    {
+        "id": "130",
+        "label": "Based Game"
+    },
+    {
+        "id": "257",
+        "label": "BBM"
+    },
+    {
+        "id": "251",
+        "label": "BBW"
+    },
+    {
+        "id": "24",
+        "label": "BDSM"
+    },
+    {
+        "id": "25",
+        "label": "Bestiality"
+    },
+    {
+        "id": "133",
+        "label": "Big Ass"
+    },
+    {
+        "id": "23",
+        "label": "Big Boobs"
+    },
+    {
+        "id": "32",
+        "label": "Big Penis"
+    },
+    {
+        "id": "267",
+        "label": "Blackmail"
+    },
+    {
+        "id": "27",
+        "label": "Bloomers"
+    },
+    {
+        "id": "28",
+        "label": "BlowJobs"
+    },
+    {
+        "id": "29",
+        "label": "Body Swap"
+    },
+    {
+        "id": "30",
+        "label": "Bodysuit"
+    },
+    {
+        "id": "254",
+        "label": "Bondage"
+    },
+    {
+        "id": "33",
+        "label": "Breast Sucking"
+    },
+    {
+        "id": "248",
+        "label": "BreastJobs"
+    },
+    {
+        "id": "31",
+        "label": "Brocon"
+    },
+    {
+        "id": "242",
+        "label": "Brother"
+    },
+    {
+        "id": "241",
+        "label": "Business Suit"
+    },
+    {
+        "id": "39",
+        "label": "Catgirls"
+    },
+    {
+        "id": "101",
+        "label": "Che ít"
+    },
+    {
+        "id": "129",
+        "label": "Che nhiều"
+    },
+    {
+        "id": "34",
+        "label": "Cheating"
+    },
+    {
+        "id": "35",
+        "label": "Chikan"
+    },
+    {
+        "id": "271",
+        "label": "Chinese Dress"
+    },
+    {
+        "id": "100",
+        "label": "Có che"
+    },
+    {
+        "id": "36",
+        "label": "Comedy"
+    },
+    {
+        "id": "120",
+        "label": "Comic"
+    },
+    {
+        "id": "210",
+        "label": "Condom"
+    },
+    {
+        "id": "38",
+        "label": "Cosplay"
+    },
+    {
+        "id": "2",
+        "label": "Cousin"
+    },
+    {
+        "id": "275",
+        "label": "Crotch Tattoo"
+    },
+    {
+        "id": "269",
+        "label": "Cunnilingus"
+    },
+    {
+        "id": "40",
+        "label": "Dark Skin"
+    },
+    {
+        "id": "262",
+        "label": "Daughter"
+    },
+    {
+        "id": "268",
+        "label": "Deepthroat"
+    },
+    {
+        "id": "132",
+        "label": "Demon"
+    },
+    {
+        "id": "212",
+        "label": "DemonGirl"
+    },
+    {
+        "id": "104",
+        "label": "Devil"
+    },
+    {
+        "id": "105",
+        "label": "DevilGirl"
+    },
+    {
+        "id": "253",
+        "label": "Dirty"
+    },
+    {
+        "id": "41",
+        "label": "Dirty Old Man"
+    },
+    {
+        "id": "260",
+        "label": "DogGirl"
+    },
+    {
+        "id": "42",
+        "label": "Double Penetration"
+    },
+    {
+        "id": "44",
+        "label": "Doujinshi"
+    },
+    {
+        "id": "4",
+        "label": "Drama"
+    },
+    {
+        "id": "43",
+        "label": "Drug"
+    },
+    {
+        "id": "45",
+        "label": "Ecchi"
+    },
+    {
+        "id": "245",
+        "label": "Elder Sister"
+    },
+    {
+        "id": "125",
+        "label": "Elf"
+    },
+    {
+        "id": "46",
+        "label": "Exhibitionism"
+    },
+    {
+        "id": "123",
+        "label": "Fantasy"
+    },
+    {
+        "id": "243",
+        "label": "Father"
+    },
+    {
+        "id": "47",
+        "label": "Femdom"
+    },
+    {
+        "id": "48",
+        "label": "Fingering"
+    },
+    {
+        "id": "108",
+        "label": "Footjob"
+    },
+    {
+        "id": "259",
+        "label": "Foxgirls"
+    },
+    {
+        "id": "37",
+        "label": "Full Color"
+    },
+    {
+        "id": "202",
+        "label": "Furry"
+    },
+    {
+        "id": "50",
+        "label": "Futanari"
+    },
+    {
+        "id": "51",
+        "label": "GangBang"
+    },
+    {
+        "id": "206",
+        "label": "Garter Belts"
+    },
+    {
+        "id": "52",
+        "label": "Gender Bender"
+    },
+    {
+        "id": "106",
+        "label": "Ghost"
+    },
+    {
+        "id": "56",
+        "label": "Glasses"
+    },
+    {
+        "id": "264",
+        "label": "Gothic Lolita"
+    },
+    {
+        "id": "53",
+        "label": "Group"
+    },
+    {
+        "id": "55",
+        "label": "Guro"
+    },
+    {
+        "id": "247",
+        "label": "Hairy"
+    },
+    {
+        "id": "57",
+        "label": "Handjob"
+    },
+    {
+        "id": "58",
+        "label": "Harem"
+    },
+    {
+        "id": "102",
+        "label": "HentaiVN"
+    },
+    {
+        "id": "80",
+        "label": "Historical"
+    },
+    {
+        "id": "122",
+        "label": "Horror"
+    },
+    {
+        "id": "59",
+        "label": "Housewife"
+    },
+    {
+        "id": "60",
+        "label": "Humiliation"
+    },
+    {
+        "id": "61",
+        "label": "Idol"
+    },
+    {
+        "id": "244",
+        "label": "Imouto"
+    },
+    {
+        "id": "62",
+        "label": "Incest"
+    },
+    {
+        "id": "26",
+        "label": "Insect (Côn Trùng)"
+    },
+    {
+        "id": "280",
+        "label": "Isekai"
+    },
+    {
+        "id": "99",
+        "label": "Không che"
+    },
+    {
+        "id": "110",
+        "label": "Kimono"
+    },
+    {
+        "id": "265",
+        "label": "Kuudere"
+    },
+    {
+        "id": "63",
+        "label": "Lolicon"
+    },
+    {
+        "id": "64",
+        "label": "Maids"
+    },
+    {
+        "id": "273",
+        "label": "Manhua"
+    },
+    {
+        "id": "114",
+        "label": "Manhwa"
+    },
+    {
+        "id": "65",
+        "label": "Masturbation"
+    },
+    {
+        "id": "119",
+        "label": "Mature"
+    },
+    {
+        "id": "124",
+        "label": "Miko"
+    },
+    {
+        "id": "126",
+        "label": "Milf"
+    },
+    {
+        "id": "121",
+        "label": "Mind Break"
+    },
+    {
+        "id": "113",
+        "label": "Mind Control"
+    },
+    {
+        "id": "263",
+        "label": "Mizugi"
+    },
+    {
+        "id": "66",
+        "label": "Monster"
+    },
+    {
+        "id": "67",
+        "label": "Monstergirl"
+    },
+    {
+        "id": "103",
+        "label": "Mother"
+    },
+    {
+        "id": "205",
+        "label": "Nakadashi"
+    },
+    {
+        "id": "1",
+        "label": "Netori"
+    },
+    {
+        "id": "201",
+        "label": "Non-hen"
+    },
+    {
+        "id": "68",
+        "label": "NTR"
+    },
+    {
+        "id": "272",
+        "label": "Nun"
+    },
+    {
+        "id": "69",
+        "label": "Nurse"
+    },
+    {
+        "id": "211",
+        "label": "Old Man"
+    },
+    {
+        "id": "71",
+        "label": "Oneshot"
+    },
+    {
+        "id": "70",
+        "label": "Oral"
+    },
+    {
+        "id": "209",
+        "label": "Osananajimi"
+    },
+    {
+        "id": "72",
+        "label": "Paizuri"
+    },
+    {
+        "id": "204",
+        "label": "Pantyhose"
+    },
+    {
+        "id": "276",
+        "label": "Ponytail"
+    },
+    {
+        "id": "73",
+        "label": "Pregnant"
+    },
+    {
+        "id": "98",
+        "label": "Rape"
+    },
+    {
+        "id": "258",
+        "label": "Rimjob"
+    },
+    {
+        "id": "117",
+        "label": "Romance"
+    },
+    {
+        "id": "207",
+        "label": "Ryona"
+    },
+    {
+        "id": "134",
+        "label": "Scat"
+    },
+    {
+        "id": "74",
+        "label": "School Uniform"
+    },
+    {
+        "id": "75",
+        "label": "SchoolGirl"
+    },
+    {
+        "id": "87",
+        "label": "Series"
+    },
+    {
+        "id": "88",
+        "label": "Sex Toys"
+    },
+    {
+        "id": "246",
+        "label": "Shimapan"
+    },
+    {
+        "id": "118",
+        "label": "Short Hentai"
+    },
+    {
+        "id": "77",
+        "label": "Shota"
+    },
+    {
+        "id": "76",
+        "label": "Shoujo"
+    },
+    {
+        "id": "79",
+        "label": "Siscon"
+    },
+    {
+        "id": "78",
+        "label": "Sister"
+    },
+    {
+        "id": "82",
+        "label": "Slave"
+    },
+    {
+        "id": "213",
+        "label": "Sleeping"
+    },
+    {
+        "id": "84",
+        "label": "Small Boobs"
+    },
+    {
+        "id": "278",
+        "label": "Son"
+    },
+    {
+        "id": "83",
+        "label": "Sports"
+    },
+    {
+        "id": "81",
+        "label": "Stockings"
+    },
+    {
+        "id": "85",
+        "label": "Supernatural"
+    },
+    {
+        "id": "250",
+        "label": "Sweating"
+    },
+    {
+        "id": "86",
+        "label": "Swimsuit"
+    },
+    {
+        "id": "266",
+        "label": "Tall Girl"
+    },
+    {
+        "id": "91",
+        "label": "Teacher"
+    },
+    {
+        "id": "89",
+        "label": "Tentacles"
+    },
+    {
+        "id": "109",
+        "label": "Time Stop"
+    },
+    {
+        "id": "90",
+        "label": "Tomboy"
+    },
+    {
+        "id": "252",
+        "label": "Tracksuit"
+    },
+    {
+        "id": "256",
+        "label": "Transformation"
+    },
+    {
+        "id": "92",
+        "label": "Trap"
+    },
+    {
+        "id": "274",
+        "label": "Truyện Việt"
+    },
+    {
+        "id": "111",
+        "label": "Tsundere"
+    },
+    {
+        "id": "93",
+        "label": "Twins"
+    },
+    {
+        "id": "261",
+        "label": "Twintails"
+    },
+    {
+        "id": "107",
+        "label": "Vampire"
+    },
+    {
+        "id": "208",
+        "label": "Vanilla"
+    },
+    {
+        "id": "95",
+        "label": "Virgin"
+    },
+    {
+        "id": "270",
+        "label": "Webtoon"
+    },
+    {
+        "id": "94",
+        "label": "X-ray"
+    },
+    {
+        "id": "112",
+        "label": "Yandere"
+    },
+    {
+        "id": "96",
+        "label": "Yaoi"
+    },
+    {
+        "id": "97",
+        "label": "Yuri"
+    },
+    {
+        "id": "128",
+        "label": "Zombie"
+    }
+]
+
+},{}]},{},[82])(82)
 });

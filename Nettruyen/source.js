@@ -377,29 +377,33 @@ __exportStar(require("./RawData"), exports);
 
 },{"./Chapter":6,"./ChapterDetails":7,"./Constants":8,"./DynamicUI":24,"./HomeSection":25,"./Languages":26,"./Manga":27,"./MangaTile":28,"./MangaUpdate":29,"./PagedResults":30,"./RawData":31,"./RequestHeaders":32,"./RequestInterceptor":33,"./RequestManager":34,"./RequestObject":35,"./ResponseObject":36,"./SearchField":37,"./SearchRequest":38,"./SourceInfo":39,"./SourceManga":40,"./SourceStateManager":41,"./SourceTag":42,"./TagSection":43,"./TrackedManga":44,"./TrackedMangaChapterReadAction":45,"./TrackerActionQueue":46}],48:[function(require,module,exports){
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getServerUnavailableMangaTiles = exports.Nettruyen = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
-const DOMAIN = 'https://www.nettruyenvt.com';
+const tags_json_1 = __importDefault(require("./tags.json"));
+const DOMAIN = "https://www.nettruyenvt.com";
 exports.NettruyenInfo = {
-    version: '1.0.5',
-    name: 'NetTruyen',
-    icon: 'icon.jpg',
-    author: 'Hoang3409',
-    authorWebsite: 'https://github.com/hoang3402',
-    description: 'Extension that pulls manga from NetTruyen.',
+    version: "1.0.6",
+    name: "NetTruyen",
+    icon: "icon.jpg",
+    author: "Hoang3409",
+    authorWebsite: "https://github.com/hoang3402",
+    description: "Extension that pulls manga from NetTruyen.",
     websiteBaseURL: DOMAIN,
     contentRating: paperback_extensions_common_1.ContentRating.MATURE,
     sourceTags: [
         {
             text: "Recommended",
-            type: paperback_extensions_common_1.TagType.BLUE
+            type: paperback_extensions_common_1.TagType.BLUE,
         },
         {
-            text: 'Notifications',
-            type: paperback_extensions_common_1.TagType.GREEN
-        }
-    ]
+            text: "Notifications",
+            type: paperback_extensions_common_1.TagType.GREEN,
+        },
+    ],
 };
 class Nettruyen extends paperback_extensions_common_1.Source {
     constructor() {
@@ -412,20 +416,20 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                     request.headers = {
                         ...(request.headers ?? {}),
                         ...{
-                            'referer': DOMAIN
-                        }
+                            referer: DOMAIN,
+                        },
                     };
                     return request;
                 },
                 interceptResponse: async (response) => {
                     return response;
-                }
-            }
+                },
+            },
         });
     }
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
-            id: 'new_added',
+            id: "new_added",
             title: "Truyện Mới Thêm",
             view_more: true,
         });
@@ -452,36 +456,38 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             });
             const data = await this.requestManager.schedule(request, 1);
             let $ = this.cheerio.load(data.data);
-            var temp = $('#item-detail > div.detail-info > div > div.col-xs-4.col-image > img');
-            var image = 'http:' + temp.attr('src');
-            var titles = temp.attr('alt');
-            var des = $('#item-detail > div.detail-content > p').text();
-            var id = $('#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div').attr('data-id');
+            var temp = $("#item-detail > div.detail-info > div > div.col-xs-4.col-image > img");
+            var image = "http:" + temp.attr("src");
+            var titles = temp.attr("alt");
+            var des = $("#item-detail > div.detail-content > p").text();
+            var id = $("#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div").attr("data-id");
             var tags = [];
-            for (let tag of $('.kind.row > .col-xs-8 > a').toArray()) {
+            for (let tag of $(".kind.row > .col-xs-8 > a").toArray()) {
                 const label = $(tag).text();
-                const id = Tags[0].tags.find(tag => tag.label == label);
+                const id = Tags[0].tags.find((tag) => tag.label == label);
                 tags.push(createTag({
                     id: id.id,
-                    label: label
+                    label: label,
                 }));
             }
             // var rating = $('div.star').attr('data-rating')!;
             return createManga({
                 id: id,
                 author: "Nettruyen ăn cắp của ai đó",
-                artist: 'chịu á',
+                artist: "chịu á",
                 desc: des,
                 titles: [titles, id],
                 image: image,
                 status: 1,
                 rating: 5,
                 hentai: false,
-                tags: [createTagSection({
+                tags: [
+                    createTagSection({
                         id: "0",
                         label: "Thể loại",
-                        tags: tags
-                    })],
+                        tags: tags,
+                    }),
+                ],
             });
         }
         catch (e) {
@@ -496,16 +502,14 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             method: "GET",
         });
         const data = await this.requestManager.schedule(request, 1);
-        let list = typeof data.data === "string"
-            ? JSON.parse(data.data)
-            : data.data;
+        let list = typeof data.data === "string" ? JSON.parse(data.data) : data.data;
         for (let chapter of list.chapters) {
             chapters.push(createChapter({
                 id: chapter.url,
                 name: chapter.name,
                 mangaId: mangaId,
-                chapNum: Number.parseInt(String(chapter.name).split(' ').at(1)),
-                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
+                chapNum: Number.parseInt(String(chapter.name).split(" ").at(1)),
+                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
             }));
         }
         return chapters;
@@ -519,10 +523,10 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
         const pages = [];
-        for (let image of $('.page-chapter').toArray()) {
-            var link = $('div.page-chapter > img', image).attr('data-original');
-            if (link.indexOf('http') === -1) {
-                pages.push('http:' + link);
+        for (let image of $(".page-chapter").toArray()) {
+            var link = $("div.page-chapter > img", image).attr("data-original");
+            if (link.indexOf("http") === -1) {
+                pages.push("http:" + link);
             }
             else {
                 pages.push(link);
@@ -539,12 +543,14 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         const page = metadata?.page ?? 1;
         let advanced;
         const tiles = [];
-        let url = '';
-        let param = '';
+        let url = "";
+        let param = "";
         if (query.includedTags.length > 0) {
             advanced = true;
             url = `${DOMAIN}/tim-truyen-nang-cao`;
-            param = `?genres=${query.includedTags.map(tag => tag.id).join(',')}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0?page=${page}`;
+            param = `?genres=${query
+                .includedTags.map((tag) => tag.id)
+                .join(",")}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0?page=${page}`;
         }
         else {
             advanced = false;
@@ -568,30 +574,34 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         }
         let $ = this.cheerio.load(data.data);
         if (advanced) {
-            for (let item of $('.item').toArray()) {
-                var img = $('img', item).attr('data-original');
+            for (let item of $(".item").toArray()) {
+                var img = $("img", item).attr("data-original");
                 if (img === undefined) {
-                    img = $('img', item).attr('src');
+                    img = $("img", item).attr("src");
                 }
                 tiles.push(createMangaTile({
-                    id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, ''),
-                    title: createIconText({ text: $('h3 > a', item).text() }),
-                    image: 'http:' + img
+                    id: $("a", item)
+                        .attr("href")
+                        ?.replace(`${DOMAIN}/truyen-tranh/`, ""),
+                    title: createIconText({ text: $("h3 > a", item).text() }),
+                    image: "http:" + img,
                 }));
             }
         }
         else {
-            for (let item of $('li').toArray()) {
+            for (let item of $("li").toArray()) {
                 tiles.push(createMangaTile({
-                    id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, ''),
-                    title: createIconText({ text: $('a > h3', item).text() }),
-                    image: 'http:' + $('a > img', item).attr('src')
+                    id: $("a", item)
+                        .attr("href")
+                        ?.replace(`${DOMAIN}/truyen-tranh/`, ""),
+                    title: createIconText({ text: $("a > h3", item).text() }),
+                    image: "http:" + $("a > img", item).attr("src"),
                 }));
             }
         }
         if (tiles.length == 0) {
             return createPagedResults({
-                results: getServerUnavailableMangaTiles()
+                results: getServerUnavailableMangaTiles(),
             });
         }
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };
@@ -603,10 +613,10 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     async getViewMoreItems(homepageSectionId, metadata) {
         const page = metadata?.page ?? 1;
         switch (homepageSectionId) {
-            case 'new_added':
+            case "new_added":
                 break;
             default:
-                throw new Error('Làm gì có page này?!');
+                throw new Error("Làm gì có page này?!");
         }
         const request = createRequestObject({
             url: `${DOMAIN}/tim-truyen-nang-cao`,
@@ -616,16 +626,26 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
         const tiles = [];
-        for (let manga of $('div.item', 'div.row').toArray()) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
-            const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
-            const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
+        for (let manga of $("div.item", "div.row").toArray()) {
+            const title = $("figure.clearfix > figcaption > h3 > a", manga)
+                .first()
+                .text();
+            const id = $("figure.clearfix > div.image > a", manga)
+                .attr("href")
+                ?.split("/")
+                .pop();
+            const image = $("figure.clearfix > div.image > a > img", manga)
+                .first()
+                .attr("data-original");
+            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga)
+                .last()
+                .text()
+                .trim();
             if (!id || !title)
                 continue;
             tiles.push(createMangaTile({
                 id: id,
-                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
+                image: !image ? "https://i.imgur.com/GYUxEX8.png" : "http:" + image,
                 title: createIconText({ text: title }),
                 subtitleText: createIconText({ text: subtitle }),
             }));
@@ -638,16 +658,26 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     parseNewUpdatedSection($) {
         let newUpdatedItems = [];
-        for (let manga of $('div.item', 'div.row').toArray().splice(0, 10)) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
-            const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
-            const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
+        for (let manga of $("div.item", "div.row").toArray().splice(0, 10)) {
+            const title = $("figure.clearfix > figcaption > h3 > a", manga)
+                .first()
+                .text();
+            const id = $("figure.clearfix > div.image > a", manga)
+                .attr("href")
+                ?.split("/")
+                .pop();
+            const image = $("figure.clearfix > div.image > a > img", manga)
+                .first()
+                .attr("data-original");
+            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga)
+                .last()
+                .text()
+                .trim();
             if (!id || !title)
                 continue;
             newUpdatedItems.push(createMangaTile({
                 id: id,
-                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
+                image: !image ? "https://i.imgur.com/GYUxEX8.png" : "http:" + image,
                 title: createIconText({ text: title }),
                 subtitleText: createIconText({ text: subtitle }),
             }));
@@ -659,23 +689,26 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             createTagSection({
                 id: "0",
                 label: "Thể loại",
-                tags: []
-            })
+                tags: tags_json_1.default.map((tag) => createTag({
+                    id: tag.id,
+                    label: tag.label,
+                })),
+            }),
         ];
-        var tags = [];
-        const request = createRequestObject({
-            url: `${DOMAIN}/tim-truyen-nang-cao`,
-            method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1);
-        const $ = this.cheerio.load(data.data);
-        for (const item of $('.row > .col-md-3.col-sm-4.col-xs-6.mrb10').toArray()) {
-            tags.push(createTag({
-                id: $('span', item).attr('data-id'),
-                label: $('.genre-item', item).text().replace('\n\n', '')
-            }));
-        }
-        tagSections[0].tags = tags;
+        // var tags: Tag[] = [];
+        // const request = createRequestObject({
+        //     url: `${DOMAIN}/tim-truyen-nang-cao`,
+        //     method: "GET",
+        // });
+        // const data = await this.requestManager.schedule(request, 1)
+        // const $ = this.cheerio.load(data.data)
+        // for (const item of $('.row > .col-md-3.col-sm-4.col-xs-6.mrb10').toArray()) {
+        //     tags.push(createTag({
+        //         id: $('span', item).attr('data-id'),
+        //         label: $('.genre-item', item).text().replace('\n\n', '')
+        //     }))
+        // }
+        // tagSections[0]!.tags = tags;
         return tagSections;
     }
 }
@@ -693,5 +726,233 @@ function getServerUnavailableMangaTiles() {
 }
 exports.getServerUnavailableMangaTiles = getServerUnavailableMangaTiles;
 
-},{"paperback-extensions-common":5}]},{},[48])(48)
+},{"./tags.json":49,"paperback-extensions-common":5}],49:[function(require,module,exports){
+module.exports=[
+    {
+        "id": "1",
+        "label": "Action"
+    },
+    {
+        "id": "2",
+        "label": "Adult"
+    },
+    {
+        "id": "3",
+        "label": "Adventure"
+    },
+    {
+        "id": "4",
+        "label": "Anime"
+    },
+    {
+        "id": "5",
+        "label": "Chuyển Sinh"
+    },
+    {
+        "id": "6",
+        "label": "Comedy"
+    },
+    {
+        "id": "7",
+        "label": "Comic"
+    },
+    {
+        "id": "8",
+        "label": "Cooking"
+    },
+    {
+        "id": "9",
+        "label": "Cổ Đại"
+    },
+    {
+        "id": "10",
+        "label": "Doujinshi"
+    },
+    {
+        "id": "11",
+        "label": "Drama"
+    },
+    {
+        "id": "12",
+        "label": "Đam Mỹ"
+    },
+    {
+        "id": "13",
+        "label": "Ecchi"
+    },
+    {
+        "id": "14",
+        "label": "Fantasy"
+    },
+    {
+        "id": "15",
+        "label": "Gender Bender"
+    },
+    {
+        "id": "16",
+        "label": "Harem"
+    },
+    {
+        "id": "17",
+        "label": "Lịch sử"
+    },
+    {
+        "id": "18",
+        "label": "Horror"
+    },
+    {
+        "id": "20",
+        "label": "Josei"
+    },
+    {
+        "id": "21",
+        "label": "Live action"
+    },
+    {
+        "id": "23",
+        "label": "Manga"
+    },
+    {
+        "id": "24",
+        "label": "Manhua"
+    },
+    {
+        "id": "25",
+        "label": "Manhwa"
+    },
+    {
+        "id": "26",
+        "label": "Martial Arts"
+    },
+    {
+        "id": "27",
+        "label": "Mature"
+    },
+    {
+        "id": "28",
+        "label": "Mecha"
+    },
+    {
+        "id": "30",
+        "label": "Mystery"
+    },
+    {
+        "id": "32",
+        "label": "Ngôn Tình"
+    },
+    {
+        "id": "33",
+        "label": "One shot"
+    },
+    {
+        "id": "34",
+        "label": "Psychological"
+    },
+    {
+        "id": "35",
+        "label": "Romance"
+    },
+    {
+        "id": "36",
+        "label": "School Life"
+    },
+    {
+        "id": "37",
+        "label": "Sci-fi"
+    },
+    {
+        "id": "38",
+        "label": "Seinen"
+    },
+    {
+        "id": "39",
+        "label": "Shoujo"
+    },
+    {
+        "id": "40",
+        "label": "Shoujo Ai"
+    },
+    {
+        "id": "41",
+        "label": "Shounen"
+    },
+    {
+        "id": "42",
+        "label": "Shounen Ai"
+    },
+    {
+        "id": "43",
+        "label": "Slice of Life"
+    },
+    {
+        "id": "44",
+        "label": "Smut"
+    },
+    {
+        "id": "45",
+        "label": "Soft Yaoi"
+    },
+    {
+        "id": "46",
+        "label": "Soft Yuri"
+    },
+    {
+        "id": "47",
+        "label": "Sports"
+    },
+    {
+        "id": "48",
+        "label": "Supernatural"
+    },
+    {
+        "id": "49",
+        "label": "Tạp chí truyện tranh"
+    },
+    {
+        "id": "50",
+        "label": "Thiếu Nhi"
+    },
+    {
+        "id": "51",
+        "label": "Tragedy"
+    },
+    {
+        "id": "52",
+        "label": "Trinh Thám"
+    },
+    {
+        "id": "53",
+        "label": "Truyện Màu"
+    },
+    {
+        "id": "54",
+        "label": "Truyện scan"
+    },
+    {
+        "id": "55",
+        "label": "Việt Nam"
+    },
+    {
+        "id": "56",
+        "label": "Webtoon"
+    },
+    {
+        "id": "57",
+        "label": "Xuyên Không"
+    },
+    {
+        "id": "58",
+        "label": "Yaoi"
+    },
+    {
+        "id": "59",
+        "label": "Yuri"
+    },
+    {
+        "id": "60",
+        "label": "16+"
+    }
+]
+
+},{}]},{},[48])(48)
 });
