@@ -1,21 +1,21 @@
 import {
     Chapter,
     ChapterDetails,
+    ContentRating,
+    HomeSection,
+    LanguageCode,
     Manga,
+    MangaStatus,
+    MangaTile,
     PagedResults,
-    SearchRequest,
-    Source,
     Request,
     Response,
-    HomeSection,
-    MangaTile,
+    SearchRequest,
+    Source,
     SourceInfo,
-    ContentRating,
-    TagType,
-    MangaStatus,
-    LanguageCode,
+    Tag,
     TagSection,
-    Tag
+    TagType
 } from "paperback-extensions-common";
 
 const DOMAIN = "https://hentaivn.tv";
@@ -88,13 +88,14 @@ export class HentaiVN extends Source {
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
 
-        for (var item of $('tr').toArray()) {
+        const arr = $('tr').toArray();
+        for (var item of arr) {
             var idChap = $('a', item).attr('href').split('-')[1];
             chapters.push(createChapter({
                 id: idChap,
                 mangaId: mangaId,
                 name: $('h2', item).text(),
-                chapNum: 0,
+                chapNum: arr.length - arr.indexOf(item),
                 langCode: LanguageCode.VIETNAMESE
             }))
         }
@@ -147,6 +148,7 @@ export class HentaiVN extends Source {
             }))
         }
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };
+
         return createPagedResults({
             results: tiles,
             metadata: metadata,

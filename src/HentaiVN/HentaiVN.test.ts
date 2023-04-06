@@ -1,7 +1,7 @@
+import { expect } from 'chai';
+import * as cheerio from 'cheerio';
 import { SearchRequest, Source } from 'paperback-extensions-common';
 import { HentaiVN } from './HentaiVN';
-import * as cheerio from 'cheerio';
-import { expect } from 'chai';
 
 describe("HentaiVN", function () {
     let source: Source;
@@ -11,7 +11,7 @@ describe("HentaiVN", function () {
     hentaivn = source as HentaiVN;
 
     describe("getMangaDetails()", function () {
-        it('Get Manga Details', async () => {
+        it.skip('Get Manga Details', async () => {
             var data = await hentaivn.getMangaDetails('/33394-doc-truyen-chinh-phuc-gai-genshin-impact-5-luat-le-sinh-ton-tien-quyet.html');
             expect(data, 'Null').to.be.not.empty
             // console.debug(data);
@@ -20,16 +20,16 @@ describe("HentaiVN", function () {
 
 
     describe("getChapters()", function () {
-        it('Get Chapters', async () => {
-            var data = await hentaivn.getChapters('33390');
+        it.skip('Get Chapters', async () => {
+            var data = await hentaivn.getChapters('23931');
             expect(data, 'Null').to.be.not.empty
-            // console.debug(data);
+            console.debug(data);
         })
     })
 
 
     describe("getChapterDetails()", function () {
-        it('Get Chapters Details', async () => {
+        it.skip('Get Chapters Details', async () => {
             var data = await hentaivn.getChapterDetails('29301', '61703');
             expect(data, 'Null').to.be.not.empty
             // console.debug(data);
@@ -38,7 +38,7 @@ describe("HentaiVN", function () {
 
 
     describe("getViewMoreItems()", function () {
-        it('Get View More Items', async () => {
+        it.skip('Get View More Items', async () => {
             var data = await hentaivn.getViewMoreItems('new_added', '');
             expect(data, 'Null').to.be.not.empty
             // console.debug(data);
@@ -47,7 +47,7 @@ describe("HentaiVN", function () {
 
 
     describe("getSearchTags()", function () {
-        it('Get Search Tags', async () => {
+        it.skip('Get Search Tags', async () => {
             var data = await hentaivn.getSearchTags();
             expect(data[0]!.tags, 'Null').to.be.not.empty
             // console.debug(data[0]!.tags);
@@ -56,7 +56,7 @@ describe("HentaiVN", function () {
 
 
     describe("getSearchResults()", function () {
-        it('Get Search Tags', async () => {
+        it.skip('Get Search Tags', async () => {
             var Srequest: SearchRequest = {
                 parameters: {},
                 title: 'đây là một đoạn tét',

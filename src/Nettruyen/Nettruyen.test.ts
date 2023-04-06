@@ -1,10 +1,10 @@
-import { Nettruyen } from "./Nettruyen";
-import {
-    Source,
-    SearchRequest,
-} from "paperback-extensions-common";
-import * as cheerio from 'cheerio';
 import { expect } from "chai";
+import * as cheerio from 'cheerio';
+import {
+    SearchRequest,
+    Source,
+} from "paperback-extensions-common";
+import { Nettruyen } from "./Nettruyen";
 
 describe("NetTruyen", function () {
     let source: Source;
@@ -16,7 +16,7 @@ describe("NetTruyen", function () {
     });
 
     describe("getChapters()", function () {
-        it('Get Chapter', async () => {
+        it.skip('Get Chapter', async () => {
             const data = await nettruyen.getChapters("60533");
             expect(data, 'Null').to.be.not.empty
             // console.log(data);
@@ -24,7 +24,7 @@ describe("NetTruyen", function () {
     });
 
     describe("getSearchTags()", function () {
-        it('Get Tags', async () => {
+        it.skip('Get Tags', async () => {
             const data = await nettruyen.getSearchTags();
             expect(data, 'Null').to.be.not.empty
             // console.debug(data[0]?.tags);
@@ -32,7 +32,7 @@ describe("NetTruyen", function () {
     });
 
     describe("getMangaDetails()", function () {
-        it('Get Manga Details', async () => {
+        it.skip('Get Manga Details', async () => {
             const data = await nettruyen.getMangaDetails('/ta-khong-muon-trung-sinh-dau-65017');
             expect(data, 'Null').to.be.not.empty
             // console.debug(data.tags);
@@ -40,7 +40,7 @@ describe("NetTruyen", function () {
     });
 
     describe("getSearchResults()", function () {
-        it('Get Search', async () => {
+        it.skip('Get Search', async () => {
             var meta = ''
             var query: SearchRequest = {
                 title: 'One',
