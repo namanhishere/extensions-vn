@@ -112,9 +112,10 @@ export class Nettruyen extends Source {
             for (let tag of $(".kind.row > .col-xs-8 > a").toArray()) {
                 const label = $(tag).text();
                 const id = Tags[0]!.tags.find((tag) => tag.label == label);
+                if (!id) continue;
                 tags.push(
                     createTag({
-                        id: id!.id,
+                        id: id.id,
                         label: label,
                     })
                 );

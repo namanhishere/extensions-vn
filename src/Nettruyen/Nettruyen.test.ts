@@ -33,7 +33,7 @@ describe("NetTruyen", function () {
 
     describe("getMangaDetails()", function () {
         it.skip('Get Manga Details', async () => {
-            const data = await nettruyen.getMangaDetails('/ta-khong-muon-trung-sinh-dau-65017');
+            const data = await nettruyen.getMangaDetails('/co-vo-moi-cuoi-cua-toi-luc-nao-cung-mim-cuoi-269050');
             expect(data, 'Null').to.be.not.empty
             console.debug(data.tags);
         })
