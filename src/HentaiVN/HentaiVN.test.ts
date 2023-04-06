@@ -14,7 +14,9 @@ describe("HentaiVN", function () {
         it.skip('Get Manga Details', async () => {
             var data = await hentaivn.getMangaDetails('/33394-doc-truyen-chinh-phuc-gai-genshin-impact-5-luat-le-sinh-ton-tien-quyet.html');
             expect(data, 'Null').to.be.not.empty
-            // console.debug(data);
+            expect(data.image, 'Null').to.be.not.empty
+            expect(data.image, 'Not correct format').to.be.includes('http')
+            console.debug(data);
         })
     })
 
@@ -32,7 +34,7 @@ describe("HentaiVN", function () {
         it.skip('Get Chapters Details', async () => {
             var data = await hentaivn.getChapterDetails('29301', '61703');
             expect(data, 'Null').to.be.not.empty
-            // console.debug(data);
+            console.debug(data);
         })
     })
 
@@ -41,7 +43,7 @@ describe("HentaiVN", function () {
         it.skip('Get View More Items', async () => {
             var data = await hentaivn.getViewMoreItems('new_added', '');
             expect(data, 'Null').to.be.not.empty
-            // console.debug(data);
+            console.debug(data);
         })
     })
 
@@ -50,7 +52,7 @@ describe("HentaiVN", function () {
         it.skip('Get Search Tags', async () => {
             var data = await hentaivn.getSearchTags();
             expect(data[0]!.tags, 'Null').to.be.not.empty
-            // console.debug(data[0]!.tags);
+            console.debug(data[0]!.tags);
         })
     })
 
@@ -64,7 +66,7 @@ describe("HentaiVN", function () {
             }
             var data = await hentaivn.getSearchResults(Srequest, '');
             expect(data, 'Null').to.be.not.empty
-            // console.debug(data);
+            console.debug(data);
         })
     })
 })

@@ -21,7 +21,7 @@ import {
 const DOMAIN = "https://hentaivn.tv";
 
 export const HentaiVNInfo: SourceInfo = {
-    version: "1.1.3",
+    version: "1.1.4",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -32,7 +32,7 @@ export const HentaiVNInfo: SourceInfo = {
     sourceTags: [{
         text: 'Hentai',
         type: TagType.RED
-    }]
+    }],
 }
 
 export class HentaiVN extends Source {
@@ -67,13 +67,24 @@ export class HentaiVN extends Source {
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
 
+        let tags: Tag[] = $('.tag').toArray().map((e: any) => createTag({ 
+            id: $(e).attr('href').split('-')[2],
+            label: $(e).text(), 
+        }));
+
         return createManga({
             id: mangaId.split('-')[0]!.replace('/', ''),
             titles: [
                 $('div.page-info > h1 > a').text().trim()
             ],
             image: $('div.page-ava > img').attr('src'),
-            status: MangaStatus.ONGOING
+            status: MangaStatus.ONGOING,
+            hentai: true,
+            tags: [createTagSection({
+                id: "0",
+                label: "Thể loại",
+                tags: tags
+            })]
         });
     }
 
@@ -96,7 +107,7 @@ export class HentaiVN extends Source {
                 mangaId: mangaId,
                 name: $('h2', item).text(),
                 chapNum: arr.length - arr.indexOf(item),
-                langCode: LanguageCode.VIETNAMESE
+                langCode: LanguageCode.VIETNAMESE,
             }))
         }
         return chapters;
@@ -121,7 +132,7 @@ export class HentaiVN extends Source {
             id: chapterId,
             mangaId: mangaId,
             pages: listUrlImage,
-            longStrip: false
+            longStrip: false,
         })
     }
 
