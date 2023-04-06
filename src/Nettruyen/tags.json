@@ -1,0 +1,226 @@
+[
+    {
+        "id": "1",
+        "label": "Action"
+    },
+    {
+        "id": "2",
+        "label": "Adult"
+    },
+    {
+        "id": "3",
+        "label": "Adventure"
+    },
+    {
+        "id": "4",
+        "label": "Anime"
+    },
+    {
+        "id": "5",
+        "label": "Chuyển Sinh"
+    },
+    {
+        "id": "6",
+        "label": "Comedy"
+    },
+    {
+        "id": "7",
+        "label": "Comic"
+    },
+    {
+        "id": "8",
+        "label": "Cooking"
+    },
+    {
+        "id": "9",
+        "label": "Cổ Đại"
+    },
+    {
+        "id": "10",
+        "label": "Doujinshi"
+    },
+    {
+        "id": "11",
+        "label": "Drama"
+    },
+    {
+        "id": "12",
+        "label": "Đam Mỹ"
+    },
+    {
+        "id": "13",
+        "label": "Ecchi"
+    },
+    {
+        "id": "14",
+        "label": "Fantasy"
+    },
+    {
+        "id": "15",
+        "label": "Gender Bender"
+    },
+    {
+        "id": "16",
+        "label": "Harem"
+    },
+    {
+        "id": "17",
+        "label": "Lịch sử"
+    },
+    {
+        "id": "18",
+        "label": "Horror"
+    },
+    {
+        "id": "20",
+        "label": "Josei"
+    },
+    {
+        "id": "21",
+        "label": "Live action"
+    },
+    {
+        "id": "23",
+        "label": "Manga"
+    },
+    {
+        "id": "24",
+        "label": "Manhua"
+    },
+    {
+        "id": "25",
+        "label": "Manhwa"
+    },
+    {
+        "id": "26",
+        "label": "Martial Arts"
+    },
+    {
+        "id": "27",
+        "label": "Mature"
+    },
+    {
+        "id": "28",
+        "label": "Mecha"
+    },
+    {
+        "id": "30",
+        "label": "Mystery"
+    },
+    {
+        "id": "32",
+        "label": "Ngôn Tình"
+    },
+    {
+        "id": "33",
+        "label": "One shot"
+    },
+    {
+        "id": "34",
+        "label": "Psychological"
+    },
+    {
+        "id": "35",
+        "label": "Romance"
+    },
+    {
+        "id": "36",
+        "label": "School Life"
+    },
+    {
+        "id": "37",
+        "label": "Sci-fi"
+    },
+    {
+        "id": "38",
+        "label": "Seinen"
+    },
+    {
+        "id": "39",
+        "label": "Shoujo"
+    },
+    {
+        "id": "40",
+        "label": "Shoujo Ai"
+    },
+    {
+        "id": "41",
+        "label": "Shounen"
+    },
+    {
+        "id": "42",
+        "label": "Shounen Ai"
+    },
+    {
+        "id": "43",
+        "label": "Slice of Life"
+    },
+    {
+        "id": "44",
+        "label": "Smut"
+    },
+    {
+        "id": "45",
+        "label": "Soft Yaoi"
+    },
+    {
+        "id": "46",
+        "label": "Soft Yuri"
+    },
+    {
+        "id": "47",
+        "label": "Sports"
+    },
+    {
+        "id": "48",
+        "label": "Supernatural"
+    },
+    {
+        "id": "49",
+        "label": "Tạp chí truyện tranh"
+    },
+    {
+        "id": "50",
+        "label": "Thiếu Nhi"
+    },
+    {
+        "id": "51",
+        "label": "Tragedy"
+    },
+    {
+        "id": "52",
+        "label": "Trinh Thám"
+    },
+    {
+        "id": "53",
+        "label": "Truyện Màu"
+    },
+    {
+        "id": "54",
+        "label": "Truyện scan"
+    },
+    {
+        "id": "55",
+        "label": "Việt Nam"
+    },
+    {
+        "id": "56",
+        "label": "Webtoon"
+    },
+    {
+        "id": "57",
+        "label": "Xuyên Không"
+    },
+    {
+        "id": "58",
+        "label": "Yaoi"
+    },
+    {
+        "id": "59",
+        "label": "Yuri"
+    },
+    {
+        "id": "60",
+        "label": "16+"
+    }
+]

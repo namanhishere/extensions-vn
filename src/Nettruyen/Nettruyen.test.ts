@@ -19,7 +19,7 @@ describe("NetTruyen", function () {
         it.skip('Get Chapter', async () => {
             const data = await nettruyen.getChapters("60533");
             expect(data, 'Null').to.be.not.empty
-            // console.log(data);
+            console.log(data);
         })
     });
 
@@ -27,7 +27,7 @@ describe("NetTruyen", function () {
         it.skip('Get Tags', async () => {
             const data = await nettruyen.getSearchTags();
             expect(data, 'Null').to.be.not.empty
-            // console.debug(data[0]?.tags);
+            console.debug(data[0]?.tags);
         })
     });
 
@@ -35,7 +35,7 @@ describe("NetTruyen", function () {
         it.skip('Get Manga Details', async () => {
             const data = await nettruyen.getMangaDetails('/ta-khong-muon-trung-sinh-dau-65017');
             expect(data, 'Null').to.be.not.empty
-            // console.debug(data.tags);
+            console.debug(data.tags);
         })
     });
 
@@ -52,7 +52,7 @@ describe("NetTruyen", function () {
             }
             const data = await nettruyen.getSearchResults(query, meta);
             expect(data, 'Null').to.be.not.empty
-            // console.log(data);
+            console.log(data);
         })
     });
 });

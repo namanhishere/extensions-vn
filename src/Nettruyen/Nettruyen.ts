@@ -17,32 +17,32 @@ import {
     TagType,
 } from "paperback-extensions-common";
 
-const DOMAIN = 'https://www.nettruyenvt.com';
+import tags from "./tags.json";
+
+const DOMAIN = "https://www.nettruyenvt.com";
 
 export const NettruyenInfo: SourceInfo = {
-    version: '1.0.5',
-    name: 'NetTruyen',
-    icon: 'icon.jpg',
-    author: 'Hoang3409',
-    authorWebsite: 'https://github.com/hoang3402',
-    description: 'Extension that pulls manga from NetTruyen.',
+    version: "1.0.6",
+    name: "NetTruyen",
+    icon: "icon.jpg",
+    author: "Hoang3409",
+    authorWebsite: "https://github.com/hoang3402",
+    description: "Extension that pulls manga from NetTruyen.",
     websiteBaseURL: DOMAIN,
     contentRating: ContentRating.MATURE,
     sourceTags: [
         {
             text: "Recommended",
-            type: TagType.BLUE
+            type: TagType.BLUE,
         },
         {
-            text: 'Notifications',
-            type: TagType.GREEN
-        }
-    ]
-}
+            text: "Notifications",
+            type: TagType.GREEN,
+        },
+    ],
+};
 
 export class Nettruyen extends Source {
-
-
     requestManager = createRequestManager({
         requestsPerSecond: 5,
         requestTimeout: 20000,
@@ -51,21 +51,23 @@ export class Nettruyen extends Source {
                 request.headers = {
                     ...(request.headers ?? {}),
                     ...{
-                        'referer': DOMAIN
-                    }
-                }
-                return request
+                        referer: DOMAIN,
+                    },
+                };
+                return request;
             },
 
             interceptResponse: async (response: Response): Promise<Response> => {
-                return response
-            }
-        }
-    })
+                return response;
+            },
+        },
+    });
 
-    override async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
+    override async getHomePageSections(
+        sectionCallback: (section: HomeSection) => void
+    ): Promise<void> {
         let newAdded: HomeSection = createHomeSection({
-            id: 'new_added',
+            id: "new_added",
             title: "Truyện Mới Thêm",
             view_more: true,
         });
@@ -74,7 +76,7 @@ export class Nettruyen extends Source {
         sectionCallback(newAdded);
 
         //New Updates
-        let url = `${DOMAIN}`
+        let url = `${DOMAIN}`;
         let request = createRequestObject({
             url: url,
             method: "GET",
@@ -97,37 +99,45 @@ export class Nettruyen extends Source {
             const data = await this.requestManager.schedule(request, 1);
             let $ = this.cheerio.load(data.data);
 
-            var temp = $('#item-detail > div.detail-info > div > div.col-xs-4.col-image > img');
-            var image = 'http:' + temp.attr('src')!;
-            var titles = temp.attr('alt')!;
-            var des = $('#item-detail > div.detail-content > p').text();
-            var id = $('#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div').attr('data-id')!;
+            var temp = $(
+                "#item-detail > div.detail-info > div > div.col-xs-4.col-image > img"
+            );
+            var image = "http:" + temp.attr("src")!;
+            var titles = temp.attr("alt")!;
+            var des = $("#item-detail > div.detail-content > p").text();
+            var id = $(
+                "#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div"
+            ).attr("data-id")!;
             var tags: Tag[] = [];
-            for (let tag of $('.kind.row > .col-xs-8 > a').toArray()) {
+            for (let tag of $(".kind.row > .col-xs-8 > a").toArray()) {
                 const label = $(tag).text();
-                const id = Tags[0]!.tags.find(tag => tag.label == label);
-                tags.push(createTag({
-                    id: id!.id,
-                    label: label
-                }))
+                const id = Tags[0]!.tags.find((tag) => tag.label == label);
+                tags.push(
+                    createTag({
+                        id: id!.id,
+                        label: label,
+                    })
+                );
             }
             // var rating = $('div.star').attr('data-rating')!;
 
             return createManga({
                 id: id,
                 author: "Nettruyen ăn cắp của ai đó",
-                artist: 'chịu á',
+                artist: "chịu á",
                 desc: des,
                 titles: [titles, id],
                 image: image,
                 status: 1,
                 rating: 5,
                 hentai: false,
-                tags: [createTagSection({
-                    id: "0",
-                    label: "Thể loại",
-                    tags: tags
-                })],
+                tags: [
+                    createTagSection({
+                        id: "0",
+                        label: "Thể loại",
+                        tags: tags,
+                    }),
+                ],
             });
         } catch (e) {
             throw new Error("Error: " + e);
@@ -145,9 +155,8 @@ export class Nettruyen extends Source {
 
         const data = await this.requestManager.schedule(request, 1);
 
-        let list = typeof data.data === "string"
-            ? JSON.parse(data.data)
-            : data.data;
+        let list =
+            typeof data.data === "string" ? JSON.parse(data.data) : data.data;
 
         for (let chapter of list.chapters) {
             chapters.push(
@@ -155,16 +164,19 @@ export class Nettruyen extends Source {
                     id: chapter.url,
                     name: chapter.name,
                     mangaId: mangaId,
-                    chapNum: Number.parseInt(String(chapter.name).split(' ').at(1)!),
-                    langCode: LanguageCode.VIETNAMESE
+                    chapNum: Number.parseInt(String(chapter.name).split(" ").at(1)!),
+                    langCode: LanguageCode.VIETNAMESE,
                 })
-            )
+            );
         }
 
         return chapters;
     }
 
-    override async getChapterDetails(mangaId: string, chapterId: string): Promise<ChapterDetails> {
+    override async getChapterDetails(
+        mangaId: string,
+        chapterId: string
+    ): Promise<ChapterDetails> {
         const request = createRequestObject({
             url: DOMAIN,
             param: chapterId,
@@ -175,10 +187,10 @@ export class Nettruyen extends Source {
         let $ = this.cheerio.load(data.data);
 
         const pages: string[] = [];
-        for (let image of $('.page-chapter').toArray()) {
-            var link = $('div.page-chapter > img', image).attr('data-original')!;
-            if (link.indexOf('http') === -1) {
-                pages.push('http:' + link);
+        for (let image of $(".page-chapter").toArray()) {
+            var link = $("div.page-chapter > img", image).attr("data-original")!;
+            if (link.indexOf("http") === -1) {
+                pages.push("http:" + link);
             } else {
                 pages.push(link);
             }
@@ -192,17 +204,24 @@ export class Nettruyen extends Source {
         });
     }
 
-    override async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
+    override async getSearchResults(
+        query: SearchRequest,
+        metadata: any
+    ): Promise<PagedResults> {
         const page: number = metadata?.page ?? 1;
         let advanced: boolean;
         const tiles: MangaTile[] = [];
-        let url = '';
-        let param = '';
+        let url = "";
+        let param = "";
 
         if (query.includedTags!.length > 0) {
             advanced = true;
             url = `${DOMAIN}/tim-truyen-nang-cao`;
-            param = `?genres=${query.includedTags!.map(tag => tag.id).join(',')}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0?page=${page}`;
+            param = `?genres=${query
+                .includedTags!.map((tag) => tag.id)
+                .join(
+                    ","
+                )}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0?page=${page}`;
         } else {
             advanced = false;
             url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
@@ -226,30 +245,38 @@ export class Nettruyen extends Source {
         let $ = this.cheerio.load(data.data);
 
         if (advanced) {
-            for (let item of $('.item').toArray()) {
-                var img = $('img', item).attr('data-original')!;
+            for (let item of $(".item").toArray()) {
+                var img = $("img", item).attr("data-original")!;
                 if (img === undefined) {
-                    img = $('img', item).attr('src')!;
+                    img = $("img", item).attr("src")!;
                 }
-                tiles.push(createMangaTile({
-                    id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, '')!,
-                    title: createIconText({ text: $('h3 > a', item).text() }),
-                    image: 'http:' + img
-                }));
+                tiles.push(
+                    createMangaTile({
+                        id: $("a", item)
+                            .attr("href")
+                            ?.replace(`${DOMAIN}/truyen-tranh/`, "")!,
+                        title: createIconText({ text: $("h3 > a", item).text() }),
+                        image: "http:" + img,
+                    })
+                );
             }
         } else {
-            for (let item of $('li').toArray()) {
-                tiles.push(createMangaTile({
-                    id: $('a', item).attr('href')?.replace(`${DOMAIN}/truyen-tranh/`, '')!,
-                    title: createIconText({ text: $('a > h3', item).text() }),
-                    image: 'http:' + $('a > img', item).attr('src')!
-                }));
+            for (let item of $("li").toArray()) {
+                tiles.push(
+                    createMangaTile({
+                        id: $("a", item)
+                            .attr("href")
+                            ?.replace(`${DOMAIN}/truyen-tranh/`, "")!,
+                        title: createIconText({ text: $("a > h3", item).text() }),
+                        image: "http:" + $("a > img", item).attr("src")!,
+                    })
+                );
             }
         }
 
         if (tiles.length == 0) {
             return createPagedResults({
-                results: getServerUnavailableMangaTiles()
+                results: getServerUnavailableMangaTiles(),
             });
         }
 
@@ -261,14 +288,17 @@ export class Nettruyen extends Source {
         });
     }
 
-    override async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults> {
+    override async getViewMoreItems(
+        homepageSectionId: string,
+        metadata: any
+    ): Promise<PagedResults> {
         const page: number = metadata?.page ?? 1;
 
         switch (homepageSectionId) {
-            case 'new_added':
+            case "new_added":
                 break;
             default:
-                throw new Error('Làm gì có page này?!');
+                throw new Error("Làm gì có page này?!");
         }
 
         const request = createRequestObject({
@@ -281,18 +311,33 @@ export class Nettruyen extends Source {
         const $ = this.cheerio.load(data.data);
         const tiles: MangaTile[] = [];
 
-        for (let manga of $('div.item', 'div.row').toArray()) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
-            const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
-            const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
+        for (let manga of $("div.item", "div.row").toArray()) {
+            const title = $("figure.clearfix > figcaption > h3 > a", manga)
+                .first()
+                .text();
+            const id = $("figure.clearfix > div.image > a", manga)
+                .attr("href")
+                ?.split("/")
+                .pop();
+            const image = $("figure.clearfix > div.image > a > img", manga)
+                .first()
+                .attr("data-original");
+            const subtitle = $(
+                "figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a",
+                manga
+            )
+                .last()
+                .text()
+                .trim();
             if (!id || !title) continue;
-            tiles.push(createMangaTile({
-                id: id,
-                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
-                title: createIconText({ text: title }),
-                subtitleText: createIconText({ text: subtitle }),
-            }));
+            tiles.push(
+                createMangaTile({
+                    id: id,
+                    image: !image ? "https://i.imgur.com/GYUxEX8.png" : "http:" + image,
+                    title: createIconText({ text: title }),
+                    subtitleText: createIconText({ text: subtitle }),
+                })
+            );
         }
 
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };
@@ -306,18 +351,33 @@ export class Nettruyen extends Source {
     parseNewUpdatedSection($: any): MangaTile[] {
         let newUpdatedItems: MangaTile[] = [];
 
-        for (let manga of $('div.item', 'div.row').toArray().splice(0, 10)) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga).first().text();
-            const id = $('figure.clearfix > div.image > a', manga).attr('href')?.split('/').pop();
-            const image = $('figure.clearfix > div.image > a > img', manga).first().attr('data-original');
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga).last().text().trim();
+        for (let manga of $("div.item", "div.row").toArray().splice(0, 10)) {
+            const title = $("figure.clearfix > figcaption > h3 > a", manga)
+                .first()
+                .text();
+            const id = $("figure.clearfix > div.image > a", manga)
+                .attr("href")
+                ?.split("/")
+                .pop();
+            const image = $("figure.clearfix > div.image > a > img", manga)
+                .first()
+                .attr("data-original");
+            const subtitle = $(
+                "figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a",
+                manga
+            )
+                .last()
+                .text()
+                .trim();
             if (!id || !title) continue;
-            newUpdatedItems.push(createMangaTile({
-                id: id,
-                image: !image ? "https://i.imgur.com/GYUxEX8.png" : 'http:' + image,
-                title: createIconText({ text: title }),
-                subtitleText: createIconText({ text: subtitle }),
-            }));
+            newUpdatedItems.push(
+                createMangaTile({
+                    id: id,
+                    image: !image ? "https://i.imgur.com/GYUxEX8.png" : "http:" + image,
+                    title: createIconText({ text: title }),
+                    subtitleText: createIconText({ text: subtitle }),
+                })
+            );
         }
 
         return newUpdatedItems;
@@ -328,24 +388,29 @@ export class Nettruyen extends Source {
             createTagSection({
                 id: "0",
                 label: "Thể loại",
-                tags: []
-            })
-        ]
+                tags: tags.map((tag) =>
+                    createTag({
+                        id: tag.id,
+                        label: tag.label,
+                    })
+                ),
+            }),
+        ];
 
-        var tags: Tag[] = [];
-        const request = createRequestObject({
-            url: `${DOMAIN}/tim-truyen-nang-cao`,
-            method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1)
-        const $ = this.cheerio.load(data.data)
-        for (const item of $('.row > .col-md-3.col-sm-4.col-xs-6.mrb10').toArray()) {
-            tags.push(createTag({
-                id: $('span', item).attr('data-id'),
-                label: $('.genre-item', item).text().replace('\n\n', '')
-            }))
-        }
-        tagSections[0]!.tags = tags;
+        // var tags: Tag[] = [];
+        // const request = createRequestObject({
+        //     url: `${DOMAIN}/tim-truyen-nang-cao`,
+        //     method: "GET",
+        // });
+        // const data = await this.requestManager.schedule(request, 1)
+        // const $ = this.cheerio.load(data.data)
+        // for (const item of $('.row > .col-md-3.col-sm-4.col-xs-6.mrb10').toArray()) {
+        //     tags.push(createTag({
+        //         id: $('span', item).attr('data-id'),
+        //         label: $('.genre-item', item).text().replace('\n\n', '')
+        //     }))
+        // }
+        // tagSections[0]!.tags = tags;
 
         return tagSections;
     }
