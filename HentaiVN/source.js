@@ -382,7 +382,7 @@ exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.1.2",
+    version: "1.1.3",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -442,13 +442,14 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        for (var item of $('tr').toArray()) {
+        const arr = $('tr').toArray();
+        for (var item of arr) {
             var idChap = $('a', item).attr('href').split('-')[1];
             chapters.push(createChapter({
                 id: idChap,
                 mangaId: mangaId,
                 name: $('h2', item).text(),
-                chapNum: 0,
+                chapNum: arr.length - arr.indexOf(item),
                 langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
             }));
         }
