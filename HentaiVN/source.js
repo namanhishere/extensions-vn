@@ -382,7 +382,7 @@ exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.1.3",
+    version: "1.1.4",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -393,7 +393,7 @@ exports.HentaiVNInfo = {
     sourceTags: [{
             text: 'Hentai',
             type: paperback_extensions_common_1.TagType.RED
-        }]
+        }],
 };
 class HentaiVN extends paperback_extensions_common_1.Source {
     constructor() {
@@ -424,13 +424,23 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
+        let tags = $('.tag').toArray().map((e) => createTag({
+            id: $(e).attr('href').split('-')[2],
+            label: $(e).text(),
+        }));
         return createManga({
             id: mangaId.split('-')[0].replace('/', ''),
             titles: [
                 $('div.page-info > h1 > a').text().trim()
             ],
             image: $('div.page-ava > img').attr('src'),
-            status: paperback_extensions_common_1.MangaStatus.ONGOING
+            status: paperback_extensions_common_1.MangaStatus.ONGOING,
+            hentai: true,
+            tags: [createTagSection({
+                    id: "0",
+                    label: "Thể loại",
+                    tags: tags
+                })]
         });
     }
     async getChapters(mangaId) {
@@ -450,7 +460,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                 mangaId: mangaId,
                 name: $('h2', item).text(),
                 chapNum: arr.length - arr.indexOf(item),
-                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
+                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
             }));
         }
         return chapters;
@@ -471,7 +481,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             id: chapterId,
             mangaId: mangaId,
             pages: listUrlImage,
-            longStrip: false
+            longStrip: false,
         });
     }
     async getSearchResults(query, metadata) {
