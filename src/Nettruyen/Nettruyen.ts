@@ -22,7 +22,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://www.nettruyenvt.com";
 
 export const NettruyenInfo: SourceInfo = {
-    version: "1.0.6",
+    version: "1.0.7",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -127,7 +127,7 @@ export class Nettruyen extends Source {
                 author: "Nettruyen ăn cắp của ai đó",
                 artist: "chịu á",
                 desc: des,
-                titles: [titles, id],
+                titles: [titles],
                 image: image,
                 status: 1,
                 rating: 5,
@@ -148,6 +148,10 @@ export class Nettruyen extends Source {
     override async getChapters(mangaId: string): Promise<Chapter[]> {
         const chapters: Chapter[] = [];
 
+        if (Number.parseInt(mangaId) === Number.NaN) {
+            mangaId = await this.getMangaID(mangaId);
+        }
+
         const request = createRequestObject({
             url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
             param: `?comicId=${mangaId}`,
@@ -156,8 +160,7 @@ export class Nettruyen extends Source {
 
         const data = await this.requestManager.schedule(request, 1);
 
-        let list =
-            typeof data.data === "string" ? JSON.parse(data.data) : data.data;
+        let list = typeof data.data === "string" ? JSON.parse(data.data) : data.data;
 
         for (let chapter of list.chapters) {
             chapters.push(
@@ -172,6 +175,21 @@ export class Nettruyen extends Source {
         }
 
         return chapters;
+    }
+
+    async getMangaID(mangaId: string): Promise<string> {
+
+        const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
+        const request = createRequestObject({
+            url: url,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        let $ = this.cheerio.load(data.data);
+
+        return $(
+            "#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div"
+        ).attr("data-id")!;
     }
 
     override async getChapterDetails(
@@ -234,7 +252,9 @@ export class Nettruyen extends Source {
             param: param,
             method: "GET",
         });
+
         let data: Response;
+
         try {
             data = await this.requestManager.schedule(request, 1);
         } catch (error) {
@@ -243,6 +263,7 @@ export class Nettruyen extends Source {
                 results: getServerUnavailableMangaTiles(),
             });
         }
+
         let $ = this.cheerio.load(data.data);
 
         if (advanced) {
