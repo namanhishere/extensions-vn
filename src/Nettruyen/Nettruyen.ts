@@ -22,7 +22,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://www.nettruyenvt.com";
 
 export const NettruyenInfo: SourceInfo = {
-    version: "1.0.7",
+    version: "1.0.8",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -148,7 +148,7 @@ export class Nettruyen extends Source {
     override async getChapters(mangaId: string): Promise<Chapter[]> {
         const chapters: Chapter[] = [];
 
-        if (Number.parseInt(mangaId) === Number.NaN) {
+        if (mangaId.match(RegExp(/[a-z]/))) {
             mangaId = await this.getMangaID(mangaId);
         }
 

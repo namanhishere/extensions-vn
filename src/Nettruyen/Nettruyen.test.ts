@@ -17,7 +17,7 @@ describe("NetTruyen", function () {
 
     describe("getChapters()", function () {
         it.skip('Get Chapter', async () => {
-            const data = await nettruyen.getChapters("60533");
+            const data = await nettruyen.getChapters("thap-dai-de-hoang-deu-la-de-tu-cua-ta-82156");
             expect(data, 'Null').to.be.not.empty
             console.log(data);
         })
