@@ -386,7 +386,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://www.nettruyenvt.com";
 exports.NettruyenInfo = {
-    version: "1.0.6",
+    version: "1.0.7",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -478,7 +478,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                 author: "Nettruyen ăn cắp của ai đó",
                 artist: "chịu á",
                 desc: des,
-                titles: [titles, id],
+                titles: [titles],
                 image: image,
                 status: 1,
                 rating: 5,
@@ -498,6 +498,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     async getChapters(mangaId) {
         const chapters = [];
+        if (Number.parseInt(mangaId) === Number.NaN) {
+            mangaId = await this.getMangaID(mangaId);
+        }
         const request = createRequestObject({
             url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
             param: `?comicId=${mangaId}`,
@@ -515,6 +518,16 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             }));
         }
         return chapters;
+    }
+    async getMangaID(mangaId) {
+        const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
+        const request = createRequestObject({
+            url: url,
+            method: "GET",
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        let $ = this.cheerio.load(data.data);
+        return $("#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div").attr("data-id");
     }
     async getChapterDetails(mangaId, chapterId) {
         const request = createRequestObject({
