@@ -386,7 +386,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://www.nettruyenvt.com";
 exports.NettruyenInfo = {
-    version: "1.0.9",
+    version: "1.1.0",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -515,12 +515,13 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         }
         const data = await this.requestManager.schedule(request, 1);
         let list = typeof data.data === "string" ? JSON.parse(data.data) : data.data;
+        var index = list.chapters.length;
         for (let chapter of list.chapters) {
             chapters.push(createChapter({
                 id: chapter.url,
                 name: chapter.name,
                 mangaId: mangaId,
-                chapNum: Number.parseInt(String(chapter.name).split(" ").at(1)),
+                chapNum: index--,
                 langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
             }));
         }
