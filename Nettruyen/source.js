@@ -386,7 +386,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://www.nettruyenvt.com";
 exports.NettruyenInfo = {
-    version: "1.0.8",
+    version: "1.0.9",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -498,14 +498,21 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     async getChapters(mangaId) {
         const chapters = [];
+        var request;
         if (mangaId.match(RegExp(/[a-z]/))) {
-            mangaId = await this.getMangaID(mangaId);
+            request = createRequestObject({
+                url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
+                param: `?comicId=${await this.getMangaID(mangaId)}`,
+                method: "GET",
+            });
         }
-        const request = createRequestObject({
-            url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
-            param: `?comicId=${mangaId}`,
-            method: "GET",
-        });
+        else {
+            request = createRequestObject({
+                url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
+                param: `?comicId=${mangaId}`,
+                method: "GET",
+            });
+        }
         const data = await this.requestManager.schedule(request, 1);
         let list = typeof data.data === "string" ? JSON.parse(data.data) : data.data;
         for (let chapter of list.chapters) {
@@ -520,12 +527,10 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         return chapters;
     }
     async getMangaID(mangaId) {
-        const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
-        const request = createRequestObject({
-            url: url,
+        const data = await this.requestManager.schedule(createRequestObject({
+            url: `${DOMAIN}/truyen-tranh/${mangaId}`,
             method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1);
+        }), 1);
         let $ = this.cheerio.load(data.data);
         return $("#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div").attr("data-id");
     }
