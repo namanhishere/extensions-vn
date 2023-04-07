@@ -22,7 +22,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://www.nettruyenvt.com";
 
 export const NettruyenInfo: SourceInfo = {
-    version: "1.0.8",
+    version: "1.0.9",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -147,16 +147,21 @@ export class Nettruyen extends Source {
 
     override async getChapters(mangaId: string): Promise<Chapter[]> {
         const chapters: Chapter[] = [];
+        var request;
 
         if (mangaId.match(RegExp(/[a-z]/))) {
-            mangaId = await this.getMangaID(mangaId);
+            request = createRequestObject({
+                url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
+                param: `?comicId=${await this.getMangaID(mangaId)}`,
+                method: "GET",
+            });
+        } else {
+            request = createRequestObject({
+                url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
+                param: `?comicId=${mangaId}`,
+                method: "GET",
+            });
         }
-
-        const request = createRequestObject({
-            url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
-            param: `?comicId=${mangaId}`,
-            method: "GET",
-        });
 
         const data = await this.requestManager.schedule(request, 1);
 
@@ -179,12 +184,10 @@ export class Nettruyen extends Source {
 
     async getMangaID(mangaId: string): Promise<string> {
 
-        const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
-        const request = createRequestObject({
-            url: url,
+        const data = await this.requestManager.schedule(createRequestObject({
+            url: `${DOMAIN}/truyen-tranh/${mangaId}`,
             method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1);
+        }), 1);
         let $ = this.cheerio.load(data.data);
 
         return $(
