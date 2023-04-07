@@ -2976,7 +2976,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://www.nettruyenvt.com";
 exports.NettruyenInfo = {
-    version: "1.0.7",
+    version: "1.0.8",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -3088,7 +3088,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
     }
     async getChapters(mangaId) {
         const chapters = [];
-        if (Number.parseInt(mangaId) === Number.NaN) {
+        if (mangaId.match(RegExp(/[a-z]/))) {
             mangaId = await this.getMangaID(mangaId);
         }
         const request = createRequestObject({
