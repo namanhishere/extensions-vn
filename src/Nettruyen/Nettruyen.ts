@@ -23,7 +23,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://www.nettruyenvt.com";
 
 export const NettruyenInfo: SourceInfo = {
-    version: "1.1.6",
+    version: "1.2.0",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -108,9 +108,7 @@ export class Nettruyen extends Source {
             var image = "http:" + temp.attr("src")!;
             var titles = temp.attr("alt")!;
             var des = $("#item-detail > div.detail-content > p").text();
-            var id = $(
-                "#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div"
-            ).attr("data-id")!;
+            var id = mangaId;
             var tags: Tag[] = [];
             for (let tag of $(".kind.row > .col-xs-8 > a").toArray()) {
                 const label = $(tag).text();
@@ -152,19 +150,11 @@ export class Nettruyen extends Source {
         const chapters: Chapter[] = [];
         var request;
 
-        if (mangaId.match(RegExp(/[a-z]/))) {
-            request = createRequestObject({
-                url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
-                param: `?comicId=${await this.getMangaID(mangaId)}`,
-                method: "GET",
-            });
-        } else {
-            request = createRequestObject({
-                url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
-                param: `?comicId=${mangaId}`,
-                method: "GET",
-            });
-        }
+        request = createRequestObject({
+            url: `${DOMAIN}/Comic/Services/ComicService.asmx/ProcessChapterList`,
+            param: `?comicId=${await this.getMangaID(mangaId)}`,
+            method: "GET",
+        });
 
         const data = await this.requestManager.schedule(request, 1);
 
@@ -461,39 +451,38 @@ export class Nettruyen extends Source {
         time: Date,
         ids: string[]
     ): Promise<void> {
-        console.log('Start filterUpdatedManga ', ids)
-        let updates: string[] = [];
-        let page = 2;
+        // let updates: string[] = [];
+        // let page = 2;
 
-        for (let i = 1; i <= page; i++) {
-            const data = await this.requestManager.schedule(
-                createRequestObject({
-                    url: `${DOMAIN}/tim-truyen-nang-cao`,
-                    param: `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0&page=${i}`,
-                    method: "GET",
-                }),
-                1
-            );
+        // for (let i = 1; i <= page; i++) {
+        //     const data = await this.requestManager.schedule(
+        //         createRequestObject({
+        //             url: `${DOMAIN}/tim-truyen-nang-cao`,
+        //             param: `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0&page=${i}`,
+        //             method: "GET",
+        //         }),
+        //         1
+        //     );
 
-            const $ = this.cheerio.load(data.data);
+        //     const $ = this.cheerio.load(data.data);
 
-            for (const manga of $(".item").toArray()) {
-                var id: string = $('.clearfix > .image > a', manga).attr("href").split("/").pop();
-                ids.forEach(item => {
-                    if (id.includes(item)) {
-                        updates.push(id);
-                    }
-                });
-            }
-        }
+        //     for (const manga of $(".item").toArray()) {
+        //         var id: string = $('.clearfix > .image > a', manga).attr("href").split("/").pop();
+        //         ids.forEach(item => {
+        //             if (id.includes(item)) {
+        //                 updates.push(id);
+        //             }
+        //         });
+        //     }
+        // }
 
-        console.debug('Found updates: ', updates.length)
+        // if (updates.length > 0) {
+        //     mangaUpdatesFoundCallback(createMangaUpdates({
+        //         ids: updates
+        //     }))
+        // }
 
-        if (updates.length > 0) {
-            mangaUpdatesFoundCallback(createMangaUpdates({
-                ids: updates
-            }))
-        }
+        mangaUpdatesFoundCallback(createMangaUpdates({ ids: ids }));
     }
 }
 
