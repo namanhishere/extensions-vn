@@ -23,7 +23,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://www.nettruyenvt.com";
 
 export const NettruyenInfo: SourceInfo = {
-    version: "1.1.1",
+    version: "1.1.6",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -58,7 +58,9 @@ export class Nettruyen extends Source {
                 return request;
             },
 
-            interceptResponse: async (response: Response): Promise<Response> => {
+            interceptResponse: async (
+                response: Response
+            ): Promise<Response> => {
                 return response;
             },
         },
@@ -166,7 +168,8 @@ export class Nettruyen extends Source {
 
         const data = await this.requestManager.schedule(request, 1);
 
-        let list = typeof data.data === "string" ? JSON.parse(data.data) : data.data;
+        let list =
+            typeof data.data === "string" ? JSON.parse(data.data) : data.data;
         var index = list.chapters.length;
         for (let chapter of list.chapters) {
             chapters.push(
@@ -184,11 +187,13 @@ export class Nettruyen extends Source {
     }
 
     async getMangaID(mangaId: string): Promise<string> {
-
-        const data = await this.requestManager.schedule(createRequestObject({
-            url: `${DOMAIN}/truyen-tranh/${mangaId}`,
-            method: "GET",
-        }), 1);
+        const data = await this.requestManager.schedule(
+            createRequestObject({
+                url: `${DOMAIN}/truyen-tranh/${mangaId}`,
+                method: "GET",
+            }),
+            1
+        );
         let $ = this.cheerio.load(data.data);
 
         return $(
@@ -211,7 +216,9 @@ export class Nettruyen extends Source {
 
         const pages: string[] = [];
         for (let image of $(".page-chapter").toArray()) {
-            var link = $("div.page-chapter > img", image).attr("data-original")!;
+            var link = $("div.page-chapter > img", image).attr(
+                "data-original"
+            )!;
             if (link.indexOf("http") === -1) {
                 pages.push("http:" + link);
             } else {
@@ -281,7 +288,9 @@ export class Nettruyen extends Source {
                         id: $("a", item)
                             .attr("href")
                             ?.replace(`${DOMAIN}/truyen-tranh/`, "")!,
-                        title: createIconText({ text: $("h3 > a", item).text() }),
+                        title: createIconText({
+                            text: $("h3 > a", item).text(),
+                        }),
                         image: "http:" + img,
                     })
                 );
@@ -293,7 +302,9 @@ export class Nettruyen extends Source {
                         id: $("a", item)
                             .attr("href")
                             ?.replace(`${DOMAIN}/truyen-tranh/`, "")!,
-                        title: createIconText({ text: $("a > h3", item).text() }),
+                        title: createIconText({
+                            text: $("a > h3", item).text(),
+                        }),
                         image: "http:" + $("a > img", item).attr("src")!,
                     })
                 );
@@ -359,7 +370,9 @@ export class Nettruyen extends Source {
             tiles.push(
                 createMangaTile({
                     id: id,
-                    image: !image ? "https://i.imgur.com/GYUxEX8.png" : "http:" + image,
+                    image: !image
+                        ? "https://i.imgur.com/GYUxEX8.png"
+                        : "http:" + image,
                     title: createIconText({ text: title }),
                     subtitleText: createIconText({ text: subtitle }),
                 })
@@ -399,7 +412,9 @@ export class Nettruyen extends Source {
             newUpdatedItems.push(
                 createMangaTile({
                     id: id,
-                    image: !image ? "https://i.imgur.com/GYUxEX8.png" : "http:" + image,
+                    image: !image
+                        ? "https://i.imgur.com/GYUxEX8.png"
+                        : "http:" + image,
                     title: createIconText({ text: title }),
                     subtitleText: createIconText({ text: subtitle }),
                 })
@@ -441,38 +456,44 @@ export class Nettruyen extends Source {
         return tagSections;
     }
 
-    override async filterUpdatedManga(mangaUpdatesFoundCallback: (updates: MangaUpdates) => void, time: Date, ids: string[]): Promise<void> {
-
-        let updates: any = []
-        let page = 10;
+    override async filterUpdatedManga(
+        mangaUpdatesFoundCallback: (updates: MangaUpdates) => void,
+        time: Date,
+        ids: string[]
+    ): Promise<void> {
+        console.log('Start filterUpdatedManga ', ids)
+        let updates: string[] = [];
+        let page = 2;
 
         for (let i = 1; i <= page; i++) {
-            const data = await this.requestManager.schedule(createRequestObject({
-                url: `${DOMAIN}/tim-truyen-nang-cao`,
-                param: `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0&page=${i}`,
-                method: "GET",
-            }), 1);
+            const data = await this.requestManager.schedule(
+                createRequestObject({
+                    url: `${DOMAIN}/tim-truyen-nang-cao`,
+                    param: `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0&page=${i}`,
+                    method: "GET",
+                }),
+                1
+            );
 
             const $ = this.cheerio.load(data.data);
 
-            for (let manga of $('.comic-item').toArray()) {
-                updates.push({
-                    id: $(manga).attr('data-id'),
-                    time: $('i.time', manga).first().text().trim()
-                })
+            for (const manga of $(".item").toArray()) {
+                var id: string = $('.clearfix > .image > a', manga).attr("href").split("/").pop();
+                ids.forEach(item => {
+                    if (id.includes(item)) {
+                        updates.push(id);
+                    }
+                });
             }
         }
 
-        let mangaUpdates: MangaUpdates = {
-            'ids': [],
-        };
+        console.debug('Found updates: ', updates.length)
 
-        for (const elem of updates) {
-            if (ids.includes(elem.id))
-                mangaUpdates.ids.push(elem.id)
+        if (updates.length > 0) {
+            mangaUpdatesFoundCallback(createMangaUpdates({
+                ids: updates
+            }))
         }
-
-        mangaUpdatesFoundCallback(createMangaUpdates(mangaUpdates))
     }
 }
 
