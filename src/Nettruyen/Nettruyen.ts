@@ -6,6 +6,7 @@ import {
     LanguageCode,
     Manga,
     MangaTile,
+    MangaUpdates,
     PagedResults,
     Request,
     Response,
@@ -22,7 +23,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://www.nettruyenvt.com";
 
 export const NettruyenInfo: SourceInfo = {
-    version: "1.1.0",
+    version: "1.1.1",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -438,6 +439,40 @@ export class Nettruyen extends Source {
         // tagSections[0]!.tags = tags;
 
         return tagSections;
+    }
+
+    override async filterUpdatedManga(mangaUpdatesFoundCallback: (updates: MangaUpdates) => void, time: Date, ids: string[]): Promise<void> {
+
+        let updates: any = []
+        let page = 10;
+
+        for (let i = 1; i <= page; i++) {
+            const data = await this.requestManager.schedule(createRequestObject({
+                url: `${DOMAIN}/tim-truyen-nang-cao`,
+                param: `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0&page=${i}`,
+                method: "GET",
+            }), 1);
+
+            const $ = this.cheerio.load(data.data);
+
+            for (let manga of $('.comic-item').toArray()) {
+                updates.push({
+                    id: $(manga).attr('data-id'),
+                    time: $('i.time', manga).first().text().trim()
+                })
+            }
+        }
+
+        let mangaUpdates: MangaUpdates = {
+            'ids': [],
+        };
+
+        for (const elem of updates) {
+            if (ids.includes(elem.id))
+                mangaUpdates.ids.push(elem.id)
+        }
+
+        mangaUpdatesFoundCallback(createMangaUpdates(mangaUpdates))
     }
 }
 
