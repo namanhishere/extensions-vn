@@ -2,6 +2,10 @@
 # Vietnamese Extensions
 Vietnamese sources for Paperback
 
+### if you use [Tachiyomi](https://tachiyomi.org/)
+
+You can convert your backup to paperback when using this [tool](https://github.com/hoang3402/Tachiyomi-To-Paperbackup-Converter)
+
 ## Link extension
 ```
 https://hoang3402.github.io/extensions-vn/
@@ -10,7 +14,7 @@ https://hoang3402.github.io/extensions-vn/
 
 | Name      | Link                    |
 |-----------|-------------------------|
-| NetTruyen | https://nettruyen.live/ |
+| NetTruyen | https://www.nettruyenvt.com/ |
 | HentaiVN  | https://hentaivn.tv/    |
 
 </div>
