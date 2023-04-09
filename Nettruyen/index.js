@@ -2976,7 +2976,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://www.nettruyenvt.com";
 exports.NettruyenInfo = {
-    version: "1.1.0",
+    version: "1.1.1",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -3321,6 +3321,32 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         // }
         // tagSections[0]!.tags = tags;
         return tagSections;
+    }
+    async filterUpdatedManga(mangaUpdatesFoundCallback, time, ids) {
+        let updates = [];
+        let page = 10;
+        for (let i = 1; i <= page; i++) {
+            const data = await this.requestManager.schedule(createRequestObject({
+                url: `${DOMAIN}/tim-truyen-nang-cao`,
+                param: `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0&page=${i}`,
+                method: "GET",
+            }), 1);
+            const $ = this.cheerio.load(data.data);
+            for (let manga of $('.comic-item').toArray()) {
+                updates.push({
+                    id: $(manga).attr('data-id'),
+                    time: $('i.time', manga).first().text().trim()
+                });
+            }
+        }
+        let mangaUpdates = {
+            'ids': [],
+        };
+        for (const elem of updates) {
+            if (ids.includes(elem.id))
+                mangaUpdates.ids.push(elem.id);
+        }
+        mangaUpdatesFoundCallback(createMangaUpdates(mangaUpdates));
     }
 }
 exports.Nettruyen = Nettruyen;
