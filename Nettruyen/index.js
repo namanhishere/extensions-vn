@@ -2976,7 +2976,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://www.nettruyenvt.com";
 exports.NettruyenInfo = {
-    version: "1.1.1",
+    version: "1.1.6",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -3194,7 +3194,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                     id: $("a", item)
                         .attr("href")
                         ?.replace(`${DOMAIN}/truyen-tranh/`, ""),
-                    title: createIconText({ text: $("h3 > a", item).text() }),
+                    title: createIconText({
+                        text: $("h3 > a", item).text(),
+                    }),
                     image: "http:" + img,
                 }));
             }
@@ -3205,7 +3207,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                     id: $("a", item)
                         .attr("href")
                         ?.replace(`${DOMAIN}/truyen-tranh/`, ""),
-                    title: createIconText({ text: $("a > h3", item).text() }),
+                    title: createIconText({
+                        text: $("a > h3", item).text(),
+                    }),
                     image: "http:" + $("a > img", item).attr("src"),
                 }));
             }
@@ -3256,7 +3260,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                 continue;
             tiles.push(createMangaTile({
                 id: id,
-                image: !image ? "https://i.imgur.com/GYUxEX8.png" : "http:" + image,
+                image: !image
+                    ? "https://i.imgur.com/GYUxEX8.png"
+                    : "http:" + image,
                 title: createIconText({ text: title }),
                 subtitleText: createIconText({ text: subtitle }),
             }));
@@ -3288,7 +3294,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                 continue;
             newUpdatedItems.push(createMangaTile({
                 id: id,
-                image: !image ? "https://i.imgur.com/GYUxEX8.png" : "http:" + image,
+                image: !image
+                    ? "https://i.imgur.com/GYUxEX8.png"
+                    : "http:" + image,
                 title: createIconText({ text: title }),
                 subtitleText: createIconText({ text: subtitle }),
             }));
@@ -3323,8 +3331,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         return tagSections;
     }
     async filterUpdatedManga(mangaUpdatesFoundCallback, time, ids) {
+        console.log('Start filterUpdatedManga ', ids);
         let updates = [];
-        let page = 10;
+        let page = 2;
         for (let i = 1; i <= page; i++) {
             const data = await this.requestManager.schedule(createRequestObject({
                 url: `${DOMAIN}/tim-truyen-nang-cao`,
@@ -3332,21 +3341,21 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                 method: "GET",
             }), 1);
             const $ = this.cheerio.load(data.data);
-            for (let manga of $('.comic-item').toArray()) {
-                updates.push({
-                    id: $(manga).attr('data-id'),
-                    time: $('i.time', manga).first().text().trim()
+            for (const manga of $(".item").toArray()) {
+                var id = $('.clearfix > .image > a', manga).attr("href").split("/").pop();
+                ids.forEach(item => {
+                    if (id.includes(item)) {
+                        updates.push(id);
+                    }
                 });
             }
         }
-        let mangaUpdates = {
-            'ids': [],
-        };
-        for (const elem of updates) {
-            if (ids.includes(elem.id))
-                mangaUpdates.ids.push(elem.id);
+        console.debug('Found updates: ', updates.length);
+        if (updates.length > 0) {
+            mangaUpdatesFoundCallback(createMangaUpdates({
+                ids: updates
+            }));
         }
-        mangaUpdatesFoundCallback(createMangaUpdates(mangaUpdates));
     }
 }
 exports.Nettruyen = Nettruyen;
