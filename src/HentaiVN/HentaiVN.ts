@@ -23,7 +23,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://hentaivn.tv";
 
 export const HentaiVNInfo: SourceInfo = {
-    version: "1.1.5",
+    version: "1.1.6",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -62,7 +62,7 @@ export class HentaiVN extends Source {
 
     override async getMangaDetails(mangaId: string): Promise<Manga> {
         const request = createRequestObject({
-            url: `${DOMAIN}${mangaId}`,
+            url: `${DOMAIN}/${mangaId}-doc-truyen-.html`,
             method: "GET",
         });
         const data = await this.requestManager.schedule(request, 1);
@@ -78,7 +78,7 @@ export class HentaiVN extends Source {
             );
 
         return createManga({
-            id: mangaId.split("-")[0]!.replace("/", ""),
+            id: mangaId,
             titles: [$("div.page-info > h1 > a").text().trim()],
             image: $("div.page-ava > img").attr("src"),
             status: MangaStatus.ONGOING,
@@ -166,7 +166,7 @@ export class HentaiVN extends Source {
         for (let item of $("li.search-li").toArray()) {
             tiles.push(
                 createMangaTile({
-                    id: $("div.search-img > a", item).attr("href"),
+                    id: $("div.search-img > a", item).attr("href").split('-')[0].replace('/', ''),
                     title: createIconText({ text: $("b", item).first().text() }),
                     image: $("img", item).attr("src"),
                 })
@@ -250,7 +250,7 @@ export class HentaiVN extends Source {
         for (let item of $("li.item > ul").toArray()) {
             tiles.push(
                 createMangaTile({
-                    id: encodeURIComponent($("a", item).attr("href")).replace("%2F", "/"),
+                    id: $("a", item).attr("href").split('-')[0].replace('/', ''),
                     title: createIconText({ text: $("img", item).attr("alt") }),
                     image: $("img", item).attr("src"),
                 })

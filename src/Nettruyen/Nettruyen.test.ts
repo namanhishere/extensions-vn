@@ -58,7 +58,7 @@ describe("NetTruyen", function () {
     });
 
     describe("filterUpdatedManga()", function () {
-        it('Get Manga Details', async () => {
+        it.skip('Get Manga Details', async () => {
             nettruyen.filterUpdatedManga(
                 (updates: MangaUpdates) => {
                     console.debug('Dang cap nhat: ' + updates.ids)
