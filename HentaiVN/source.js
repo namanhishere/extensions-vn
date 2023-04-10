@@ -386,7 +386,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.1.5",
+    version: "1.1.6",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -425,7 +425,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     }
     async getMangaDetails(mangaId) {
         const request = createRequestObject({
-            url: `${DOMAIN}${mangaId}`,
+            url: `${DOMAIN}/${mangaId}-doc-truyen-.html`,
             method: "GET",
         });
         const data = await this.requestManager.schedule(request, 1);
@@ -437,7 +437,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             label: $(e).text(),
         }));
         return createManga({
-            id: mangaId.split("-")[0].replace("/", ""),
+            id: mangaId,
             titles: [$("div.page-info > h1 > a").text().trim()],
             image: $("div.page-ava > img").attr("src"),
             status: paperback_extensions_common_1.MangaStatus.ONGOING,
@@ -507,7 +507,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const tiles = [];
         for (let item of $("li.search-li").toArray()) {
             tiles.push(createMangaTile({
-                id: $("div.search-img > a", item).attr("href"),
+                id: $("div.search-img > a", item).attr("href").split('-')[0].replace('/', ''),
                 title: createIconText({ text: $("b", item).first().text() }),
                 image: $("img", item).attr("src"),
             }));
@@ -572,7 +572,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const tiles = [];
         for (let item of $("li.item > ul").toArray()) {
             tiles.push(createMangaTile({
-                id: encodeURIComponent($("a", item).attr("href")).replace("%2F", "/"),
+                id: $("a", item).attr("href").split('-')[0].replace('/', ''),
                 title: createIconText({ text: $("img", item).attr("alt") }),
                 image: $("img", item).attr("src"),
             }));
