@@ -23,7 +23,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://www.nettruyenvt.com";
 
 export const NettruyenInfo: SourceInfo = {
-    version: "1.2.0",
+    version: "1.2.1",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -177,6 +177,8 @@ export class Nettruyen extends Source {
     }
 
     async getMangaID(mangaId: string): Promise<string> {
+        if (!mangaId.match(RegExp(/[a-z]/))) return mangaId;
+
         const data = await this.requestManager.schedule(
             createRequestObject({
                 url: `${DOMAIN}/truyen-tranh/${mangaId}`,

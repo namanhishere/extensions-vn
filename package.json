@@ -6,6 +6,7 @@
   "scripts": {
     "test": "node_modules\\.bin\\mocha --timeout 300000 -r ts-node/register src/**/*.test.ts",
     "dev": "npx nodemon --watch \"**/*.ts\" --ext \"js ts\" --exec \"npm run test\"",
+    "log": "paperback logcat --ip=192.168.1.6",
     "bundle": "paperback bundle",
     "serve": "paperback serve",
     "deploy": "gh-pages -d bundles"
