@@ -18,3 +18,5 @@ https://hoang3402.github.io/extensions-vn/
 | HentaiVN  | https://hentaivn.tv/    |
 
 </div>
+
+## If you want to add your own source, you can refer to it [here](https://github.com/hoang3402/extensions-vn/wiki)
