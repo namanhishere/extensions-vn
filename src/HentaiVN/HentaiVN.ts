@@ -209,7 +209,7 @@ export class HentaiVN extends Source {
         for (let item of $("ul.page-random").toArray()) {
             items.push(
                 createMangaTile({
-                    id: $("div.img-same > a", item).attr("href"),
+                    id: $("div.img-same > a", item).attr("href").split('-')[0].replace('/', ''),
                     title: createIconText({ text: $("b", item).first().text() }),
                     image: $("div[style*=background]", item)
                         .attr("style")
