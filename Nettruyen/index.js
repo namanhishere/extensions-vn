@@ -2976,7 +2976,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://www.nettruyenvt.com";
 exports.NettruyenInfo = {
-    version: "1.2.1",
+    version: "1.2.2",
     name: "NetTruyen",
     icon: "icon.jpg",
     author: "Hoang3409",
@@ -3023,8 +3023,6 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             title: "Truyện Mới Thêm",
             view_more: true,
         });
-        //Load empty sections
-        sectionCallback(newAdded);
         //New Updates
         let url = `${DOMAIN}`;
         let request = createRequestObject({
@@ -3048,8 +3046,8 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             let $ = this.cheerio.load(data.data);
             var temp = $("#item-detail > div.detail-info > div > div.col-xs-4.col-image > img");
             var image = "http:" + temp.attr("src");
-            var titles = temp.attr("alt");
-            var des = $("#item-detail > div.detail-content > p").text();
+            var titles = [temp.attr("alt")];
+            var des = $("#item-detail > div.detail-content > p").text().replaceAll('\n', ' ');
             var id = mangaId;
             var tags = [];
             for (let tag of $(".kind.row > .col-xs-8 > a").toArray()) {
@@ -3062,16 +3060,23 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                     label: label,
                 }));
             }
-            // var rating = $('div.star').attr('data-rating')!;
+            var rating = $('span[itemprop="ratingValue"]').text();
+            var views = $('ul.list-info > li.row > p.col-xs-8').last().text().replaceAll('.', '');
+            if ($('ul.list-info > li.othername.row')) {
+                $('ul.list-info > li.othername.row > h2')
+                    .text()
+                    .split(';')
+                    .map((item) => titles.push(item.trim()));
+            }
             return createManga({
                 id: id,
                 author: "Nettruyen ăn cắp của ai đó",
                 artist: "chịu á",
                 desc: des,
-                titles: [titles],
+                titles: titles,
                 image: image,
                 status: 1,
-                rating: 5,
+                rating: Number.parseFloat(rating),
                 hentai: false,
                 tags: [
                     createTagSection({
@@ -3080,6 +3085,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                         tags: tags,
                     }),
                 ],
+                views: Number.parseInt(views),
             });
         }
         catch (e) {
@@ -3297,59 +3303,15 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         return newUpdatedItems;
     }
     async getSearchTags() {
-        const tagSections = [
+        return [
             createTagSection({
                 id: "0",
                 label: "Thể loại",
-                tags: tags_json_1.default.map((tag) => createTag({
-                    id: tag.id,
-                    label: tag.label,
-                })),
+                tags: tags_json_1.default.map((tag) => createTag(tag)),
             }),
         ];
-        // var tags: Tag[] = [];
-        // const request = createRequestObject({
-        //     url: `${DOMAIN}/tim-truyen-nang-cao`,
-        //     method: "GET",
-        // });
-        // const data = await this.requestManager.schedule(request, 1)
-        // const $ = this.cheerio.load(data.data)
-        // for (const item of $('.row > .col-md-3.col-sm-4.col-xs-6.mrb10').toArray()) {
-        //     tags.push(createTag({
-        //         id: $('span', item).attr('data-id'),
-        //         label: $('.genre-item', item).text().replace('\n\n', '')
-        //     }))
-        // }
-        // tagSections[0]!.tags = tags;
-        return tagSections;
     }
     async filterUpdatedManga(mangaUpdatesFoundCallback, time, ids) {
-        // let updates: string[] = [];
-        // let page = 2;
-        // for (let i = 1; i <= page; i++) {
-        //     const data = await this.requestManager.schedule(
-        //         createRequestObject({
-        //             url: `${DOMAIN}/tim-truyen-nang-cao`,
-        //             param: `?genres=&notgenres=&gender=-1&status=-1&minchapter=1&sort=0&page=${i}`,
-        //             method: "GET",
-        //         }),
-        //         1
-        //     );
-        //     const $ = this.cheerio.load(data.data);
-        //     for (const manga of $(".item").toArray()) {
-        //         var id: string = $('.clearfix > .image > a', manga).attr("href").split("/").pop();
-        //         ids.forEach(item => {
-        //             if (id.includes(item)) {
-        //                 updates.push(id);
-        //             }
-        //         });
-        //     }
-        // }
-        // if (updates.length > 0) {
-        //     mangaUpdatesFoundCallback(createMangaUpdates({
-        //         ids: updates
-        //     }))
-        // }
         mangaUpdatesFoundCallback(createMangaUpdates({ ids: ids }));
     }
 }

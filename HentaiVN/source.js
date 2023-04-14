@@ -584,33 +584,6 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
     }
     async getSearchTags() {
-        // This function is called on the homepage and should not throw if the server is unavailable
-        // let genresResponse: Response
-        // try {
-        //     const request = createRequestObject({
-        //         url: `${DOMAIN}/tag_box.php`,
-        //         method: "GET"
-        //     })
-        //     genresResponse = await this.requestManager.schedule(request, 1);
-        //     const genresResult = this.cheerio.load(genresResponse.data);
-        //     const tagSections: TagSection[] = [
-        //         createTagSection({ id: "0", label: "Thể loại", tags: [] })
-        //     ];
-        //     var temp: Tag[] = []
-        //     for (const item of genresResult('li').toArray()) {
-        //         temp.push(createTag({
-        //             id: genresResult('a', item).attr('href').split('-')[2],
-        //             label: genresResult('a', item).text()
-        //         }))
-        //     }
-        //     tagSections[0]!.tags = temp
-        //     return tagSections;
-        // } catch (e) {
-        //     console.log(`getTags failed with error: ${e}`);
-        //     return [
-        //         createTagSection({ id: "-1", label: "Server unavailable", tags: [] }),
-        //     ];
-        // }
         return [
             createTagSection({
                 id: "0",
