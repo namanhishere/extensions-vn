@@ -18,7 +18,7 @@ describe("NetTruyen", function () {
 
     describe("getChapters()", function () {
         it.skip('Get Chapter', async () => {
-            const data = await nettruyen.getChapters("gay-go-cap-99-600783");
+            const data = await nettruyen.getChapters("verndio-su-thi-ve-mong-kiem-60612");
             expect(data, 'Null').to.be.not.empty
             console.log(data);
         })
@@ -66,6 +66,16 @@ describe("NetTruyen", function () {
                 new Date,
                 ["dinh-cap-khi-van-lang-le-tu-luyen-ngan-nam-63226", "tro-thanh-tai-phiet-nho-game-74151", "truoc-khi-vo-dich-ta-no-tinh-qua-nhieu-71614", "chuyen-sinh-vao-the-gioi-vo-lam-74995", "man-cap-tra-xanh-xuyen-khong-thanh-tieu-dang-thuong-62902", "ta-co-the-don-ngo-vo-han-74869", "phap-su-phe-vat-71545", "moi-tuan-ta-co-mot-nghe-nghiep-moi-505430", "66879", "65660", "71030"]
             )
+        })
+    });
+
+    describe("ConvertTime()", function () {
+        it.skip('Convert Time', async () => {
+            var data = nettruyen.convertTime("1 giờ trước");
+            // var data = nettruyen.convertTime("16 ngày trước");
+            // var data = nettruyen.convertTime("12:44 05/02");
+            // var data = nettruyen.convertTime("29/12/22");
+            console.debug(data);
         })
     });
 });
