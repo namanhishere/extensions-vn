@@ -23,7 +23,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://hentaivn.tv";
 
 export const HentaiVNInfo: SourceInfo = {
-    version: "1.1.8",
+    version: "1.1.9",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -72,7 +72,7 @@ export class HentaiVN extends Source {
         let tags: Tag[] = [];
 
         for (const item of $("a.tag").toArray()) {
-            const tag: Tag = Tags[0]!.tags.find($(item).text())!;
+            const tag: Tag = Tags[0]!.tags.find((tag) => $(item).text() == tag.label)!;
             if (!tag) continue;
             tags.push(tag);
         }
