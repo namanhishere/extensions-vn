@@ -386,7 +386,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.1.8",
+    version: "1.1.9",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -433,7 +433,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         let $ = this.cheerio.load(data.data);
         let tags = [];
         for (const item of $("a.tag").toArray()) {
-            const tag = Tags[0].tags.find($(item).text());
+            const tag = Tags[0].tags.find((tag) => $(item).text() == tag.label);
             if (!tag)
                 continue;
             tags.push(tag);
