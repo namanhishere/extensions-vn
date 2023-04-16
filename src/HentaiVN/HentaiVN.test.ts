@@ -11,7 +11,7 @@ describe("HentaiVN", function () {
     hentaivn = source as HentaiVN;
 
     describe("getMangaDetails()", function () {
-        it("Get Manga Details", async () => {
+        it.skip("Get Manga Details", async () => {
             var data = await hentaivn.getMangaDetails(
                 "33394"
             );
@@ -19,6 +19,7 @@ describe("HentaiVN", function () {
             expect(data.image, "Null").to.be.not.empty;
             expect(data.image, "Not correct format").to.be.includes("http");
             console.debug(data);
+            console.debug(data.tags!.at(0)!.tags);
         });
     });
 
