@@ -386,7 +386,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://hentaivn.tv";
 exports.HentaiVNInfo = {
-    version: "1.1.6",
+    version: "1.1.8",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -424,18 +424,20 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
     }
     async getMangaDetails(mangaId) {
+        const Tags = await this.getSearchTags();
         const request = createRequestObject({
             url: `${DOMAIN}/${mangaId}-doc-truyen-.html`,
             method: "GET",
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        let tags = $(".tag")
-            .toArray()
-            .map((e) => createTag({
-            id: $(e).attr("href").split("-")[2],
-            label: $(e).text(),
-        }));
+        let tags = [];
+        for (const item of $("a.tag").toArray()) {
+            const tag = Tags[0].tags.find($(item).text());
+            if (!tag)
+                continue;
+            tags.push(tag);
+        }
         return createManga({
             id: mangaId,
             titles: [$("div.page-info > h1 > a").text().trim()],
@@ -588,7 +590,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             createTagSection({
                 id: "0",
                 label: "Thể loại",
-                tags: tags_json_1.default.map((e) => createTag(e)),
+                tags: tags_json_1.default.map((tag) => createTag(tag)),
             }),
         ];
     }
