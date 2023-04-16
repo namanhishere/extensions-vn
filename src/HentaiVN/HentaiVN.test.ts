@@ -11,9 +11,9 @@ describe("HentaiVN", function () {
     hentaivn = source as HentaiVN;
 
     describe("getMangaDetails()", function () {
-        it.skip("Get Manga Details", async () => {
+        it("Get Manga Details", async () => {
             var data = await hentaivn.getMangaDetails(
-                "/33394-doc-truyen-chinh-phuc-gai-genshin-impact-5-luat-le-sinh-ton-tien-quyet.html"
+                "33394"
             );
             expect(data, "Null").to.be.not.empty;
             expect(data.image, "Null").to.be.not.empty;

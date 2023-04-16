@@ -23,7 +23,7 @@ import tags from "./tags.json";
 const DOMAIN = "https://hentaivn.tv";
 
 export const HentaiVNInfo: SourceInfo = {
-    version: "1.1.6",
+    version: "1.1.8",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -61,6 +61,7 @@ export class HentaiVN extends Source {
     });
 
     override async getMangaDetails(mangaId: string): Promise<Manga> {
+        const Tags = await this.getSearchTags();
         const request = createRequestObject({
             url: `${DOMAIN}/${mangaId}-doc-truyen-.html`,
             method: "GET",
@@ -68,14 +69,13 @@ export class HentaiVN extends Source {
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
 
-        let tags: Tag[] = $(".tag")
-            .toArray()
-            .map((e: any) =>
-                createTag({
-                    id: $(e).attr("href").split("-")[2],
-                    label: $(e).text(),
-                })
-            );
+        let tags: Tag[] = [];
+
+        for (const item of $("a.tag").toArray()) {
+            const tag: Tag = Tags[0]!.tags.find($(item).text())!;
+            if (!tag) continue;
+            tags.push(tag);
+        }
 
         return createManga({
             id: mangaId,
@@ -270,7 +270,7 @@ export class HentaiVN extends Source {
             createTagSection({
                 id: "0",
                 label: "Thể loại",
-                tags: tags.map((e) => createTag(e)),
+                tags: tags.map((tag) => createTag(tag)),
             }),
         ];
     }
