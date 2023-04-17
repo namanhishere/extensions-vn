@@ -21,6 +21,7 @@ import {
 import tags from "./tags.json";
 
 const DOMAIN = "https://hentaivn.run";
+const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1'
 
 export const HentaiVNInfo: SourceInfo = {
     version: "1.2.1",
@@ -49,6 +50,7 @@ export class HentaiVN extends Source {
                     ...(request.headers ?? {}),
                     ...{
                         referer: DOMAIN,
+                        "user-agent": userAgent,
                     },
                 };
                 return request;
