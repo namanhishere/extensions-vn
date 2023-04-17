@@ -377,35 +377,23 @@ __exportStar(require("./RawData"), exports);
 
 },{"./Chapter":6,"./ChapterDetails":7,"./Constants":8,"./DynamicUI":24,"./HomeSection":25,"./Languages":26,"./Manga":27,"./MangaTile":28,"./MangaUpdate":29,"./PagedResults":30,"./RawData":31,"./RequestHeaders":32,"./RequestInterceptor":33,"./RequestManager":34,"./RequestObject":35,"./ResponseObject":36,"./SearchField":37,"./SearchRequest":38,"./SourceInfo":39,"./SourceManga":40,"./SourceStateManager":41,"./SourceTag":42,"./TagSection":43,"./TrackedManga":44,"./TrackedMangaChapterReadAction":45,"./TrackerActionQueue":46}],48:[function(require,module,exports){
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertTime = exports.getServerUnavailableMangaTiles = exports.Nettruyen = exports.NettruyenInfo = void 0;
+exports.convertTime = exports.decodeHtml = exports.BaoTangTruyen = exports.BaoTangTruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
-const tags_json_1 = __importDefault(require("./tags.json"));
-const DOMAIN = "https://www.nettruyenvt.com";
-exports.NettruyenInfo = {
-    version: "1.2.3",
-    name: "NetTruyen",
-    icon: "icon.jpg",
-    author: "Hoang3409",
-    authorWebsite: "https://github.com/hoang3402",
-    description: "Extension that pulls manga from NetTruyen.",
+const DOMAIN = 'https://baotangtruyen2.com/';
+const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
+exports.BaoTangTruyenInfo = {
+    version: '1.0.0',
+    name: 'Bảo Tàng Truyện',
+    icon: 'icon.png',
+    author: 'Hoang3409',
+    description: 'Extension that pulls manga from Bảo Tàng Truyện',
+    contentRating: paperback_extensions_common_1.ContentRating.EVERYONE,
     websiteBaseURL: DOMAIN,
-    contentRating: paperback_extensions_common_1.ContentRating.MATURE,
-    sourceTags: [
-        {
-            text: "Recommended",
-            type: paperback_extensions_common_1.TagType.BLUE,
-        },
-        {
-            text: "Notifications",
-            type: paperback_extensions_common_1.TagType.GREEN,
-        },
-    ],
+    authorWebsite: 'https://github.com/hoang3402/extensions-vn',
+    language: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
 };
-class Nettruyen extends paperback_extensions_common_1.Source {
+class BaoTangTruyen extends paperback_extensions_common_1.Source {
     constructor() {
         super(...arguments);
         this.requestManager = createRequestManager({
@@ -417,6 +405,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                         ...(request.headers ?? {}),
                         ...{
                             referer: DOMAIN,
+                            'user-agent': userAgent
                         },
                     };
                     return request;
@@ -424,8 +413,68 @@ class Nettruyen extends paperback_extensions_common_1.Source {
                 interceptResponse: async (response) => {
                     return response;
                 },
-            },
+            }
         });
+    }
+    async getMangaDetails(mangaId) {
+        const request = createRequestObject({
+            url: `${DOMAIN}truyen-tranh/a-${mangaId}`,
+            method: "GET"
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+        return createManga({
+            id: mangaId,
+            titles: [decodeHtml($('h1.title-detail').text().trim())],
+            desc: decodeHtml($('#summary').text().trim()),
+            image: $('div.col-image > img').attr('data-src'),
+            status: paperback_extensions_common_1.MangaStatus.ONGOING
+        });
+    }
+    async getChapters(mangaId) {
+        var chapters = [];
+        const request = createRequestObject({
+            url: `${DOMAIN}Story/ListChapterByStoryID`,
+            param: `?StoryID=${mangaId}`,
+            method: "GET"
+        });
+        const response = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(response.data);
+        const chapterList = $('li.row').slice(1).toArray();
+        var index = chapterList.length;
+        for (const item of chapterList) {
+            var time = $('.col-xs-4.text-center.small', item).text();
+            chapters.push(createChapter({
+                id: $('.chapter > a', item).attr('data-id'),
+                mangaId: mangaId,
+                name: $('.chapter > a', item).text(),
+                chapNum: index--,
+                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
+                time: convertTime(decodeHtml(time))
+            }));
+        }
+        return chapters;
+    }
+    async getChapterDetails(mangaId, chapterId) {
+        const request = createRequestObject({
+            url: `${DOMAIN}truyen-tranh/a/b/${chapterId}`,
+            method: "GET"
+        });
+        const response = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(response.data);
+        var pages = [];
+        for (const item of $('img[data-index]').toArray()) {
+            pages.push($(item).attr('src'));
+        }
+        return createChapterDetails({
+            id: chapterId,
+            mangaId: mangaId,
+            pages: pages,
+            longStrip: false
+        });
+    }
+    async getSearchResults(query, metadata) {
+        throw new Error("Method not implemented.");
     }
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
@@ -434,7 +483,7 @@ class Nettruyen extends paperback_extensions_common_1.Source {
             view_more: true,
         });
         //New Updates
-        let url = `${DOMAIN}`;
+        let url = `${DOMAIN}home`;
         let request = createRequestObject({
             url: url,
             method: "GET",
@@ -444,290 +493,89 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         newAdded.items = this.parseNewUpdatedSection($);
         sectionCallback(newAdded);
     }
-    async getMangaDetails(mangaId) {
-        try {
-            const Tags = await this.getSearchTags();
-            const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
-            const request = createRequestObject({
-                url: url,
-                method: "GET",
-            });
-            const data = await this.requestManager.schedule(request, 1);
-            let $ = this.cheerio.load(data.data);
-            var temp = $("#item-detail > div.detail-info > div > div.col-xs-4.col-image > img");
-            var image = "http:" + temp.attr("src");
-            var titles = [temp.attr("alt")];
-            var des = $("#item-detail > div.detail-content > p").text().replaceAll('\n', ' ');
-            var id = mangaId;
-            var tags = [];
-            for (let tag of $(".kind.row > .col-xs-8 > a").toArray()) {
-                const label = $(tag).text();
-                const id = Tags[0].tags.find((tag) => tag.label == label);
-                if (!id)
-                    continue;
-                tags.push(createTag({
-                    id: id.id,
-                    label: label,
-                }));
-            }
-            var rating = $('span[itemprop="ratingValue"]').text();
-            var views = $('ul.list-info > li.row > p.col-xs-8').last().text().replaceAll('.', '');
-            if ($('ul.list-info > li.othername.row')) {
-                $('ul.list-info > li.othername.row > h2')
-                    .text()
-                    .split(';')
-                    .map((item) => titles.push(item.trim()));
-            }
-            return createManga({
+    parseNewUpdatedSection($) {
+        let manga = [];
+        for (const item of $('figure.clearfix').toArray()) {
+            let title = $(item).find('h3 > a').text().trim();
+            let id = $(item).find('a').attr('href').split('-').pop();
+            let image = $(item).find('img').attr('src');
+            let subtitle = $(item).find('ul > li > a').first().text();
+            manga.push(createMangaTile({
                 id: id,
-                author: "Nettruyen ăn cắp của ai đó",
-                artist: "chịu á",
-                desc: des,
-                titles: titles,
                 image: image,
-                status: 1,
-                rating: Number.parseFloat(rating),
-                hentai: false,
-                tags: [
-                    createTagSection({
-                        id: "0",
-                        label: "Thể loại",
-                        tags: tags,
-                    }),
-                ],
-                views: Number.parseInt(views),
-            });
-        }
-        catch (e) {
-            throw new Error("Error: " + e);
-        }
-    }
-    async getChapters(mangaId) {
-        const chapters = [];
-        const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
-        const request = createRequestObject({
-            url: url,
-            method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1);
-        let $ = this.cheerio.load(data.data);
-        const chapterList = $('#nt_listchapter > nav > ul > li').toArray();
-        for (let chapter of chapterList) {
-            chapters.push(createChapter({
-                id: $(chapter).find('a').attr('href').replace(`${DOMAIN}`, ''),
-                name: $(chapter).find('a').text(),
-                mangaId: mangaId,
-                chapNum: chapterList.length - chapterList.indexOf(chapter),
-                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
-                time: convertTime($('div.col-xs-4', chapter).text()),
+                title: createIconText({ text: decodeHtml(title) }),
+                subtitleText: createIconText({ text: decodeHtml(subtitle) }),
             }));
         }
-        return chapters;
-    }
-    async getChapterDetails(mangaId, chapterId) {
-        const request = createRequestObject({
-            url: DOMAIN,
-            param: chapterId,
-            method: "GET",
-        });
-        const data = await this.requestManager.schedule(request, 1);
-        let $ = this.cheerio.load(data.data);
-        const pages = [];
-        for (let image of $(".page-chapter").toArray()) {
-            var link = $("div.page-chapter > img", image).attr("data-original");
-            if (link.indexOf("http") === -1) {
-                pages.push("http:" + link);
-            }
-            else {
-                pages.push(link);
-            }
-        }
-        return createChapterDetails({
-            pages: pages,
-            longStrip: false,
-            id: chapterId,
-            mangaId: mangaId,
-        });
-    }
-    async getSearchResults(query, metadata) {
-        const page = metadata?.page ?? 1;
-        let advanced;
-        const tiles = [];
-        let url = "";
-        let param = "";
-        if (query.includedTags.length > 0) {
-            advanced = true;
-            url = `${DOMAIN}/tim-truyen-nang-cao`;
-            param = `?genres=${query
-                .includedTags.map((tag) => tag.id)
-                .join(",")}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0?page=${page}`;
-        }
-        else {
-            advanced = false;
-            url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
-            param = `?q=${encodeURIComponent(query.title)}`;
-        }
-        const request = createRequestObject({
-            url: url,
-            param: param,
-            method: "GET",
-        });
-        let data;
-        try {
-            data = await this.requestManager.schedule(request, 1);
-        }
-        catch (error) {
-            console.log(`searchRequest failed with error: ${error}`);
-            return createPagedResults({
-                results: getServerUnavailableMangaTiles(),
-            });
-        }
-        let $ = this.cheerio.load(data.data);
-        if (advanced) {
-            for (let item of $(".item").toArray()) {
-                var img = $("img", item).attr("data-original");
-                if (img === undefined) {
-                    img = $("img", item).attr("src");
-                }
-                tiles.push(createMangaTile({
-                    id: $("a", item)
-                        .attr("href")
-                        ?.replace(`${DOMAIN}/truyen-tranh/`, ""),
-                    title: createIconText({
-                        text: $("h3 > a", item).text(),
-                    }),
-                    image: "http:" + img,
-                }));
-            }
-        }
-        else {
-            for (let item of $("li").toArray()) {
-                tiles.push(createMangaTile({
-                    id: $("a", item)
-                        .attr("href")
-                        ?.replace(`${DOMAIN}/truyen-tranh/`, ""),
-                    title: createIconText({
-                        text: $("a > h3", item).text(),
-                    }),
-                    image: "http:" + $("a > img", item).attr("src"),
-                }));
-            }
-        }
-        if (tiles.length == 0) {
-            return createPagedResults({
-                results: getServerUnavailableMangaTiles(),
-            });
-        }
-        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
-        return createPagedResults({
-            results: tiles,
-            metadata: metadata,
-        });
+        return manga;
     }
     async getViewMoreItems(homepageSectionId, metadata) {
-        const page = metadata?.page ?? 1;
+        let page = metadata?.page ?? 1;
         switch (homepageSectionId) {
             case "new_added":
                 break;
             default:
-                throw new Error("Làm gì có page này?!");
         }
         const request = createRequestObject({
-            url: `${DOMAIN}/tim-truyen-nang-cao`,
-            param: `?page=${page}`,
-            method: "GET",
+            url: `${DOMAIN}home`,
+            param: `?page=${page}&typegroup=0`,
+            method: "GET"
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
-        const tiles = [];
-        for (let manga of $("div.item", "div.row").toArray()) {
-            const title = $("figure.clearfix > figcaption > h3 > a", manga)
-                .first()
-                .text();
-            const id = $("figure.clearfix > div.image > a", manga)
-                .attr("href")
-                ?.split("/")
-                .pop();
-            const image = $("figure.clearfix > div.image > a > img", manga)
-                .first()
-                .attr("data-original");
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga)
-                .last()
-                .text()
-                .trim();
-            if (!id || !title)
-                continue;
-            tiles.push(createMangaTile({
+        let manga = [];
+        for (const item of $('figure.clearfix').toArray()) {
+            let title = $(item).find('h3 > a').text();
+            let id = $(item).find('a').attr('href').split('-').pop();
+            let image = $(item).find('img').attr('src');
+            let subtitle = $(item).find('ul > li > a').first().text();
+            manga.push(createMangaTile({
                 id: id,
-                image: !image
-                    ? "https://i.imgur.com/GYUxEX8.png"
-                    : "http:" + image,
-                title: createIconText({ text: title }),
-                subtitleText: createIconText({ text: subtitle }),
+                image: image,
+                title: createIconText({ text: decodeHtml(title) }),
+                subtitleText: createIconText({ text: decodeHtml(subtitle) }),
             }));
         }
-        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
         return createPagedResults({
-            results: tiles,
-            metadata: metadata,
+            results: manga,
+            metadata: {
+                page: page + 1
+            }
         });
     }
-    parseNewUpdatedSection($) {
-        let newUpdatedItems = [];
-        for (let manga of $("div.item", "div.row").toArray().splice(0, 10)) {
-            const title = $("figure.clearfix > figcaption > h3 > a", manga)
-                .first()
-                .text();
-            const id = $("figure.clearfix > div.image > a", manga)
-                .attr("href")
-                ?.split("/")
-                .pop();
-            const image = $("figure.clearfix > div.image > a > img", manga)
-                .first()
-                .attr("data-original");
-            const subtitle = $("figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a", manga)
-                .last()
-                .text()
-                .trim();
-            if (!id || !title)
-                continue;
-            newUpdatedItems.push(createMangaTile({
-                id: id,
-                image: !image
-                    ? "https://i.imgur.com/GYUxEX8.png"
-                    : "http:" + image,
-                title: createIconText({ text: title }),
-                subtitleText: createIconText({ text: subtitle }),
-            }));
+}
+exports.BaoTangTruyen = BaoTangTruyen;
+function decodeHtml(encodedString) {
+    const entityRegex = /&(#[0-9]+|[a-z]+);/gi;
+    const entities = {
+        "&lt;": "<",
+        "&gt;": ">",
+        "&amp;": "&",
+        "&quot;": "\"",
+        "&apos;": "'",
+        "&#39;": "'",
+        "&#x2F;": "/",
+        "&#x3D;": "=",
+        "&#x22;": "\"",
+        "&#x3C;": "<",
+        "&#x3E;": ">",
+    };
+    return encodedString.replace(entityRegex, (match, entity) => {
+        if (entity[0] === "#") {
+            const code = entity.slice(1);
+            if (code[0] === "x") {
+                return String.fromCharCode(parseInt(code.slice(1), 16));
+            }
+            else {
+                return String.fromCharCode(parseInt(code));
+            }
         }
-        return newUpdatedItems;
-    }
-    async getSearchTags() {
-        return [
-            createTagSection({
-                id: "0",
-                label: "Thể loại",
-                tags: tags_json_1.default.map((tag) => createTag(tag)),
-            }),
-        ];
-    }
-    async filterUpdatedManga(mangaUpdatesFoundCallback, time, ids) {
-        mangaUpdatesFoundCallback(createMangaUpdates({ ids: ids }));
-    }
+        else {
+            return entities[match] || match;
+        }
+    });
 }
-exports.Nettruyen = Nettruyen;
-function getServerUnavailableMangaTiles() {
-    // This tile is used as a placeholder when the server is unavailable
-    return [
-        createMangaTile({
-            id: "placeholder-id",
-            title: createIconText({ text: "Server" }),
-            image: "",
-            subtitleText: createIconText({ text: "unavailable" }),
-        }),
-    ];
-}
-exports.getServerUnavailableMangaTiles = getServerUnavailableMangaTiles;
+exports.decodeHtml = decodeHtml;
 function convertTime(time) {
     var date;
     // 29/12/22
@@ -784,233 +632,5 @@ function convertTime(time) {
 }
 exports.convertTime = convertTime;
 
-},{"./tags.json":49,"paperback-extensions-common":5}],49:[function(require,module,exports){
-module.exports=[
-    {
-        "id": "1",
-        "label": "Action"
-    },
-    {
-        "id": "2",
-        "label": "Adult"
-    },
-    {
-        "id": "3",
-        "label": "Adventure"
-    },
-    {
-        "id": "4",
-        "label": "Anime"
-    },
-    {
-        "id": "5",
-        "label": "Chuyển Sinh"
-    },
-    {
-        "id": "6",
-        "label": "Comedy"
-    },
-    {
-        "id": "7",
-        "label": "Comic"
-    },
-    {
-        "id": "8",
-        "label": "Cooking"
-    },
-    {
-        "id": "9",
-        "label": "Cổ Đại"
-    },
-    {
-        "id": "10",
-        "label": "Doujinshi"
-    },
-    {
-        "id": "11",
-        "label": "Drama"
-    },
-    {
-        "id": "12",
-        "label": "Đam Mỹ"
-    },
-    {
-        "id": "13",
-        "label": "Ecchi"
-    },
-    {
-        "id": "14",
-        "label": "Fantasy"
-    },
-    {
-        "id": "15",
-        "label": "Gender Bender"
-    },
-    {
-        "id": "16",
-        "label": "Harem"
-    },
-    {
-        "id": "17",
-        "label": "Lịch sử"
-    },
-    {
-        "id": "18",
-        "label": "Horror"
-    },
-    {
-        "id": "20",
-        "label": "Josei"
-    },
-    {
-        "id": "21",
-        "label": "Live action"
-    },
-    {
-        "id": "23",
-        "label": "Manga"
-    },
-    {
-        "id": "24",
-        "label": "Manhua"
-    },
-    {
-        "id": "25",
-        "label": "Manhwa"
-    },
-    {
-        "id": "26",
-        "label": "Martial Arts"
-    },
-    {
-        "id": "27",
-        "label": "Mature"
-    },
-    {
-        "id": "28",
-        "label": "Mecha"
-    },
-    {
-        "id": "30",
-        "label": "Mystery"
-    },
-    {
-        "id": "32",
-        "label": "Ngôn Tình"
-    },
-    {
-        "id": "33",
-        "label": "One shot"
-    },
-    {
-        "id": "34",
-        "label": "Psychological"
-    },
-    {
-        "id": "35",
-        "label": "Romance"
-    },
-    {
-        "id": "36",
-        "label": "School Life"
-    },
-    {
-        "id": "37",
-        "label": "Sci-fi"
-    },
-    {
-        "id": "38",
-        "label": "Seinen"
-    },
-    {
-        "id": "39",
-        "label": "Shoujo"
-    },
-    {
-        "id": "40",
-        "label": "Shoujo Ai"
-    },
-    {
-        "id": "41",
-        "label": "Shounen"
-    },
-    {
-        "id": "42",
-        "label": "Shounen Ai"
-    },
-    {
-        "id": "43",
-        "label": "Slice of Life"
-    },
-    {
-        "id": "44",
-        "label": "Smut"
-    },
-    {
-        "id": "45",
-        "label": "Soft Yaoi"
-    },
-    {
-        "id": "46",
-        "label": "Soft Yuri"
-    },
-    {
-        "id": "47",
-        "label": "Sports"
-    },
-    {
-        "id": "48",
-        "label": "Supernatural"
-    },
-    {
-        "id": "49",
-        "label": "Tạp chí truyện tranh"
-    },
-    {
-        "id": "50",
-        "label": "Thiếu Nhi"
-    },
-    {
-        "id": "51",
-        "label": "Tragedy"
-    },
-    {
-        "id": "52",
-        "label": "Trinh Thám"
-    },
-    {
-        "id": "53",
-        "label": "Truyện Màu"
-    },
-    {
-        "id": "54",
-        "label": "Truyện scan"
-    },
-    {
-        "id": "55",
-        "label": "Việt Nam"
-    },
-    {
-        "id": "56",
-        "label": "Webtoon"
-    },
-    {
-        "id": "57",
-        "label": "Xuyên Không"
-    },
-    {
-        "id": "58",
-        "label": "Yaoi"
-    },
-    {
-        "id": "59",
-        "label": "Yuri"
-    },
-    {
-        "id": "60",
-        "label": "16+"
-    }
-]
-
-},{}]},{},[48])(48)
+},{"paperback-extensions-common":5}]},{},[48])(48)
 });

@@ -385,6 +385,7 @@ exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = "https://hentaivn.run";
+const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 exports.HentaiVNInfo = {
     version: "1.2.1",
     name: "HentaiVN",
@@ -413,6 +414,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                         ...(request.headers ?? {}),
                         ...{
                             referer: DOMAIN,
+                            "user-agent": userAgent,
                         },
                     };
                     return request;
