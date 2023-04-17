@@ -182,23 +182,6 @@ export class Nettruyen extends Source {
         return chapters;
     }
 
-    async getMangaID(mangaId: string): Promise<string> {
-        if (!mangaId.match(RegExp(/[a-z]/))) return mangaId;
-
-        const data = await this.requestManager.schedule(
-            createRequestObject({
-                url: `${DOMAIN}/truyen-tranh/${mangaId}`,
-                method: "GET",
-            }),
-            1
-        );
-        let $ = this.cheerio.load(data.data);
-
-        return $(
-            "#item-detail > div.detail-info > div > div.col-xs-8.col-info > div.row.rating > div:nth-child(1) > div"
-        ).attr("data-id")!;
-    }
-
     override async getChapterDetails(
         mangaId: string,
         chapterId: string
