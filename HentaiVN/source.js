@@ -384,9 +384,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
-const DOMAIN = "https://hentaivn.tv";
+const DOMAIN = "https://hentaivn.run";
 exports.HentaiVNInfo = {
-    version: "1.1.9",
+    version: "1.2.1",
     name: "HentaiVN",
     icon: "icon.png",
     author: "Hoang3409",
@@ -432,6 +432,8 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
         let tags = [];
+        let title = $("div.page-info > h1 > a").text().trim();
+        let img = $("div.page-ava > img").attr("src");
         for (const item of $("a.tag").toArray()) {
             const tag = Tags[0].tags.find((tag) => $(item).text() == tag.label);
             if (!tag)
@@ -440,8 +442,8 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         }
         return createManga({
             id: mangaId,
-            titles: [$("div.page-info > h1 > a").text().trim()],
-            image: $("div.page-ava > img").attr("src"),
+            titles: [title],
+            image: img,
             status: paperback_extensions_common_1.MangaStatus.ONGOING,
             hentai: true,
             tags: [
