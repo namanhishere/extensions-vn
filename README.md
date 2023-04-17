@@ -15,7 +15,7 @@ https://hoang3402.github.io/extensions-vn/
 | Name      | Link                    |
 |-----------|-------------------------|
 | NetTruyen | https://www.nettruyenvt.com/ |
-| HentaiVN  | https://hentaivn.tv/    |
+| HentaiVN  | https://hentaivn.run/    |
 
 </div>
 
