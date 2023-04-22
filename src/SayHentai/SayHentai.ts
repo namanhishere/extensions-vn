@@ -2,7 +2,9 @@ import {
     Chapter,
     ChapterDetails,
     ContentRating,
+    LanguageCode,
     Manga,
+    MangaStatus,
     MangaTile,
     PagedResults,
     Request,
@@ -58,12 +60,47 @@ export class SayHentai extends Source {
 
 
     override async getMangaDetails(mangaId: string): Promise<Manga> {
-        throw new Error("Method not implemented.");
+
+        const request = createRequestObject({
+            url: `${DOMAIN}${mangaId}`,
+            method: "GET"
+        })
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+
+        return createManga({
+            id: mangaId,
+            titles: [$('.post-title').text()],
+            image: $('.summary_image img').attr('src'),
+            desc: $('.description-summary p').text(),
+            status: MangaStatus.ONGOING
+        })
     }
 
 
     override async getChapters(mangaId: string): Promise<Chapter[]> {
-        throw new Error("Method not implemented.");
+
+        const request = createRequestObject({
+            url: `${DOMAIN}${mangaId}`,
+            method: "GET"
+        })
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+
+        let chapters: Chapter[] = []
+        const arr = $('.wp-manga-chapter a').toArray()
+        let index = arr.length
+        for (let item of arr) {
+            chapters.push(createChapter({
+                id: $(item).attr('href').replace(DOMAIN, ''),
+                chapNum: index--,
+                name: $(item).text(),
+                mangaId: mangaId,
+                langCode: LanguageCode.VIETNAMESE
+            }))
+        }
+
+        return chapters;
     }
 
 
@@ -71,7 +108,25 @@ export class SayHentai extends Source {
         mangaId: string,
         chapterId: string
     ): Promise<ChapterDetails> {
-        throw new Error("Method not implemented.");
+
+        const request = createRequestObject({
+            url: `${DOMAIN}${chapterId}`,
+            method: "GET"
+        })
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+
+        let pages: string[] = []
+        for (let item of $('.page-break img').toArray()) {
+            pages.push($(item).attr('src'))
+        }
+
+        return createChapterDetails({
+            id: chapterId,
+            mangaId: mangaId,
+            pages: pages,
+            longStrip: false
+        })
     }
 
 
@@ -92,14 +147,13 @@ export class SayHentai extends Source {
 
         for (let item of $('div.page-item-detail').toArray()) {
             result.push(createMangaTile({
-                id: $('.line-2 > a', item).attr('href'),
+                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
                 title: createIconText({
                     text: $('.line-2 > a', item).text()
                 }),
                 image: $('img', item).attr('src'),
             }))
         }
-
 
         return createPagedResults({
             results: result,
