@@ -13,13 +13,16 @@ import {
     SearchRequest,
     Source,
     SourceInfo,
+    TagSection,
     TagType,
 } from "paperback-extensions-common";
+
+import tags from './tags.json';
 
 const DOMAIN = "https://sayhentai.me/";
 
 export const SayHentaiInfo: SourceInfo = {
-    version: "1.0.0",
+    version: "1.0.3",
     name: "SayHentai",
     icon: "icon.png",
     author: "Hoang3409",
@@ -136,9 +139,16 @@ export class SayHentai extends Source {
     ): Promise<PagedResults> {
         // search?s=a&page=2
         let page: number = metadata?.page ?? 1;
+        var url: string;
+
+        if (query.includedTags) {
+            url = query.includedTags[0]!.id
+        } else {
+            url = `${DOMAIN}search?s=${query.title}&page=${page}`
+        }
 
         const request = createRequestObject({
-            url: `${DOMAIN}search?s=${query.title}&page=${page}`,
+            url: url,
             method: "GET"
         });
         const data = await this.requestManager.schedule(request, 1);
@@ -161,5 +171,15 @@ export class SayHentai extends Source {
                 page: page + 1,
             }
         })
+    }
+
+
+    override async getSearchTags(): Promise<TagSection[]> {
+
+        return [createTagSection({
+            id: '0',
+            label: 'Thể loại (Chỉ chọn 1)',
+            tags: tags.map(item => createTag(item))
+        })];
     }
 }
