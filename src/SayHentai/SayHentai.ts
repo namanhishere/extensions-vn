@@ -2,6 +2,7 @@ import {
     Chapter,
     ChapterDetails,
     ContentRating,
+    HomeSection,
     LanguageCode,
     Manga,
     MangaStatus,
@@ -22,7 +23,7 @@ import tags from './tags.json';
 const DOMAIN = "https://sayhentai.me/";
 
 export const SayHentaiInfo: SourceInfo = {
-    version: "1.0.3",
+    version: "1.0.4",
     name: "SayHentai",
     icon: "icon.png",
     author: "Hoang3409",
@@ -141,8 +142,8 @@ export class SayHentai extends Source {
         let page: number = metadata?.page ?? 1;
         var url: string;
 
-        if (query.includedTags) {
-            url = query.includedTags[0]!.id
+        if (query.includedTags!.length > 0) {
+            url = query.includedTags![0]!.id
         } else {
             url = `${DOMAIN}search?s=${query.title}&page=${page}`
         }
@@ -181,5 +182,72 @@ export class SayHentai extends Source {
             label: 'Thể loại (Chỉ chọn 1)',
             tags: tags.map(item => createTag(item))
         })];
+    }
+
+
+    override async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
+        let newAdded: HomeSection = createHomeSection({
+            id: "new_added",
+            title: "Truyện Mới Cập Nhật",
+            view_more: true,
+        });
+        //Load empty sections
+        sectionCallback(newAdded);
+        //New Updates
+        let request = createRequestObject({
+            url: `${DOMAIN}`,
+            method: "GET",
+        });
+        let data = await this.requestManager.schedule(request, 1);
+        let $ = this.cheerio.load(data.data);
+        newAdded.items = await this.parseNewUpdatedSection($);
+        sectionCallback(newAdded);
+    }
+
+
+    async parseNewUpdatedSection($: any): Promise<MangaTile[]> {
+        var result: MangaTile[] = []
+
+        for (let item of $('div.page-item-detail').toArray().splice(0, 10)) {
+            result.push(createMangaTile({
+                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
+                title: createIconText({
+                    text: $('.line-2 > a', item).text()
+                }),
+                image: $('img', item).attr('src') ?? $('img', item).attr('data-src'),
+            }))
+        }
+
+        return result;
+    }
+
+    override async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults> {
+        let page: number = metadata?.page ?? 1;
+
+        const request = createRequestObject({
+            url: `${DOMAIN}?page=${page}`,
+            method: "GET"
+        })
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+
+        let result: MangaTile[] = []
+
+        for (let item of $('div.page-item-detail').toArray()) {
+            result.push(createMangaTile({
+                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
+                title: createIconText({
+                    text: $('.line-2 > a', item).text()
+                }),
+                image: $('img', item).attr('src') ?? $('img', item).attr('data-src'),
+            }))
+        }
+
+        return createPagedResults({
+            results: result,
+            metadata: {
+                page: page + 1,
+            }
+        })
     }
 }
