@@ -2973,7 +2973,7 @@ const paperback_extensions_common_1 = require("paperback-extensions-common");
 const DOMAIN = "https://baotangtruyen2.com/";
 const userAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1";
 exports.BaoTangTruyenInfo = {
-    version: "1.0.1",
+    version: "1.0.2",
     name: "Bảo Tàng Truyện",
     icon: "icon.png",
     author: "Hoang3409",
@@ -2982,6 +2982,12 @@ exports.BaoTangTruyenInfo = {
     websiteBaseURL: DOMAIN,
     authorWebsite: "https://github.com/hoang3402/extensions-vn",
     language: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
+    sourceTags: [
+        {
+            text: "Recommended",
+            type: paperback_extensions_common_1.TagType.BLUE,
+        },
+    ],
 };
 class BaoTangTruyen extends paperback_extensions_common_1.Source {
     constructor() {
