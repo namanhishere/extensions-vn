@@ -20,6 +20,7 @@ https://hoang3402.github.io/extensions-vn/
 | ------------- | ---------------------------- |
 | NetTruyen     | https://www.nettruyenvt.com/ |
 | BaoTangTruyen | https://baotangtruyen2.com/  |
+| SayHentai     | https://sayhentai.me/        |
 | HentaiVN      | https://hentaivn.run/        |
 
 </div>

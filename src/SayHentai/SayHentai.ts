@@ -3,9 +3,7 @@ import {
     ChapterDetails,
     ContentRating,
     HomeSection,
-    LanguageCode,
     Manga,
-    MangaStatus,
     MangaTile,
     PagedResults,
     Request,
@@ -17,13 +15,19 @@ import {
     TagSection,
     TagType,
 } from "paperback-extensions-common";
-
+import {
+    getChapterDetails,
+    getChapters,
+    getManga,
+    getMangaTile,
+    isLastPage,
+} from "./SayHentaiParser";
 import tags from './tags.json';
 
-const DOMAIN = "https://sayhentai.me/";
+export const DOMAIN = "https://sayhentai.me/";
 
 export const SayHentaiInfo: SourceInfo = {
-    version: "1.0.4",
+    version: "1.0.7",
     name: "SayHentai",
     icon: "icon.png",
     author: "Hoang3409",
@@ -65,20 +69,17 @@ export class SayHentai extends Source {
 
     override async getMangaDetails(mangaId: string): Promise<Manga> {
 
+        var tags = await this.getSearchTags()
+
         const request = createRequestObject({
             url: `${DOMAIN}${mangaId}`,
             method: "GET"
         })
+
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
 
-        return createManga({
-            id: mangaId,
-            titles: [$('.post-title').text()],
-            image: $('.summary_image img').attr('src'),
-            desc: $('.description-summary p').text(),
-            status: MangaStatus.ONGOING
-        })
+        return getManga($, tags, mangaId);
     }
 
 
@@ -91,20 +92,7 @@ export class SayHentai extends Source {
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
 
-        let chapters: Chapter[] = []
-        const arr = $('.wp-manga-chapter a').toArray()
-        let index = arr.length
-        for (let item of arr) {
-            chapters.push(createChapter({
-                id: $(item).attr('href').replace(DOMAIN, ''),
-                chapNum: index--,
-                name: $(item).text(),
-                mangaId: mangaId,
-                langCode: LanguageCode.VIETNAMESE
-            }))
-        }
-
-        return chapters;
+        return getChapters($, mangaId);
     }
 
 
@@ -120,17 +108,7 @@ export class SayHentai extends Source {
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
 
-        let pages: string[] = []
-        for (let item of $('.page-break img').toArray()) {
-            pages.push($(item).attr('src'))
-        }
-
-        return createChapterDetails({
-            id: chapterId,
-            mangaId: mangaId,
-            pages: pages,
-            longStrip: false
-        })
+        return getChapterDetails($, chapterId, mangaId);
     }
 
 
@@ -138,12 +116,19 @@ export class SayHentai extends Source {
         query: SearchRequest,
         metadata: any
     ): Promise<PagedResults> {
-        // search?s=a&page=2
         let page: number = metadata?.page ?? 1;
         var url: string;
+        if (metadata?.isLastPage) {
+            return createPagedResults({
+                results: [],
+                metadata: {
+                    isLastPage: true
+                }
+            })
+        }
 
         if (query.includedTags!.length > 0) {
-            url = query.includedTags![0]!.id
+            url = `${query.includedTags![0]!.id}?page=${page}`
         } else {
             url = `${DOMAIN}search?s=${query.title}&page=${page}`
         }
@@ -154,22 +139,13 @@ export class SayHentai extends Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
-        var result: MangaTile[] = []
-
-        for (let item of $('div.page-item-detail').toArray()) {
-            result.push(createMangaTile({
-                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
-                title: createIconText({
-                    text: $('.line-2 > a', item).text()
-                }),
-                image: $('img', item).attr('src'),
-            }))
-        }
+        var result: MangaTile[] = getMangaTile($);
 
         return createPagedResults({
             results: result,
             metadata: {
                 page: page + 1,
+                isLastPage: isLastPage(result.length)
             }
         })
     }
@@ -200,29 +176,20 @@ export class SayHentai extends Source {
         });
         let data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        newAdded.items = await this.parseNewUpdatedSection($);
+        newAdded.items = getMangaTile($);
         sectionCallback(newAdded);
-    }
-
-
-    async parseNewUpdatedSection($: any): Promise<MangaTile[]> {
-        var result: MangaTile[] = []
-
-        for (let item of $('div.page-item-detail').toArray().splice(0, 10)) {
-            result.push(createMangaTile({
-                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
-                title: createIconText({
-                    text: $('.line-2 > a', item).text()
-                }),
-                image: $('img', item).attr('src') ?? $('img', item).attr('data-src'),
-            }))
-        }
-
-        return result;
     }
 
     override async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults> {
         let page: number = metadata?.page ?? 1;
+        if (metadata?.isLastPage) {
+            return createPagedResults({
+                results: [],
+                metadata: {
+                    isLastPage: true
+                }
+            })
+        }
 
         const request = createRequestObject({
             url: `${DOMAIN}?page=${page}`,
@@ -231,23 +198,18 @@ export class SayHentai extends Source {
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
 
-        let result: MangaTile[] = []
-
-        for (let item of $('div.page-item-detail').toArray()) {
-            result.push(createMangaTile({
-                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
-                title: createIconText({
-                    text: $('.line-2 > a', item).text()
-                }),
-                image: $('img', item).attr('src') ?? $('img', item).attr('data-src'),
-            }))
-        }
+        let result: MangaTile[] = getMangaTile($);
 
         return createPagedResults({
             results: result,
             metadata: {
                 page: page + 1,
+                isLastPage: isLastPage(result.length)
             }
-        })
+        });
     }
 }
+
+
+
+
