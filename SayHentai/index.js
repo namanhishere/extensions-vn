@@ -2971,18 +2971,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SayHentai = exports.SayHentaiInfo = void 0;
+exports.SayHentai = exports.SayHentaiInfo = exports.DOMAIN = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
+const SayHentaiParser_1 = require("./SayHentaiParser");
 const tags_json_1 = __importDefault(require("./tags.json"));
-const DOMAIN = "https://sayhentai.me/";
+exports.DOMAIN = "https://sayhentai.me/";
 exports.SayHentaiInfo = {
-    version: "1.0.4",
+    version: "1.0.7",
     name: "SayHentai",
     icon: "icon.png",
     author: "Hoang3409",
     description: "Extension that pulls manga from SayHentai",
     contentRating: paperback_extensions_common_1.ContentRating.ADULT,
-    websiteBaseURL: DOMAIN,
+    websiteBaseURL: exports.DOMAIN,
     sourceTags: [
         {
             text: "Hentai",
@@ -3001,7 +3002,7 @@ class SayHentai extends paperback_extensions_common_1.Source {
                     request.headers = {
                         ...(request.headers ?? {}),
                         ...{
-                            referer: DOMAIN,
+                            referer: exports.DOMAIN,
                         },
                     };
                     return request;
@@ -3013,68 +3014,49 @@ class SayHentai extends paperback_extensions_common_1.Source {
         });
     }
     async getMangaDetails(mangaId) {
+        var tags = await this.getSearchTags();
         const request = createRequestObject({
-            url: `${DOMAIN}${mangaId}`,
+            url: `${exports.DOMAIN}${mangaId}`,
             method: "GET"
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
-        return createManga({
-            id: mangaId,
-            titles: [$('.post-title').text()],
-            image: $('.summary_image img').attr('src'),
-            desc: $('.description-summary p').text(),
-            status: paperback_extensions_common_1.MangaStatus.ONGOING
-        });
+        return (0, SayHentaiParser_1.getManga)($, tags, mangaId);
     }
     async getChapters(mangaId) {
         const request = createRequestObject({
-            url: `${DOMAIN}${mangaId}`,
+            url: `${exports.DOMAIN}${mangaId}`,
             method: "GET"
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
-        let chapters = [];
-        const arr = $('.wp-manga-chapter a').toArray();
-        let index = arr.length;
-        for (let item of arr) {
-            chapters.push(createChapter({
-                id: $(item).attr('href').replace(DOMAIN, ''),
-                chapNum: index--,
-                name: $(item).text(),
-                mangaId: mangaId,
-                langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
-            }));
-        }
-        return chapters;
+        return (0, SayHentaiParser_1.getChapters)($, mangaId);
     }
     async getChapterDetails(mangaId, chapterId) {
         const request = createRequestObject({
-            url: `${DOMAIN}${chapterId}`,
+            url: `${exports.DOMAIN}${chapterId}`,
             method: "GET"
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
-        let pages = [];
-        for (let item of $('.page-break img').toArray()) {
-            pages.push($(item).attr('src'));
-        }
-        return createChapterDetails({
-            id: chapterId,
-            mangaId: mangaId,
-            pages: pages,
-            longStrip: false
-        });
+        return (0, SayHentaiParser_1.getChapterDetails)($, chapterId, mangaId);
     }
     async getSearchResults(query, metadata) {
-        // search?s=a&page=2
         let page = metadata?.page ?? 1;
         var url;
+        if (metadata?.isLastPage) {
+            return createPagedResults({
+                results: [],
+                metadata: {
+                    isLastPage: true
+                }
+            });
+        }
         if (query.includedTags.length > 0) {
-            url = query.includedTags[0].id;
+            url = `${query.includedTags[0].id}?page=${page}`;
         }
         else {
-            url = `${DOMAIN}search?s=${query.title}&page=${page}`;
+            url = `${exports.DOMAIN}search?s=${query.title}&page=${page}`;
         }
         const request = createRequestObject({
             url: url,
@@ -3082,20 +3064,12 @@ class SayHentai extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
-        var result = [];
-        for (let item of $('div.page-item-detail').toArray()) {
-            result.push(createMangaTile({
-                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
-                title: createIconText({
-                    text: $('.line-2 > a', item).text()
-                }),
-                image: $('img', item).attr('src'),
-            }));
-        }
+        var result = (0, SayHentaiParser_1.getMangaTile)($);
         return createPagedResults({
             results: result,
             metadata: {
                 page: page + 1,
+                isLastPage: (0, SayHentaiParser_1.isLastPage)(result.length)
             }
         });
     }
@@ -3116,56 +3090,126 @@ class SayHentai extends paperback_extensions_common_1.Source {
         sectionCallback(newAdded);
         //New Updates
         let request = createRequestObject({
-            url: `${DOMAIN}`,
+            url: `${exports.DOMAIN}`,
             method: "GET",
         });
         let data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        newAdded.items = await this.parseNewUpdatedSection($);
+        newAdded.items = (0, SayHentaiParser_1.getMangaTile)($);
         sectionCallback(newAdded);
-    }
-    async parseNewUpdatedSection($) {
-        var result = [];
-        for (let item of $('div.page-item-detail').toArray().splice(0, 10)) {
-            result.push(createMangaTile({
-                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
-                title: createIconText({
-                    text: $('.line-2 > a', item).text()
-                }),
-                image: $('img', item).attr('src') ?? $('img', item).attr('data-src'),
-            }));
-        }
-        return result;
     }
     async getViewMoreItems(homepageSectionId, metadata) {
         let page = metadata?.page ?? 1;
+        if (metadata?.isLastPage) {
+            return createPagedResults({
+                results: [],
+                metadata: {
+                    isLastPage: true
+                }
+            });
+        }
         const request = createRequestObject({
-            url: `${DOMAIN}?page=${page}`,
+            url: `${exports.DOMAIN}?page=${page}`,
             method: "GET"
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
-        let result = [];
-        for (let item of $('div.page-item-detail').toArray()) {
-            result.push(createMangaTile({
-                id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
-                title: createIconText({
-                    text: $('.line-2 > a', item).text()
-                }),
-                image: $('img', item).attr('src') ?? $('img', item).attr('data-src'),
-            }));
-        }
+        let result = (0, SayHentaiParser_1.getMangaTile)($);
         return createPagedResults({
             results: result,
             metadata: {
                 page: page + 1,
+                isLastPage: (0, SayHentaiParser_1.isLastPage)(result.length)
             }
         });
     }
 }
 exports.SayHentai = SayHentai;
 
-},{"./tags.json":83,"paperback-extensions-common":8}],83:[function(require,module,exports){
+},{"./SayHentaiParser":83,"./tags.json":84,"paperback-extensions-common":8}],83:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isLastPage = exports.getManga = exports.getMangaTile = exports.getChapterDetails = exports.getChapters = void 0;
+const paperback_extensions_common_1 = require("paperback-extensions-common");
+const SayHentai_1 = require("./SayHentai");
+function getChapters($, mangaId) {
+    let chapters = [];
+    const arr = $('.wp-manga-chapter a').toArray();
+    let index = arr.length;
+    for (let item of arr) {
+        chapters.push(createChapter({
+            id: $(item).attr('href').replace(SayHentai_1.DOMAIN, ''),
+            chapNum: index--,
+            name: $(item).text(),
+            mangaId: mangaId,
+            langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE
+        }));
+    }
+    return chapters;
+}
+exports.getChapters = getChapters;
+function getChapterDetails($, chapterId, mangaId) {
+    let pages = [];
+    for (let item of $('.page-break img').toArray()) {
+        pages.push($(item).attr('src'));
+    }
+    return createChapterDetails({
+        id: chapterId,
+        mangaId: mangaId,
+        pages: pages,
+        longStrip: false
+    });
+}
+exports.getChapterDetails = getChapterDetails;
+function getMangaTile($) {
+    var result = [];
+    for (let item of $('div.page-item-detail').toArray()) {
+        var img = $('img', item).attr('src') ?? $('img', item).attr('data-src');
+        result.push(createMangaTile({
+            id: $('.line-2 > a', item).attr('href').replace(SayHentai_1.DOMAIN, ''),
+            title: createIconText({
+                text: $('.line-2 > a', item).text()
+            }),
+            image: encodeURI(img),
+        }));
+    }
+    return result;
+}
+exports.getMangaTile = getMangaTile;
+function getManga($, tags, mangaId) {
+    let genres = [];
+    for (const genre of $('.genres-content > a').toArray()) {
+        let label = $(genre).text();
+        let tag = tags[0].tags.find(x => x.label === label);
+        if (tag) {
+            genres.push(tag);
+        }
+    }
+    return createManga({
+        id: mangaId,
+        titles: [$('.post-title').text()],
+        image: $('.summary_image img').attr('src'),
+        desc: $('.description-summary p').text(),
+        status: paperback_extensions_common_1.MangaStatus.ONGOING,
+        tags: [createTagSection({
+                id: '0',
+                label: 'Thể loại',
+                tags: genres
+            })]
+    });
+}
+exports.getManga = getManga;
+function isLastPage(numberManga) {
+    if (numberManga < 40) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+exports.isLastPage = isLastPage;
+
+},{"./SayHentai":82,"paperback-extensions-common":8}],84:[function(require,module,exports){
 module.exports=[
     {
         "id": "https://sayhentai.me/genre/18",
