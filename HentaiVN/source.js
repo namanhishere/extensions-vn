@@ -387,7 +387,7 @@ const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://hentaivn.run';
 const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 exports.HentaiVNInfo = {
-    version: '1.2.2',
+    version: '1.2.3',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -427,28 +427,64 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     }
     async getMangaDetails(mangaId) {
         const Tags = await this.getSearchTags();
-        const request = createRequestObject({
+        const data = await this.requestManager.schedule(createRequestObject({
             url: `${DOMAIN}/${mangaId}-doc-truyen-.html`,
             method: 'GET',
-        });
-        const data = await this.requestManager.schedule(request, 1);
+        }), 1);
+        const moreInfo = await this.requestManager.schedule(createRequestObject({
+            url: `${DOMAIN}/list-info-all-mobile.php?id_anime=${mangaId}`,
+            method: 'GET',
+        }), 1);
         let $ = this.cheerio.load(data.data);
-        // console.log(data.data);
+        let $More = this.cheerio.load(moreInfo.data);
         let title = $('div.page-info > h1 > a').text().trim();
         let img = $('img.cover-1').first().attr('data-cfsrc');
-        let tags = [];
-        for (const item of $('a.tag').toArray()) {
-            const tag = Tags[0].tags.find((tag) => $(item).text() == tag.label);
-            if (!tag)
-                continue;
-            tags.push(tag);
+        let author = '';
+        let status = paperback_extensions_common_1.MangaStatus.ONGOING;
+        let views = 0;
+        let des = '';
+        var arr = $More('p').toArray();
+        var index = 0;
+        for (const item of arr) {
+            index++;
+            switch ($More('b', item).text().trim()) {
+                case 'Tác giả:':
+                    author = $More('a', item).text();
+                    break;
+                case 'Tình Trạng:':
+                    status = $More('a', item).text().includes('Đã hoàn thành')
+                        ? paperback_extensions_common_1.MangaStatus.COMPLETED
+                        : status;
+                    break;
+                case 'Nội dung:':
+                    console.log('index ', index);
+                    $More(arr[index])
+                        .toArray()
+                        .forEach((e) => {
+                        des += $More(e).text() + '\n';
+                    });
+                    break;
+                default:
+                    break;
+            }
         }
+        let tags = [];
+        var regex = /idtltruyenmobile=([^&]+)/;
+        var match = data.data.match(regex);
+        var result = match ? match[1] : '';
+        result.split(',').map((id) => {
+            tags.push(Tags[0].tags.find((tag) => tag.id == id));
+        });
         return createManga({
             id: mangaId,
             titles: [title],
             image: img,
-            status: paperback_extensions_common_1.MangaStatus.ONGOING,
+            desc: des,
+            status: status,
             hentai: true,
+            author: author,
+            artist: '',
+            views: views,
             tags: [
                 createTagSection({
                     id: '0',
