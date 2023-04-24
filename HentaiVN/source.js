@@ -385,9 +385,9 @@ exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://hentaivn.run';
-const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
+const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 exports.HentaiVNInfo = {
-    version: '1.2.1',
+    version: '1.2.2',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -413,7 +413,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                     request.headers = {
                         ...(request.headers ?? {}),
                         ...{
-                            referer: DOMAIN,
+                            referer: `${DOMAIN}/`,
                             'user-agent': userAgent,
                         },
                     };
@@ -433,9 +433,10 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        let tags = [];
+        // console.log(data.data);
         let title = $('div.page-info > h1 > a').text().trim();
-        let img = $('div.page-ava > img').attr('src');
+        let img = $('img.cover-1').first().attr('data-cfsrc');
+        let tags = [];
         for (const item of $('a.tag').toArray()) {
             const tag = Tags[0].tags.find((tag) => $(item).text() == tag.label);
             if (!tag)
@@ -520,7 +521,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                 title: createIconText({
                     text: $('b', item).first().text(),
                 }),
-                image: $('img', item).attr('src'),
+                image: $('img', item).attr('data-cfsrc'),
             }));
         }
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };
@@ -615,6 +616,10 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         return createRequestObject({
             url: DOMAIN,
             method: 'GET',
+            headers: {
+                referer: `${DOMAIN}/`,
+                'user-agent': userAgent,
+            },
         });
     }
 }
