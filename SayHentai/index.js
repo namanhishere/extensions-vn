@@ -2977,7 +2977,7 @@ const SayHentaiParser_1 = require("./SayHentaiParser");
 const tags_json_1 = __importDefault(require("./tags.json"));
 exports.DOMAIN = "https://sayhentai.me/";
 exports.SayHentaiInfo = {
-    version: "1.0.7",
+    version: "1.0.8",
     name: "SayHentai",
     icon: "icon.png",
     author: "Hoang3409",
@@ -3123,13 +3123,26 @@ class SayHentai extends paperback_extensions_common_1.Source {
             }
         });
     }
+    async filterUpdatedManga(mangaUpdatesFoundCallback, time, ids) {
+        const request = createRequestObject({
+            url: exports.DOMAIN,
+            method: "GET"
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+        var newIds = (0, SayHentaiParser_1.getUpdate)($);
+        var result = newIds.filter(id => ids.includes(id));
+        mangaUpdatesFoundCallback(createMangaUpdates({
+            ids: result
+        }));
+    }
 }
 exports.SayHentai = SayHentai;
 
 },{"./SayHentaiParser":83,"./tags.json":84,"paperback-extensions-common":8}],83:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.isLastPage = exports.getManga = exports.getMangaTile = exports.getChapterDetails = exports.getChapters = void 0;
+exports.isLastPage = exports.getManga = exports.getUpdate = exports.getMangaTile = exports.getChapterDetails = exports.getChapters = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const SayHentai_1 = require("./SayHentai");
 function getChapters($, mangaId) {
@@ -3176,6 +3189,14 @@ function getMangaTile($) {
     return result;
 }
 exports.getMangaTile = getMangaTile;
+function getUpdate($) {
+    var result = [];
+    for (let item of $('div.page-item-detail').toArray()) {
+        result.push($('.line-2 > a', item).attr('href').replace(SayHentai_1.DOMAIN, ''));
+    }
+    return result;
+}
+exports.getUpdate = getUpdate;
 function getManga($, tags, mangaId) {
     let genres = [];
     for (const genre of $('.genres-content > a').toArray()) {
