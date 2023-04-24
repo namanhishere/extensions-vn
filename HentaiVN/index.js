@@ -2977,7 +2977,7 @@ const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://hentaivn.run';
 const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 exports.HentaiVNInfo = {
-    version: '1.2.3',
+    version: '1.2.4',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -2987,8 +2987,16 @@ exports.HentaiVNInfo = {
     websiteBaseURL: DOMAIN,
     sourceTags: [
         {
+            text: 'Recommended',
+            type: paperback_extensions_common_1.TagType.GREEN,
+        },
+        {
             text: 'Hentai',
             type: paperback_extensions_common_1.TagType.RED,
+        },
+        {
+            text: 'Cloudflare',
+            type: paperback_extensions_common_1.TagType.YELLOW,
         },
     ],
 };
