@@ -25,7 +25,7 @@ const userAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 
 export const HentaiVNInfo: SourceInfo = {
-    version: '1.2.2',
+    version: '1.2.3',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -67,18 +67,54 @@ export class HentaiVN extends Source {
 
     override async getMangaDetails(mangaId: string): Promise<Manga> {
         const Tags = await this.getSearchTags();
-        const request = createRequestObject({
-            url: `${DOMAIN}/${mangaId}-doc-truyen-.html`,
-            method: 'GET',
-        });
-
-        const data = await this.requestManager.schedule(request, 1);
+        const data = await this.requestManager.schedule(
+            createRequestObject({
+                url: `${DOMAIN}/${mangaId}-doc-truyen-.html`,
+                method: 'GET',
+            }),
+            1
+        );
+        const moreInfo = await this.requestManager.schedule(
+            createRequestObject({
+                url: `${DOMAIN}/list-info-all-mobile.php?id_anime=${mangaId}`,
+                method: 'GET',
+            }),
+            1
+        );
         let $ = this.cheerio.load(data.data);
-
-        // console.log(data.data);
+        let $More = this.cheerio.load(moreInfo.data);
 
         let title: string = $('div.page-info > h1 > a').text().trim();
         let img: string = $('img.cover-1').first().attr('data-cfsrc');
+        let author: string = '';
+        let status = MangaStatus.ONGOING;
+        let views: number = 0;
+        let des: string = '';
+        var arr = $More('p').toArray();
+        var index = 0;
+        for (const item of arr) {
+            index++;
+            switch ($More('b', item).text().trim()) {
+                case 'Tác giả:':
+                    author = $More('a', item).text();
+                    break;
+                case 'Tình Trạng:':
+                    status = $More('a', item).text().includes('Đã hoàn thành')
+                        ? MangaStatus.COMPLETED
+                        : status;
+                    break;
+                case 'Nội dung:':
+                    console.log('index ', index);
+                    $More(arr[index])
+                        .toArray()
+                        .forEach((e: any) => {
+                            des += $More(e).text() + '\n';
+                        });
+                    break;
+                default:
+                    break;
+            }
+        }
 
         let tags: Tag[] = [];
         for (const item of $('a.tag').toArray()) {
@@ -93,8 +129,12 @@ export class HentaiVN extends Source {
             id: mangaId,
             titles: [title],
             image: img,
-            status: MangaStatus.ONGOING,
+            desc: des,
+            status: status,
             hentai: true,
+            author: author,
+            artist: '',
+            views: views,
             tags: [
                 createTagSection({
                     id: '0',
