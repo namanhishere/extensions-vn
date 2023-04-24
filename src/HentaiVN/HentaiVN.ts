@@ -117,13 +117,12 @@ export class HentaiVN extends Source {
         }
 
         let tags: Tag[] = [];
-        for (const item of $('a.tag').toArray()) {
-            const tag: Tag = Tags[0]!.tags.find(
-                (tag) => $(item).text() == tag.label
-            )!;
-            if (!tag) continue;
-            tags.push(tag);
-        }
+        var regex = /idtltruyenmobile=([^&]+)/;
+        var match = data.data.match(regex);
+        var result: string = match ? match[1]! : '';
+        result.split(',').map((id) => {
+            tags.push(Tags[0]!.tags.find((tag) => tag.id == id)!);
+        });
 
         return createManga({
             id: mangaId,
