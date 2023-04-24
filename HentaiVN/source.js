@@ -384,20 +384,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.HentaiVN = exports.HentaiVNInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
-const DOMAIN = "https://hentaivn.run";
+const DOMAIN = 'https://hentaivn.run';
 const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 exports.HentaiVNInfo = {
-    version: "1.2.1",
-    name: "HentaiVN",
-    icon: "icon.png",
-    author: "Hoang3409",
-    authorWebsite: "https://github.com/hoang3402",
-    description: "Extension that pulls manga from HentaiVN.",
+    version: '1.2.1',
+    name: 'HentaiVN',
+    icon: 'icon.png',
+    author: 'Hoang3409',
+    authorWebsite: 'https://github.com/hoang3402',
+    description: 'Extension that pulls manga from HentaiVN.',
     contentRating: paperback_extensions_common_1.ContentRating.ADULT,
     websiteBaseURL: DOMAIN,
     sourceTags: [
         {
-            text: "Hentai",
+            text: 'Hentai',
             type: paperback_extensions_common_1.TagType.RED,
         },
     ],
@@ -414,7 +414,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                         ...(request.headers ?? {}),
                         ...{
                             referer: DOMAIN,
-                            "user-agent": userAgent,
+                            'user-agent': userAgent,
                         },
                     };
                     return request;
@@ -429,14 +429,14 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const Tags = await this.getSearchTags();
         const request = createRequestObject({
             url: `${DOMAIN}/${mangaId}-doc-truyen-.html`,
-            method: "GET",
+            method: 'GET',
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
         let tags = [];
-        let title = $("div.page-info > h1 > a").text().trim();
-        let img = $("div.page-ava > img").attr("src");
-        for (const item of $("a.tag").toArray()) {
+        let title = $('div.page-info > h1 > a').text().trim();
+        let img = $('div.page-ava > img').attr('src');
+        for (const item of $('a.tag').toArray()) {
             const tag = Tags[0].tags.find((tag) => $(item).text() == tag.label);
             if (!tag)
                 continue;
@@ -450,8 +450,8 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             hentai: true,
             tags: [
                 createTagSection({
-                    id: "0",
-                    label: "Thể loại",
+                    id: '0',
+                    label: 'Thể loại',
                     tags: tags,
                 }),
             ],
@@ -462,17 +462,17 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const request = createRequestObject({
             url: `${DOMAIN}/list-showchapter.php`,
             param: `?idchapshow=${mangaId}`,
-            method: "GET",
+            method: 'GET',
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        const arr = $("tr").toArray();
+        const arr = $('tr').toArray();
         for (var item of arr) {
-            var idChap = $("a", item).attr("href").split("-")[1];
+            var idChap = $('a', item).attr('href').split('-')[1];
             chapters.push(createChapter({
                 id: idChap,
                 mangaId: mangaId,
-                name: $("h2", item).text(),
+                name: $('h2', item).text(),
                 chapNum: arr.length - arr.indexOf(item),
                 langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
             }));
@@ -484,11 +484,11 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const request = createRequestObject({
             url: `${DOMAIN}/ajax_load_server.php`,
             data: `server_id=${chapterId}&server_type=3`,
-            method: "POST",
+            method: 'POST',
         });
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
-        for (const item of $("img").toArray()) {
+        for (const item of $('img').toArray()) {
             listUrlImage.push(item.attribs.src);
         }
         return createChapterDetails({
@@ -503,7 +503,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const request = createRequestObject({
             url: `${DOMAIN}/forum/search-plus.php`,
             param: `?name=${encodeURIComponent(query.title)}&dou=&char=&search=&page=${page}`,
-            method: "GET",
+            method: 'GET',
         });
         for (const item of query.includedTags) {
             request.param += `&tag[]=${item.id}`;
@@ -511,11 +511,16 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
         const tiles = [];
-        for (let item of $("li.search-li").toArray()) {
+        for (let item of $('li.search-li').toArray()) {
             tiles.push(createMangaTile({
-                id: $("div.search-img > a", item).attr("href").split('-')[0].replace('/', ''),
-                title: createIconText({ text: $("b", item).first().text() }),
-                image: $("img", item).attr("src"),
+                id: $('div.search-img > a', item)
+                    .attr('href')
+                    .split('-')[0]
+                    .replace('/', ''),
+                title: createIconText({
+                    text: $('b', item).first().text(),
+                }),
+                image: $('img', item).attr('src'),
             }));
         }
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };
@@ -527,8 +532,8 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     // Sections
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
-            id: "new_added",
-            title: "Truyện Mới Cập Nhật",
+            id: 'new_added',
+            title: 'Truyện Mới Cập Nhật',
             view_more: true,
         });
         //Load empty sections
@@ -536,7 +541,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         //New Updates
         let request = createRequestObject({
             url: `${DOMAIN}/list-new2.php`,
-            method: "GET",
+            method: 'GET',
         });
         let data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
@@ -545,12 +550,17 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     }
     async parseNewUpdatedSection($) {
         const items = [];
-        for (let item of $("ul.page-random").toArray()) {
+        for (let item of $('ul.page-random').toArray()) {
             items.push(createMangaTile({
-                id: $("div.img-same > a", item).attr("href").split('-')[0].replace('/', ''),
-                title: createIconText({ text: $("b", item).first().text() }),
-                image: $("div[style*=background]", item)
-                    .attr("style")
+                id: $('div.img-same > a', item)
+                    .attr('href')
+                    .split('-')[0]
+                    .replace('/', ''),
+                title: createIconText({
+                    text: $('b', item).first().text(),
+                }),
+                image: $('div[style*=background]', item)
+                    .attr('style')
                     .match(/background:url\((.+)\);/)[1],
             }));
         }
@@ -558,29 +568,32 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     }
     async getViewMoreItems(homepageSectionId, metadata) {
         const page = metadata?.page ?? 1;
-        let url = "";
-        let param = "";
+        let url = '';
+        let param = '';
         switch (homepageSectionId) {
-            case "new_added":
+            case 'new_added':
                 url = `${DOMAIN}/list-moicapnhat-doc.php`;
                 param = `?page=${page}`;
                 break;
             default:
-                throw new Error("Làm gì có page này?!");
+                throw new Error('Làm gì có page này?!');
         }
         const request = createRequestObject({
             url: url,
             param: param,
-            method: "GET",
+            method: 'GET',
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
         const tiles = [];
-        for (let item of $("li.item > ul").toArray()) {
+        for (let item of $('li.item > ul').toArray()) {
             tiles.push(createMangaTile({
-                id: $("a", item).attr("href").split('-')[0].replace('/', ''),
-                title: createIconText({ text: $("img", item).attr("alt") }),
-                image: $("img", item).attr("src"),
+                id: $('a', item)
+                    .attr('href')
+                    .split('-')[0]
+                    .replace('/', ''),
+                title: createIconText({ text: $('img', item).attr('alt') }),
+                image: $('img', item).attr('src'),
             }));
         }
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };
@@ -592,11 +605,17 @@ class HentaiVN extends paperback_extensions_common_1.Source {
     async getSearchTags() {
         return [
             createTagSection({
-                id: "0",
-                label: "Thể loại",
+                id: '0',
+                label: 'Thể loại',
                 tags: tags_json_1.default.map((tag) => createTag(tag)),
             }),
         ];
+    }
+    getCloudflareBypassRequest() {
+        return createRequestObject({
+            url: DOMAIN,
+            method: 'GET',
+        });
     }
 }
 exports.HentaiVN = HentaiVN;
