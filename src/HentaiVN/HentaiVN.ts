@@ -22,10 +22,10 @@ import tags from './tags.json';
 
 const DOMAIN = 'https://hentaivn.run';
 const userAgent =
-    'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 
 export const HentaiVNInfo: SourceInfo = {
-    version: '1.2.1',
+    version: '1.2.2',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -50,7 +50,7 @@ export class HentaiVN extends Source {
                 request.headers = {
                     ...(request.headers ?? {}),
                     ...{
-                        referer: DOMAIN,
+                        referer: `${DOMAIN}/`,
                         'user-agent': userAgent,
                     },
                 };
@@ -75,10 +75,12 @@ export class HentaiVN extends Source {
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
 
-        let tags: Tag[] = [];
-        let title = $('div.page-info > h1 > a').text().trim();
-        let img = $('div.page-ava > img').attr('src');
+        // console.log(data.data);
 
+        let title: string = $('div.page-info > h1 > a').text().trim();
+        let img: string = $('img.cover-1').first().attr('data-cfsrc');
+
+        let tags: Tag[] = [];
         for (const item of $('a.tag').toArray()) {
             const tag: Tag = Tags[0]!.tags.find(
                 (tag) => $(item).text() == tag.label
@@ -183,7 +185,7 @@ export class HentaiVN extends Source {
                     title: createIconText({
                         text: $('b', item).first().text(),
                     }),
-                    image: $('img', item).attr('src'),
+                    image: $('img', item).attr('data-cfsrc'),
                 })
             );
         }
@@ -302,6 +304,10 @@ export class HentaiVN extends Source {
         return createRequestObject({
             url: DOMAIN,
             method: 'GET',
+            headers: {
+                referer: `${DOMAIN}/`,
+                'user-agent': userAgent,
+            },
         });
     }
 }
