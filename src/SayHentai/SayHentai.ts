@@ -15,7 +15,7 @@ import {
     SourceInfo,
     TagSection,
     TagType,
-} from "paperback-extensions-common";
+} from 'paperback-extensions-common';
 import {
     getChapterDetails,
     getChapters,
@@ -23,29 +23,28 @@ import {
     getMangaTile,
     getUpdate,
     isLastPage,
-} from "./SayHentaiParser";
+} from './SayHentaiParser';
 import tags from './tags.json';
 
-export const DOMAIN = "https://sayhentai.me/";
+export const DOMAIN = 'https://sayhentai.me/';
 
 export const SayHentaiInfo: SourceInfo = {
-    version: "1.0.8",
-    name: "SayHentai",
-    icon: "icon.png",
-    author: "Hoang3409",
-    description: "Extension that pulls manga from SayHentai",
+    version: '1.0.8',
+    name: 'SayHentai',
+    icon: 'icon.png',
+    author: 'Hoang3409',
+    description: 'Extension that pulls manga from SayHentai',
     contentRating: ContentRating.ADULT,
     websiteBaseURL: DOMAIN,
     sourceTags: [
         {
-            text: "Hentai",
+            text: 'Hentai',
             type: TagType.RED,
         },
     ],
 };
 
 export class SayHentai extends Source {
-
     requestManager: RequestManager = createRequestManager({
         requestsPerSecond: 5,
         requestTimeout: 20000,
@@ -68,15 +67,13 @@ export class SayHentai extends Source {
         },
     });
 
-
     override async getMangaDetails(mangaId: string): Promise<Manga> {
-
-        var tags = await this.getSearchTags()
+        var tags = await this.getSearchTags();
 
         const request = createRequestObject({
             url: `${DOMAIN}${mangaId}`,
-            method: "GET"
-        })
+            method: 'GET',
+        });
 
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
@@ -84,35 +81,30 @@ export class SayHentai extends Source {
         return getManga($, tags, mangaId);
     }
 
-
     override async getChapters(mangaId: string): Promise<Chapter[]> {
-
         const request = createRequestObject({
             url: `${DOMAIN}${mangaId}`,
-            method: "GET"
-        })
+            method: 'GET',
+        });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
 
         return getChapters($, mangaId);
     }
 
-
     override async getChapterDetails(
         mangaId: string,
         chapterId: string
     ): Promise<ChapterDetails> {
-
         const request = createRequestObject({
             url: `${DOMAIN}${chapterId}`,
-            method: "GET"
-        })
+            method: 'GET',
+        });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
 
         return getChapterDetails($, chapterId, mangaId);
     }
-
 
     override async getSearchResults(
         query: SearchRequest,
@@ -124,20 +116,20 @@ export class SayHentai extends Source {
             return createPagedResults({
                 results: [],
                 metadata: {
-                    isLastPage: true
-                }
-            })
+                    isLastPage: true,
+                },
+            });
         }
 
         if (query.includedTags!.length > 0) {
-            url = `${query.includedTags![0]!.id}?page=${page}`
+            url = `${query.includedTags![0]!.id}?page=${page}`;
         } else {
-            url = `${DOMAIN}search?s=${query.title}&page=${page}`
+            url = `${DOMAIN}search?s=${query.title}&page=${page}`;
         }
 
         const request = createRequestObject({
             url: url,
-            method: "GET"
+            method: 'GET',
         });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
@@ -147,26 +139,27 @@ export class SayHentai extends Source {
             results: result,
             metadata: {
                 page: page + 1,
-                isLastPage: isLastPage(result.length)
-            }
-        })
+                isLastPage: isLastPage(result.length),
+            },
+        });
     }
-
 
     override async getSearchTags(): Promise<TagSection[]> {
-
-        return [createTagSection({
-            id: '0',
-            label: 'Thể loại (Chỉ chọn 1)',
-            tags: tags.map(item => createTag(item))
-        })];
+        return [
+            createTagSection({
+                id: '0',
+                label: 'Thể loại (Chỉ chọn 1)',
+                tags: tags.map((item) => createTag(item)),
+            }),
+        ];
     }
 
-
-    override async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
+    override async getHomePageSections(
+        sectionCallback: (section: HomeSection) => void
+    ): Promise<void> {
         let newAdded: HomeSection = createHomeSection({
-            id: "new_added",
-            title: "Truyện Mới Cập Nhật",
+            id: 'new_added',
+            title: 'Truyện Mới Cập Nhật',
             view_more: true,
         });
         //Load empty sections
@@ -174,7 +167,7 @@ export class SayHentai extends Source {
         //New Updates
         let request = createRequestObject({
             url: `${DOMAIN}`,
-            method: "GET",
+            method: 'GET',
         });
         let data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
@@ -182,21 +175,24 @@ export class SayHentai extends Source {
         sectionCallback(newAdded);
     }
 
-    override async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults> {
+    override async getViewMoreItems(
+        homepageSectionId: string,
+        metadata: any
+    ): Promise<PagedResults> {
         let page: number = metadata?.page ?? 1;
         if (metadata?.isLastPage) {
             return createPagedResults({
                 results: [],
                 metadata: {
-                    isLastPage: true
-                }
-            })
+                    isLastPage: true,
+                },
+            });
         }
 
         const request = createRequestObject({
             url: `${DOMAIN}?page=${page}`,
-            method: "GET"
-        })
+            method: 'GET',
+        });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
 
@@ -206,25 +202,30 @@ export class SayHentai extends Source {
             results: result,
             metadata: {
                 page: page + 1,
-                isLastPage: isLastPage(result.length)
-            }
+                isLastPage: isLastPage(result.length),
+            },
         });
     }
 
-    override async filterUpdatedManga(mangaUpdatesFoundCallback: (updates: MangaUpdates) => void, time: Date, ids: string[]): Promise<void> {
-
+    override async filterUpdatedManga(
+        mangaUpdatesFoundCallback: (updates: MangaUpdates) => void,
+        time: Date,
+        ids: string[]
+    ): Promise<void> {
         const request = createRequestObject({
             url: DOMAIN,
-            method: "GET"
-        })
+            method: 'GET',
+        });
         const data = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(data.data);
 
         var newIds = getUpdate($);
-        var result = newIds.filter(id => ids.includes(id));
+        var result = newIds.filter((id) => ids.includes(id));
 
-        mangaUpdatesFoundCallback(createMangaUpdates({
-            ids: result
-        }))
+        mangaUpdatesFoundCallback(
+            createMangaUpdates({
+                ids: result,
+            })
+        );
     }
 }
