@@ -3,6 +3,7 @@ import {
     Chapter,
     ChapterDetails,
     LanguageCode,
+    Manga,
     MangaStatus,
     MangaTile,
     Tag,
@@ -60,7 +61,17 @@ export function getMangaTile($: any): MangaTile[] {
     return result;
 }
 
-export function getManga($: any, tags: TagSection[], mangaId: string) {
+export function getUpdate($: any): string[] {
+    var result: string[] = [];
+
+    for (let item of $('div.page-item-detail').toArray()) {
+        result.push($('.line-2 > a', item).attr('href').replace(DOMAIN, ''));
+    }
+
+    return result;
+}
+
+export function getManga($: any, tags: TagSection[], mangaId: string): Manga {
     let genres: Tag[] = [];
     for (const genre of $('.genres-content > a').toArray()) {
         let label = $(genre).text();

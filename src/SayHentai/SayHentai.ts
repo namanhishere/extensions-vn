@@ -5,6 +5,7 @@ import {
     HomeSection,
     Manga,
     MangaTile,
+    MangaUpdates,
     PagedResults,
     Request,
     RequestManager,
@@ -20,6 +21,7 @@ import {
     getChapters,
     getManga,
     getMangaTile,
+    getUpdate,
     isLastPage,
 } from "./SayHentaiParser";
 import tags from './tags.json';
@@ -27,7 +29,7 @@ import tags from './tags.json';
 export const DOMAIN = "https://sayhentai.me/";
 
 export const SayHentaiInfo: SourceInfo = {
-    version: "1.0.7",
+    version: "1.0.8",
     name: "SayHentai",
     icon: "icon.png",
     author: "Hoang3409",
@@ -208,8 +210,21 @@ export class SayHentai extends Source {
             }
         });
     }
+
+    override async filterUpdatedManga(mangaUpdatesFoundCallback: (updates: MangaUpdates) => void, time: Date, ids: string[]): Promise<void> {
+
+        const request = createRequestObject({
+            url: DOMAIN,
+            method: "GET"
+        })
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+
+        var newIds = getUpdate($);
+        var result = newIds.filter(id => ids.includes(id));
+
+        mangaUpdatesFoundCallback(createMangaUpdates({
+            ids: result
+        }))
+    }
 }
-
-
-
-
