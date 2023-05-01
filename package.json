@@ -4,7 +4,7 @@
   "description": "The source for Viet Nam",
   "main": "index.js",
   "scripts": {
-    "test": "paperback test HentaiVN --ip=192.168.1.6",
+    "test": "paperback test",
     "dev": "npx nodemon --watch \"**/*.ts\" --ext \"js ts\" --exec \"npm run test\"",
     "log": "paperback logcat --ip=192.168.1.6",
     "bundle": "paperback bundle",

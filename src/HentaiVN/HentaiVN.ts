@@ -20,12 +20,12 @@ import {
 
 import tags from './tags.json';
 
-const DOMAIN = 'https://hentaivn.run';
+const DOMAIN = 'https://hentaivn.tv';
 const userAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 
 export const HentaiVNInfo: SourceInfo = {
-    version: '1.2.4',
+    version: '1.2.5',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',

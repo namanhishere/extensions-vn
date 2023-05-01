@@ -17,12 +17,12 @@ import {
     TagType,
 } from 'paperback-extensions-common';
 
-const DOMAIN = 'https://baotangtruyen2.com/';
+const DOMAIN = 'https://baotangtruyengo.com/';
 const userAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 
 export const BaoTangTruyenInfo: SourceInfo = {
-    version: '1.0.2',
+    version: '1.0.3',
     name: 'Bảo Tàng Truyện',
     icon: 'icon.png',
     author: 'Hoang3409',

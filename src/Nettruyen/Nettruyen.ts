@@ -20,10 +20,10 @@ import {
 
 import tags from './tags.json';
 
-const DOMAIN = 'https://www.nettruyenvt.com';
+const DOMAIN = 'https://www.nettruyenplus.com';
 
 export const NettruyenInfo: SourceInfo = {
-    version: '1.2.3',
+    version: '1.2.4',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
