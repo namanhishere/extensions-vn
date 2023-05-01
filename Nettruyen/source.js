@@ -384,9 +384,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertTime = exports.getServerUnavailableMangaTiles = exports.Nettruyen = exports.NettruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const tags_json_1 = __importDefault(require("./tags.json"));
-const DOMAIN = 'https://www.nettruyenvt.com';
+const DOMAIN = 'https://www.nettruyenplus.com';
 exports.NettruyenInfo = {
-    version: '1.2.3',
+    version: '1.2.4',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
