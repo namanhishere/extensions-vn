@@ -34,11 +34,11 @@ export const NettruyenInfo: SourceInfo = {
     sourceTags: [
         {
             text: 'Recommended',
-            type: TagType.BLUE,
+            type: TagType.GREEN,
         },
         {
             text: 'Notifications',
-            type: TagType.GREEN,
+            type: TagType.BLUE,
         },
     ],
 };
