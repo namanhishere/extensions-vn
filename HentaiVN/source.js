@@ -387,7 +387,7 @@ const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://hentaivn.tv';
 const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 exports.HentaiVNInfo = {
-    version: '1.2.5',
+    version: '1.2.6',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -446,7 +446,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
         let $ = this.cheerio.load(data.data);
         let $More = this.cheerio.load(moreInfo.data);
         let title = $('div.page-info > h1 > a').text().trim();
-        let img = $('img.cover-1').first().attr('data-cfsrc');
+        let img = $('img.cover-1').first().attr('src');
         let author = '';
         let status = paperback_extensions_common_1.MangaStatus.ONGOING;
         let views = 0;
