@@ -395,7 +395,7 @@ exports.BaoTangTruyenInfo = {
     sourceTags: [
         {
             text: 'Recommended',
-            type: paperback_extensions_common_1.TagType.BLUE,
+            type: paperback_extensions_common_1.TagType.GREEN,
         },
     ],
 };
