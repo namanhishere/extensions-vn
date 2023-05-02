@@ -34,7 +34,7 @@ export const BaoTangTruyenInfo: SourceInfo = {
     sourceTags: [
         {
             text: 'Recommended',
-            type: TagType.BLUE,
+            type: TagType.GREEN,
         },
     ],
 };
