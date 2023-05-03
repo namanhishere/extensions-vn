@@ -36,6 +36,10 @@ export const BaoTangTruyenInfo: SourceInfo = {
             text: 'Recommended',
             type: TagType.GREEN,
         },
+        {
+            text: 'Notifications',
+            type: TagType.BLUE,
+        },
     ],
 };
 
@@ -137,7 +141,34 @@ export class BaoTangTruyen extends Source {
         query: SearchRequest,
         metadata: any
     ): Promise<PagedResults> {
-        throw new Error('Method not implemented.');
+        let page: number = metadata?.page ?? 1;
+        const request = createRequestObject({
+            url: `${DOMAIN}tim-truyen?keyword=${query.title}&page=${page}`,
+            method: 'GET',
+        });
+        const response = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(response.data);
+
+        const results: MangaTile[] = [];
+
+        for (const item of $('.image').toArray()) {
+            results.push(
+                createMangaTile({
+                    id: $('a', item).attr('href').split('-').pop(),
+                    title: createIconText({
+                        text: $('a', item).attr('title'),
+                    }),
+                    image: $('img', item).attr('src'),
+                })
+            );
+        }
+
+        return createPagedResults({
+            results: results,
+            metadata: {
+                page: page + 1,
+            },
+        });
     }
 
     override async getHomePageSections(
