@@ -25,7 +25,7 @@ const userAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 
 export const HentaiVNInfo: SourceInfo = {
-    version: '1.2.6',
+    version: '1.2.7',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -89,15 +89,23 @@ export class HentaiVN extends Source {
             }),
             1
         );
+        const _title = await this.requestManager.schedule(
+            createRequestObject({
+                url: `${DOMAIN}/list-info-ten-mobile.php?id_anime=${mangaId}`,
+                method: 'GET',
+            }),
+            1
+        );
         let $ = this.cheerio.load(data.data);
         let $More = this.cheerio.load(moreInfo.data);
+        let $title = this.cheerio.load(_title.data);
 
-        let title: string = $('div.page-info > h1 > a').text().trim();
+        let title: string = $title('h3 b').text().trim();
         let img: string = $('img.cover-1').first().attr('src');
         let author: string = '';
         let status = MangaStatus.ONGOING;
         let views: number = 0;
-        let des: string = '';
+        let des: string = 'Không có mô tả!';
         var arr = $More('p').toArray();
         var index = 0;
         for (const item of arr) {
@@ -232,7 +240,7 @@ export class HentaiVN extends Source {
                     title: createIconText({
                         text: $('b', item).first().text(),
                     }),
-                    image: $('img', item).attr('data-cfsrc'),
+                    image: $('img', item).attr('src'),
                 })
             );
         }
