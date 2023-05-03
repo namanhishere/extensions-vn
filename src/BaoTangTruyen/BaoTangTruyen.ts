@@ -15,14 +15,17 @@ import {
     MangaTile,
     MangaUpdates,
     TagType,
+    TagSection,
 } from 'paperback-extensions-common';
+
+import tags from './tags.json';
 
 const DOMAIN = 'https://baotangtruyengo.com/';
 const userAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 
 export const BaoTangTruyenInfo: SourceInfo = {
-    version: '1.0.3',
+    version: '1.0.4',
     name: 'Bảo Tàng Truyện',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -142,10 +145,19 @@ export class BaoTangTruyen extends Source {
         metadata: any
     ): Promise<PagedResults> {
         let page: number = metadata?.page ?? 1;
-        const request = createRequestObject({
-            url: `${DOMAIN}tim-truyen?keyword=${query.title}&page=${page}`,
+        let request = createRequestObject({
+            url: '',
             method: 'GET',
         });
+        if (query.title) {
+            request.url = `${DOMAIN}tim-truyen?keyword=${query.title}&page=${page}`;
+        }
+        if (query.includedTags) {
+            request.url = `${DOMAIN}tim-truyen/${
+                query.includedTags[0]!.id
+            }?page=${page}`;
+        }
+
         const response = await this.requestManager.schedule(request, 1);
         const $ = this.cheerio.load(response.data);
 
@@ -156,7 +168,7 @@ export class BaoTangTruyen extends Source {
                 createMangaTile({
                     id: $('a', item).attr('href').split('-').pop(),
                     title: createIconText({
-                        text: $('a', item).attr('title'),
+                        text: decodeHtml($('a', item).attr('title')),
                     }),
                     image: $('img', item).attr('src'),
                 })
@@ -296,6 +308,16 @@ export class BaoTangTruyen extends Source {
         }
 
         mangaUpdatesFoundCallback(createMangaUpdates({ ids: results }));
+    }
+
+    override async getSearchTags(): Promise<TagSection[]> {
+        return [
+            createTagSection({
+                id: '0',
+                label: 'Thể loại',
+                tags: tags.map((tag) => createTag(tag)),
+            }),
+        ];
     }
 }
 
