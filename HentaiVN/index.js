@@ -2977,7 +2977,7 @@ const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://hentaivn.tv';
 const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 15_4_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Mobile/15E148 Safari/604.1';
 exports.HentaiVNInfo = {
-    version: '1.2.6',
+    version: '1.2.7',
     name: 'HentaiVN',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -3033,14 +3033,19 @@ class HentaiVN extends paperback_extensions_common_1.Source {
             url: `${DOMAIN}/list-info-all-mobile.php?id_anime=${mangaId}`,
             method: 'GET',
         }), 1);
+        const _title = await this.requestManager.schedule(createRequestObject({
+            url: `${DOMAIN}/list-info-ten-mobile.php?id_anime=${mangaId}`,
+            method: 'GET',
+        }), 1);
         let $ = this.cheerio.load(data.data);
         let $More = this.cheerio.load(moreInfo.data);
-        let title = $('div.page-info > h1 > a').text().trim();
+        let $title = this.cheerio.load(_title.data);
+        let title = $title('h3 b').text().trim();
         let img = $('img.cover-1').first().attr('src');
         let author = '';
         let status = paperback_extensions_common_1.MangaStatus.ONGOING;
         let views = 0;
-        let des = '';
+        let des = 'Không có mô tả!';
         var arr = $More('p').toArray();
         var index = 0;
         for (const item of arr) {
@@ -3155,7 +3160,7 @@ class HentaiVN extends paperback_extensions_common_1.Source {
                 title: createIconText({
                     text: $('b', item).first().text(),
                 }),
-                image: $('img', item).attr('data-cfsrc'),
+                image: $('img', item).attr('src'),
             }));
         }
         metadata = tiles.length === 0 ? undefined : { page: page + 1 };

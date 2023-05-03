@@ -397,11 +397,11 @@ exports.NettruyenInfo = {
     sourceTags: [
         {
             text: 'Recommended',
-            type: paperback_extensions_common_1.TagType.BLUE,
+            type: paperback_extensions_common_1.TagType.GREEN,
         },
         {
             text: 'Notifications',
-            type: paperback_extensions_common_1.TagType.GREEN,
+            type: paperback_extensions_common_1.TagType.BLUE,
         },
     ],
 };

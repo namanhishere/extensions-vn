@@ -377,13 +377,17 @@ __exportStar(require("./RawData"), exports);
 
 },{"./Chapter":6,"./ChapterDetails":7,"./Constants":8,"./DynamicUI":24,"./HomeSection":25,"./Languages":26,"./Manga":27,"./MangaTile":28,"./MangaUpdate":29,"./PagedResults":30,"./RawData":31,"./RequestHeaders":32,"./RequestInterceptor":33,"./RequestManager":34,"./RequestObject":35,"./ResponseObject":36,"./SearchField":37,"./SearchRequest":38,"./SourceInfo":39,"./SourceManga":40,"./SourceStateManager":41,"./SourceTag":42,"./TagSection":43,"./TrackedManga":44,"./TrackedMangaChapterReadAction":45,"./TrackerActionQueue":46}],48:[function(require,module,exports){
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertTime = exports.decodeHtml = exports.BaoTangTruyen = exports.BaoTangTruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
+const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://baotangtruyengo.com/';
 const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 exports.BaoTangTruyenInfo = {
-    version: '1.0.3',
+    version: '1.0.4',
     name: 'Bảo Tàng Truyện',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -396,6 +400,10 @@ exports.BaoTangTruyenInfo = {
         {
             text: 'Recommended',
             type: paperback_extensions_common_1.TagType.GREEN,
+        },
+        {
+            text: 'Notifications',
+            type: paperback_extensions_common_1.TagType.BLUE,
         },
     ],
 };
@@ -480,7 +488,35 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
         });
     }
     async getSearchResults(query, metadata) {
-        throw new Error('Method not implemented.');
+        let page = metadata?.page ?? 1;
+        let request = createRequestObject({
+            url: '',
+            method: 'GET',
+        });
+        if (query.title) {
+            request.url = `${DOMAIN}tim-truyen?keyword=${query.title}&page=${page}`;
+        }
+        if (query.includedTags) {
+            request.url = `${DOMAIN}tim-truyen/${query.includedTags[0].id}?page=${page}`;
+        }
+        const response = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(response.data);
+        const results = [];
+        for (const item of $('.image').toArray()) {
+            results.push(createMangaTile({
+                id: $('a', item).attr('href').split('-').pop(),
+                title: createIconText({
+                    text: decodeHtml($('a', item).attr('title')),
+                }),
+                image: $('img', item).attr('src'),
+            }));
+        }
+        return createPagedResults({
+            results: results,
+            metadata: {
+                page: page + 1,
+            },
+        });
     }
     async getHomePageSections(sectionCallback) {
         let newAdded = createHomeSection({
@@ -572,6 +608,15 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
         }
         mangaUpdatesFoundCallback(createMangaUpdates({ ids: results }));
     }
+    async getSearchTags() {
+        return [
+            createTagSection({
+                id: '0',
+                label: 'Thể loại',
+                tags: tags_json_1.default.map((tag) => createTag(tag)),
+            }),
+        ];
+    }
 }
 exports.BaoTangTruyen = BaoTangTruyen;
 function decodeHtml(encodedString) {
@@ -661,5 +706,209 @@ function convertTime(time) {
 }
 exports.convertTime = convertTime;
 
-},{"paperback-extensions-common":5}]},{},[48])(48)
+},{"./tags.json":49,"paperback-extensions-common":5}],49:[function(require,module,exports){
+module.exports=[
+    {
+        "id": "action",
+        "label": "Action"
+    },
+    {
+        "id": "anime",
+        "label": "Anime"
+    },
+    {
+        "id": "mecha",
+        "label": "Mecha"
+    },
+    {
+        "id": "scifi",
+        "label": "Sci-fi"
+    },
+    {
+        "id": "shounen",
+        "label": "Shounen"
+    },
+    {
+        "id": "co-dai",
+        "label": "Cổ Đại"
+    },
+    {
+        "id": "comedy",
+        "label": "Comedy"
+    },
+    {
+        "id": "manhua",
+        "label": "Manhua"
+    },
+    {
+        "id": "ngon-tinh",
+        "label": "Ngôn Tình"
+    },
+    {
+        "id": "romance",
+        "label": "Romance"
+    },
+    {
+        "id": "truyen-mau",
+        "label": "Truyện Màu"
+    },
+    {
+        "id": "drama",
+        "label": "Drama"
+    },
+    {
+        "id": "school-life",
+        "label": "School Life"
+    },
+    {
+        "id": "seinen",
+        "label": "Seinen"
+    },
+    {
+        "id": "manhwa",
+        "label": "Manhwa"
+    },
+    {
+        "id": "comic",
+        "label": "Comic"
+    },
+    {
+        "id": "chuyen-sinh",
+        "label": "Chuyển Sinh"
+    },
+    {
+        "id": "fantasy",
+        "label": "Fantasy"
+    },
+    {
+        "id": "supernatural",
+        "label": "Supernatural"
+    },
+    {
+        "id": "webtoon",
+        "label": "Webtoon"
+    },
+    {
+        "id": "xuyen-khong",
+        "label": "Xuyên Không"
+    },
+    {
+        "id": "shoujo",
+        "label": "Shoujo"
+    },
+    {
+        "id": "sports",
+        "label": "Sports"
+    },
+    {
+        "id": "manga",
+        "label": "Manga"
+    },
+    {
+        "id": "smut",
+        "label": "Smut"
+    },
+    {
+        "id": "historical",
+        "label": "Historical"
+    },
+    {
+        "id": "adventure",
+        "label": "Adventure"
+    },
+    {
+        "id": "slice-of-life",
+        "label": "Slice of Life"
+    },
+    {
+        "id": "tragedy",
+        "label": "Tragedy"
+    },
+    {
+        "id": "mystery",
+        "label": "Mystery"
+    },
+    {
+        "id": "horror",
+        "label": "Horror"
+    },
+    {
+        "id": "martial-arts",
+        "label": "Martial Arts"
+    },
+    {
+        "id": "shoujo-ai",
+        "label": "Shoujo Ai"
+    },
+    {
+        "id": "viet-nam",
+        "label": "Việt Nam"
+    },
+    {
+        "id": "dam-my",
+        "label": "Đam Mỹ"
+    },
+    {
+        "id": "shounen-ai",
+        "label": "Shounen Ai"
+    },
+    {
+        "id": "soft-yuri",
+        "label": "Soft Yuri"
+    },
+    {
+        "id": "yuri",
+        "label": "Yuri"
+    },
+    {
+        "id": "gender-bender",
+        "label": "Gender Bender"
+    },
+    {
+        "id": "yaoi",
+        "label": "Yaoi"
+    },
+    {
+        "id": "psychological",
+        "label": "Psychological"
+    },
+    {
+        "id": "doujinshi",
+        "label": "Doujinshi"
+    },
+    {
+        "id": "soft-yaoi",
+        "label": "Soft Yaoi"
+    },
+    {
+        "id": "josei",
+        "label": "Josei"
+    },
+    {
+        "id": "thieu-nhi",
+        "label": "Thiếu Nhi"
+    },
+    {
+        "id": "truyen-scan",
+        "label": "Truyện scan"
+    },
+    {
+        "id": "cooking",
+        "label": "Cooking"
+    },
+    {
+        "id": "trinh-tham",
+        "label": "Trinh Thám"
+    },
+    {
+        "id": "live-action",
+        "label": "Live action"
+    },
+    {
+        "id": "tap-chi-truyen-tranh",
+        "label": "Tạp chí truyện tranh"
+    }
+]
+
+},{}]},{},[48])(48)
 });
