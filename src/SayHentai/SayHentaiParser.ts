@@ -10,20 +10,22 @@ import {
 } from 'paperback-extensions-common';
 
 import { decodeHtml } from '../utils/decode';
+import { convertTime } from '../utils/time';
 import { DOMAIN } from './SayHentai';
 
 export function getChapters($: any, mangaId: string): Chapter[] {
     let chapters: Chapter[] = [];
 
-    const arr = $('.wp-manga-chapter a').toArray();
+    const arr = $('.wp-manga-chapter').toArray();
     let index = arr.length;
     for (let item of arr) {
         chapters.push(
             createChapter({
-                id: $(item).attr('href').replace(DOMAIN, ''),
+                id: $('a', item).attr('href').replace(DOMAIN, ''),
                 chapNum: index--,
-                name: $(item).text(),
+                name: $('a', item).text(),
                 mangaId: mangaId,
+                time: convertTime($('span.chapter-release-date').text()),
                 langCode: LanguageCode.VIETNAMESE,
             })
         );
@@ -91,10 +93,13 @@ export function getManga($: any, tags: TagSection[], mangaId: string): Manga {
 
     return createManga({
         id: mangaId,
-        titles: [$('.post-title').text()],
+        titles: [decodeHtml($('.post-title').text())],
         image: $('.summary_image img').attr('src'),
         desc: $('.description-summary p').text(),
-        status: MangaStatus.ONGOING,
+        status: $('.summary-content').text().includes('Đang Ra')
+            ? MangaStatus.ONGOING
+            : MangaStatus.COMPLETED,
+        rating: Number.parseFloat($('.avg-rate').text()),
         tags: [
             createTagSection({
                 id: '0',

@@ -29,7 +29,7 @@ import tags from './tags.json';
 export const DOMAIN = 'https://sayhentai.me/';
 
 export const SayHentaiInfo: SourceInfo = {
-    version: '1.0.9',
+    version: '1.1.0',
     name: 'SayHentai',
     icon: 'icon.png',
     author: 'Hoang3409',
