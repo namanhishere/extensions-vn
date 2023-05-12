@@ -2971,13 +2971,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.convertTime = exports.decodeHtml = exports.BaoTangTruyen = exports.BaoTangTruyenInfo = void 0;
+exports.BaoTangTruyen = exports.BaoTangTruyenInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
+const time_1 = require("../utils/time");
+const decode_1 = require("../utils/decode");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://baotangtruyengo.com/';
 const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 exports.BaoTangTruyenInfo = {
-    version: '1.0.4',
+    version: '1.0.5',
     name: 'Bảo Tàng Truyện',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -3029,8 +3031,8 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
         const $ = this.cheerio.load(data.data);
         return createManga({
             id: mangaId,
-            titles: [decodeHtml($('h1.title-detail').text().trim())],
-            desc: decodeHtml($('#summary').text().trim()),
+            titles: [(0, decode_1.decodeHtml)($('h1.title-detail').text().trim())],
+            desc: (0, decode_1.decodeHtml)($('#summary').text().trim()),
             image: $('div.col-image > img').attr('data-src'),
             status: paperback_extensions_common_1.MangaStatus.ONGOING,
         });
@@ -3054,7 +3056,7 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
                 name: $('.chapter > a', item).text(),
                 chapNum: index--,
                 langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
-                time: convertTime(decodeHtml(time)),
+                time: (0, time_1.convertTime)((0, decode_1.decodeHtml)(time)),
             }));
         }
         return chapters;
@@ -3096,7 +3098,7 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
             results.push(createMangaTile({
                 id: $('a', item).attr('href').split('-').pop(),
                 title: createIconText({
-                    text: decodeHtml($('a', item).attr('title')),
+                    text: (0, decode_1.decodeHtml)($('a', item).attr('title')),
                 }),
                 image: $('img', item).attr('src'),
             }));
@@ -3135,9 +3137,9 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
             manga.push(createMangaTile({
                 id: id,
                 image: image,
-                title: createIconText({ text: decodeHtml(title) }),
+                title: createIconText({ text: (0, decode_1.decodeHtml)(title) }),
                 subtitleText: createIconText({
-                    text: decodeHtml(subtitle),
+                    text: (0, decode_1.decodeHtml)(subtitle),
                 }),
             }));
         }
@@ -3166,9 +3168,9 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
             manga.push(createMangaTile({
                 id: id,
                 image: image,
-                title: createIconText({ text: decodeHtml(title) }),
+                title: createIconText({ text: (0, decode_1.decodeHtml)(title) }),
                 subtitleText: createIconText({
-                    text: decodeHtml(subtitle),
+                    text: (0, decode_1.decodeHtml)(subtitle),
                 }),
             }));
         }
@@ -3209,94 +3211,8 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
     }
 }
 exports.BaoTangTruyen = BaoTangTruyen;
-function decodeHtml(encodedString) {
-    const entityRegex = /&(#[0-9]+|[a-z]+);/gi;
-    const entities = {
-        '&lt;': '<',
-        '&gt;': '>',
-        '&amp;': '&',
-        '&quot;': '"',
-        '&apos;': "'",
-        '&#39;': "'",
-        '&#x2F;': '/',
-        '&#x3D;': '=',
-        '&#x22;': '"',
-        '&#x3C;': '<',
-        '&#x3E;': '>',
-    };
-    return encodedString.replace(entityRegex, (match, entity) => {
-        if (entity[0] === '#') {
-            const code = entity.slice(1);
-            if (code[0] === 'x') {
-                return String.fromCharCode(parseInt(code.slice(1), 16));
-            }
-            else {
-                return String.fromCharCode(parseInt(code));
-            }
-        }
-        else {
-            return entities[match] || match;
-        }
-    });
-}
-exports.decodeHtml = decodeHtml;
-function convertTime(time) {
-    var date;
-    // 29/12/22
-    if (time.split('/').length == 3) {
-        date = time.split('/');
-        date[2] = '20' + date[2];
-        return new Date(Number.parseInt(date[2]), Number.parseInt(date[1]) - 1, Number.parseInt(date[0]));
-    }
-    // 11:44 05/02
-    if (time.includes(':')) {
-        date = new Date();
-        var temp = time.split(' ');
-        date.setHours(Number.parseInt(temp[0].split(':')[0]));
-        date.setMinutes(Number.parseInt(temp[0].split(':')[1]));
-        date.setDate(Number.parseInt(temp[1].split('/')[0]));
-        date.setMonth(Number.parseInt(temp[1].split('/')[1]) - 1);
-        return date;
-    }
-    // some thing "* trước"
-    if (time.includes('trước')) {
-        var T = Number.parseInt(time.split(' ')[0]);
-        if (time.includes('giây')) {
-            date = new Date();
-            date.setSeconds(date.getSeconds() - T);
-            return date;
-        }
-        if (time.includes('phút')) {
-            date = new Date();
-            date.setMinutes(date.getMinutes() - T);
-            return date;
-        }
-        if (time.includes('giờ')) {
-            date = new Date();
-            date.setHours(date.getHours() - T);
-            return date;
-        }
-        if (time.includes('ngày')) {
-            date = new Date();
-            date.setDate(date.getDate() - T);
-            return date;
-        }
-        if (time.includes('tháng')) {
-            date = new Date();
-            date.setMonth(date.getMonth() - T);
-            return date;
-        }
-        if (time.includes('năm')) {
-            date = new Date();
-            date.setFullYear(date.getFullYear() - T);
-            return date;
-        }
-    }
-    return new Date();
-}
-exports.convertTime = convertTime;
 
-},{"./tags.json":83,"paperback-extensions-common":8}],83:[function(require,module,exports){
+},{"../utils/decode":84,"../utils/time":85,"./tags.json":83,"paperback-extensions-common":8}],83:[function(require,module,exports){
 module.exports=[
     {
         "id": "action",
@@ -3499,6 +3415,102 @@ module.exports=[
         "label": "Tạp chí truyện tranh"
     }
 ]
+
+},{}],84:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.decodeHtml = void 0;
+function decodeHtml(encodedString) {
+    const entityRegex = /&(#[0-9]+|[a-z]+);/gi;
+    const entities = {
+        '&lt;': '<',
+        '&gt;': '>',
+        '&amp;': '&',
+        '&quot;': '"',
+        '&apos;': "'",
+        '&#39;': "'",
+        '&#x2F;': '/',
+        '&#x3D;': '=',
+        '&#x22;': '"',
+        '&#x3C;': '<',
+        '&#x3E;': '>',
+    };
+    return encodedString.replace(entityRegex, (match, entity) => {
+        if (entity[0] === '#') {
+            const code = entity.slice(1);
+            if (code[0] === 'x') {
+                return String.fromCharCode(parseInt(code.slice(1), 16));
+            }
+            else {
+                return String.fromCharCode(parseInt(code));
+            }
+        }
+        else {
+            return entities[match] || match;
+        }
+    });
+}
+exports.decodeHtml = decodeHtml;
+
+},{}],85:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.convertTime = void 0;
+function convertTime(time) {
+    var date;
+    // 29/12/22
+    if (time.split('/').length == 3) {
+        date = time.split('/');
+        date[2] = '20' + date[2];
+        return new Date(Number.parseInt(date[2]), Number.parseInt(date[1]) - 1, Number.parseInt(date[0]));
+    }
+    // 11:44 05/02
+    if (time.includes(':')) {
+        date = new Date();
+        var temp = time.split(' ');
+        date.setHours(Number.parseInt(temp[0].split(':')[0]));
+        date.setMinutes(Number.parseInt(temp[0].split(':')[1]));
+        date.setDate(Number.parseInt(temp[1].split('/')[0]));
+        date.setMonth(Number.parseInt(temp[1].split('/')[1]) - 1);
+        return date;
+    }
+    // some thing "* trước"
+    if (time.includes('trước')) {
+        var T = Number.parseInt(time.split(' ')[0]);
+        if (time.includes('giây')) {
+            date = new Date();
+            date.setSeconds(date.getSeconds() - T);
+            return date;
+        }
+        if (time.includes('phút')) {
+            date = new Date();
+            date.setMinutes(date.getMinutes() - T);
+            return date;
+        }
+        if (time.includes('giờ')) {
+            date = new Date();
+            date.setHours(date.getHours() - T);
+            return date;
+        }
+        if (time.includes('ngày')) {
+            date = new Date();
+            date.setDate(date.getDate() - T);
+            return date;
+        }
+        if (time.includes('tháng')) {
+            date = new Date();
+            date.setMonth(date.getMonth() - T);
+            return date;
+        }
+        if (time.includes('năm')) {
+            date = new Date();
+            date.setFullYear(date.getFullYear() - T);
+            return date;
+        }
+    }
+    return new Date();
+}
+exports.convertTime = convertTime;
 
 },{}]},{},[82])(82)
 });

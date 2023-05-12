@@ -387,7 +387,7 @@ const SayHentaiParser_1 = require("./SayHentaiParser");
 const tags_json_1 = __importDefault(require("./tags.json"));
 exports.DOMAIN = 'https://sayhentai.me/';
 exports.SayHentaiInfo = {
-    version: '1.0.8',
+    version: '1.0.9',
     name: 'SayHentai',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -556,6 +556,7 @@ exports.SayHentai = SayHentai;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isLastPage = exports.getManga = exports.getUpdate = exports.getMangaTile = exports.getChapterDetails = exports.getChapters = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
+const decode_1 = require("../utils/decode");
 const SayHentai_1 = require("./SayHentai");
 function getChapters($, mangaId) {
     let chapters = [];
@@ -593,7 +594,7 @@ function getMangaTile($) {
         result.push(createMangaTile({
             id: $('.line-2 > a', item).attr('href').replace(SayHentai_1.DOMAIN, ''),
             title: createIconText({
-                text: $('.line-2 > a', item).text(),
+                text: (0, decode_1.decodeHtml)($('.line-2 > a', item).text()),
             }),
             image: encodeURI(img),
         }));
@@ -644,7 +645,7 @@ function isLastPage(numberManga) {
 }
 exports.isLastPage = isLastPage;
 
-},{"./SayHentai":48,"paperback-extensions-common":5}],50:[function(require,module,exports){
+},{"../utils/decode":51,"./SayHentai":48,"paperback-extensions-common":5}],50:[function(require,module,exports){
 module.exports=[
     {
         "id": "https://sayhentai.me/genre/18",
@@ -819,6 +820,42 @@ module.exports=[
         "label": "Yuri"
     }
 ]
+
+},{}],51:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.decodeHtml = void 0;
+function decodeHtml(encodedString) {
+    const entityRegex = /&(#[0-9]+|[a-z]+);/gi;
+    const entities = {
+        '&lt;': '<',
+        '&gt;': '>',
+        '&amp;': '&',
+        '&quot;': '"',
+        '&apos;': "'",
+        '&#39;': "'",
+        '&#x2F;': '/',
+        '&#x3D;': '=',
+        '&#x22;': '"',
+        '&#x3C;': '<',
+        '&#x3E;': '>',
+    };
+    return encodedString.replace(entityRegex, (match, entity) => {
+        if (entity[0] === '#') {
+            const code = entity.slice(1);
+            if (code[0] === 'x') {
+                return String.fromCharCode(parseInt(code.slice(1), 16));
+            }
+            else {
+                return String.fromCharCode(parseInt(code));
+            }
+        }
+        else {
+            return entities[match] || match;
+        }
+    });
+}
+exports.decodeHtml = decodeHtml;
 
 },{}]},{},[48])(48)
 });
