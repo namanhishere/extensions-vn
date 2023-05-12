@@ -27,33 +27,28 @@ export function convertTime(time: string): Date {
     // some thing "* trước"
     if (time.includes('trước')) {
         var T = Number.parseInt(time.split(' ')[0]!);
+        date = new Date();
         if (time.includes('giây')) {
-            date = new Date();
             date.setSeconds(date.getSeconds() - T);
             return date;
         }
         if (time.includes('phút')) {
-            date = new Date();
             date.setMinutes(date.getMinutes() - T);
             return date;
         }
         if (time.includes('giờ')) {
-            date = new Date();
             date.setHours(date.getHours() - T);
             return date;
         }
         if (time.includes('ngày')) {
-            date = new Date();
             date.setDate(date.getDate() - T);
             return date;
         }
         if (time.includes('tháng')) {
-            date = new Date();
             date.setMonth(date.getMonth() - T);
             return date;
         }
         if (time.includes('năm')) {
-            date = new Date();
             date.setFullYear(date.getFullYear() - T);
             return date;
         }
