@@ -9,6 +9,7 @@ import {
     TagSection,
 } from 'paperback-extensions-common';
 
+import { decodeHtml } from '../utils/decode';
 import { DOMAIN } from './SayHentai';
 
 export function getChapters($: any, mangaId: string): Chapter[] {
@@ -58,7 +59,7 @@ export function getMangaTile($: any): MangaTile[] {
             createMangaTile({
                 id: $('.line-2 > a', item).attr('href').replace(DOMAIN, ''),
                 title: createIconText({
-                    text: $('.line-2 > a', item).text(),
+                    text: decodeHtml($('.line-2 > a', item).text()),
                 }),
                 image: encodeURI(img),
             })

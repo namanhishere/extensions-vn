@@ -18,6 +18,8 @@ import {
     TagSection,
 } from 'paperback-extensions-common';
 
+import { convertTime } from '../utils/time';
+import { decodeHtml } from '../utils/decode';
 import tags from './tags.json';
 
 const DOMAIN = 'https://baotangtruyengo.com/';
@@ -25,7 +27,7 @@ const userAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 
 export const BaoTangTruyenInfo: SourceInfo = {
-    version: '1.0.4',
+    version: '1.0.5',
     name: 'Bảo Tàng Truyện',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -319,98 +321,4 @@ export class BaoTangTruyen extends Source {
             }),
         ];
     }
-}
-
-export function decodeHtml(encodedString: string): string {
-    const entityRegex = /&(#[0-9]+|[a-z]+);/gi;
-    const entities: { [key: string]: string } = {
-        '&lt;': '<',
-        '&gt;': '>',
-        '&amp;': '&',
-        '&quot;': '"',
-        '&apos;': "'",
-        '&#39;': "'",
-        '&#x2F;': '/',
-        '&#x3D;': '=',
-        '&#x22;': '"',
-        '&#x3C;': '<',
-        '&#x3E;': '>',
-    };
-
-    return encodedString.replace(entityRegex, (match, entity) => {
-        if (entity[0] === '#') {
-            const code = entity.slice(1);
-            if (code[0] === 'x') {
-                return String.fromCharCode(parseInt(code.slice(1), 16));
-            } else {
-                return String.fromCharCode(parseInt(code));
-            }
-        } else {
-            return entities[match] || match;
-        }
-    });
-}
-
-export function convertTime(time: string): Date {
-    var date;
-    // 29/12/22
-    if (time.split('/').length == 3) {
-        date = time.split('/');
-        date[2] = '20' + date[2];
-        return new Date(
-            Number.parseInt(date[2]),
-            Number.parseInt(date[1]!) - 1,
-            Number.parseInt(date[0]!)
-        );
-    }
-
-    // 11:44 05/02
-    if (time.includes(':')) {
-        date = new Date();
-        var temp = time.split(' ');
-        date.setHours(Number.parseInt(temp[0]!.split(':')[0]!));
-        date.setMinutes(Number.parseInt(temp[0]!.split(':')[1]!));
-
-        date.setDate(Number.parseInt(temp[1]!.split('/')[0]!));
-        date.setMonth(Number.parseInt(temp[1]!.split('/')[1]!) - 1);
-
-        return date;
-    }
-
-    // some thing "* trước"
-    if (time.includes('trước')) {
-        var T = Number.parseInt(time.split(' ')[0]!);
-        if (time.includes('giây')) {
-            date = new Date();
-            date.setSeconds(date.getSeconds() - T);
-            return date;
-        }
-        if (time.includes('phút')) {
-            date = new Date();
-            date.setMinutes(date.getMinutes() - T);
-            return date;
-        }
-        if (time.includes('giờ')) {
-            date = new Date();
-            date.setHours(date.getHours() - T);
-            return date;
-        }
-        if (time.includes('ngày')) {
-            date = new Date();
-            date.setDate(date.getDate() - T);
-            return date;
-        }
-        if (time.includes('tháng')) {
-            date = new Date();
-            date.setMonth(date.getMonth() - T);
-            return date;
-        }
-        if (time.includes('năm')) {
-            date = new Date();
-            date.setFullYear(date.getFullYear() - T);
-            return date;
-        }
-    }
-
-    return new Date();
 }
