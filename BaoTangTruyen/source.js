@@ -389,7 +389,7 @@ const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://baotangtruyengo.com/';
 const userAgent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 exports.BaoTangTruyenInfo = {
-    version: '1.0.5',
+    version: '1.0.6',
     name: 'Bảo Tàng Truyện',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -498,7 +498,7 @@ class BaoTangTruyen extends paperback_extensions_common_1.Source {
         if (query.title) {
             request.url = `${DOMAIN}tim-truyen?keyword=${query.title}&page=${page}`;
         }
-        if (query.includedTags) {
+        if (query.includedTags[0]?.id) {
             request.url = `${DOMAIN}tim-truyen/${query.includedTags[0].id}?page=${page}`;
         }
         const response = await this.requestManager.schedule(request, 1);
