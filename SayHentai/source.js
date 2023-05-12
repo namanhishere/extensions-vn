@@ -387,7 +387,7 @@ const SayHentaiParser_1 = require("./SayHentaiParser");
 const tags_json_1 = __importDefault(require("./tags.json"));
 exports.DOMAIN = 'https://sayhentai.me/';
 exports.SayHentaiInfo = {
-    version: '1.0.9',
+    version: '1.1.0',
     name: 'SayHentai',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -557,17 +557,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.isLastPage = exports.getManga = exports.getUpdate = exports.getMangaTile = exports.getChapterDetails = exports.getChapters = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const decode_1 = require("../utils/decode");
+const time_1 = require("../utils/time");
 const SayHentai_1 = require("./SayHentai");
 function getChapters($, mangaId) {
     let chapters = [];
-    const arr = $('.wp-manga-chapter a').toArray();
+    const arr = $('.wp-manga-chapter').toArray();
     let index = arr.length;
     for (let item of arr) {
         chapters.push(createChapter({
-            id: $(item).attr('href').replace(SayHentai_1.DOMAIN, ''),
+            id: $('a', item).attr('href').replace(SayHentai_1.DOMAIN, ''),
             chapNum: index--,
-            name: $(item).text(),
+            name: $('a', item).text(),
             mangaId: mangaId,
+            time: (0, time_1.convertTime)($('span.chapter-release-date').text()),
             langCode: paperback_extensions_common_1.LanguageCode.VIETNAMESE,
         }));
     }
@@ -621,10 +623,13 @@ function getManga($, tags, mangaId) {
     }
     return createManga({
         id: mangaId,
-        titles: [$('.post-title').text()],
+        titles: [(0, decode_1.decodeHtml)($('.post-title').text())],
         image: $('.summary_image img').attr('src'),
         desc: $('.description-summary p').text(),
-        status: paperback_extensions_common_1.MangaStatus.ONGOING,
+        status: $('.summary-content').text().includes('Đang Ra')
+            ? paperback_extensions_common_1.MangaStatus.ONGOING
+            : paperback_extensions_common_1.MangaStatus.COMPLETED,
+        rating: Number.parseFloat($('.avg-rate').text()),
         tags: [
             createTagSection({
                 id: '0',
@@ -645,7 +650,7 @@ function isLastPage(numberManga) {
 }
 exports.isLastPage = isLastPage;
 
-},{"../utils/decode":51,"./SayHentai":48,"paperback-extensions-common":5}],50:[function(require,module,exports){
+},{"../utils/decode":51,"../utils/time":52,"./SayHentai":48,"paperback-extensions-common":5}],50:[function(require,module,exports){
 module.exports=[
     {
         "id": "https://sayhentai.me/genre/18",
@@ -856,6 +861,61 @@ function decodeHtml(encodedString) {
     });
 }
 exports.decodeHtml = decodeHtml;
+
+},{}],52:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.convertTime = void 0;
+function convertTime(time) {
+    var date;
+    // 29/12/22
+    if (time.split('/').length == 3) {
+        date = time.split('/');
+        date[2] = '20' + date[2];
+        return new Date(Number.parseInt(date[2]), Number.parseInt(date[1]) - 1, Number.parseInt(date[0]));
+    }
+    // 11:44 05/02
+    if (time.includes(':')) {
+        date = new Date();
+        var temp = time.split(' ');
+        date.setHours(Number.parseInt(temp[0].split(':')[0]));
+        date.setMinutes(Number.parseInt(temp[0].split(':')[1]));
+        date.setDate(Number.parseInt(temp[1].split('/')[0]));
+        date.setMonth(Number.parseInt(temp[1].split('/')[1]) - 1);
+        return date;
+    }
+    // some thing "* trước"
+    if (time.includes('trước')) {
+        var T = Number.parseInt(time.split(' ')[0]);
+        date = new Date();
+        if (time.includes('giây')) {
+            date.setSeconds(date.getSeconds() - T);
+            return date;
+        }
+        if (time.includes('phút')) {
+            date.setMinutes(date.getMinutes() - T);
+            return date;
+        }
+        if (time.includes('giờ')) {
+            date.setHours(date.getHours() - T);
+            return date;
+        }
+        if (time.includes('ngày')) {
+            date.setDate(date.getDate() - T);
+            return date;
+        }
+        if (time.includes('tháng')) {
+            date.setMonth(date.getMonth() - T);
+            return date;
+        }
+        if (time.includes('năm')) {
+            date.setFullYear(date.getFullYear() - T);
+            return date;
+        }
+    }
+    return new Date();
+}
+exports.convertTime = convertTime;
 
 },{}]},{},[48])(48)
 });
