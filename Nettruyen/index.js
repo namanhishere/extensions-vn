@@ -2977,7 +2977,7 @@ const time_1 = require("../utils/time");
 const tags_json_1 = __importDefault(require("./tags.json"));
 const DOMAIN = 'https://www.nettruyenplus.com';
 exports.NettruyenInfo = {
-    version: '1.2.5',
+    version: '1.2.6',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
@@ -3311,7 +3311,20 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         ];
     }
     async filterUpdatedManga(mangaUpdatesFoundCallback, time, ids) {
-        mangaUpdatesFoundCallback(createMangaUpdates({ ids: ids }));
+        const request = createRequestObject({
+            url: `${DOMAIN}/hot`,
+            method: 'GET',
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+        var newIds = [];
+        for (const item of $('.row .item').toArray()) {
+            newIds.push($('a', item)
+                .attr('href')
+                ?.replace(`${DOMAIN}/truyen-tranh/`, ''));
+        }
+        var result = newIds.filter((id) => ids.includes(id));
+        mangaUpdatesFoundCallback(createMangaUpdates({ ids: result }));
     }
 }
 exports.Nettruyen = Nettruyen;
