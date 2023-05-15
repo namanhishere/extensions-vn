@@ -427,7 +427,24 @@ export class Nettruyen extends Source {
         time: Date,
         ids: string[]
     ): Promise<void> {
-        mangaUpdatesFoundCallback(createMangaUpdates({ ids: ids }));
+        const request = createRequestObject({
+            url: `${DOMAIN}/hot`,
+            method: 'GET',
+        });
+        const data = await this.requestManager.schedule(request, 1);
+        const $ = this.cheerio.load(data.data);
+
+        var newIds: string[] = [];
+        for (const item of $('.row .item').toArray()) {
+            newIds.push(
+                $('a', item)
+                    .attr('href')
+                    ?.replace(`${DOMAIN}/truyen-tranh/`, '')!
+            );
+        }
+
+        var result = newIds.filter((id) => ids.includes(id));
+        mangaUpdatesFoundCallback(createMangaUpdates({ ids: result }));
     }
 }
 
