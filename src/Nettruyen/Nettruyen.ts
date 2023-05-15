@@ -24,7 +24,7 @@ import tags from './tags.json';
 const DOMAIN = 'https://www.nettruyenplus.com';
 
 export const NettruyenInfo: SourceInfo = {
-    version: '1.2.5',
+    version: '1.2.6',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
