@@ -2975,9 +2975,9 @@ exports.getServerUnavailableMangaTiles = exports.Nettruyen = exports.NettruyenIn
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const time_1 = require("../utils/time");
 const tags_json_1 = __importDefault(require("./tags.json"));
-const DOMAIN = 'https://www.nettruyenco.vn/';
+const DOMAIN = 'https://www.nettruyenco.vn';
 exports.NettruyenInfo = {
-    version: '1.2.7',
+    version: '1.2.8',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
