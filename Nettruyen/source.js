@@ -542,8 +542,9 @@ class Nettruyen extends paperback_extensions_common_1.Source {
         const data = await this.requestManager.schedule(request, 1);
         let $ = this.cheerio.load(data.data);
         const pages = [];
+        // src || data-original
         for (let image of $('.page-chapter').toArray()) {
-            var link = $('div.page-chapter > img', image).attr('data-original');
+            var link = $('div.page-chapter > img', image).attr('src');
             if (link.indexOf('http') === -1) {
                 pages.push('http:' + link);
             }
