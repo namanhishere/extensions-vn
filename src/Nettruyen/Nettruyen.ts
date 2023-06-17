@@ -203,9 +203,10 @@ export class Nettruyen extends Source {
         let $ = this.cheerio.load(data.data);
 
         const pages: string[] = [];
+        // src || data-original
         for (let image of $('.page-chapter').toArray()) {
             var link = $('div.page-chapter > img', image).attr(
-                'data-original'
+                'src'
             )!;
             if (link.indexOf('http') === -1) {
                 pages.push('http:' + link);
