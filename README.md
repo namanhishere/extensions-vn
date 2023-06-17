@@ -18,7 +18,7 @@ https://hoang3409.is-a.dev/extensions-vn/
 
 | Name                         | Link                           |
 | ---------------------------- | ------------------------------ |
-| NetTruyen                    | https://www.nettruyenplus.com/ |
+| NetTruyen                    | https://www.nettruyenco.vn/    |
 | BaoTangTruyen                | https://baotangtruyengo.com/   |
 | SayHentai                    | https://sayhentai.me/          |
 | HentaiVN (Bypass Cloudflare) | https://hentaivn.tv/           |
