@@ -21,10 +21,10 @@ import {
 import { convertTime } from '../utils/time';
 import tags from './tags.json';
 
-const DOMAIN = 'https://www.nettruyenco.vn';
+const DOMAIN = 'https://nettruyen.live';
 
 export const NettruyenInfo: SourceInfo = {
-    version: '1.2.8',
+    version: '1.2.9',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
