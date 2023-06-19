@@ -21,10 +21,10 @@ import {
 import { convertTime } from '../utils/time';
 import tags from './tags.json';
 
-const DOMAIN = 'https://nettruyen.live';
+const DOMAIN = 'https://www.nettruyenmax.com';
 
 export const NettruyenInfo: SourceInfo = {
-    version: '1.2.9',
+    version: '1.3.0',
     name: 'NetTruyen',
     icon: 'icon.jpg',
     author: 'Hoang3409',
@@ -206,7 +206,7 @@ export class Nettruyen extends Source {
         // src || data-original
         for (let image of $('.page-chapter').toArray()) {
             var link = $('div.page-chapter > img', image).attr(
-                'src'
+                'data-original'
             )!;
             if (link.indexOf('http') === -1) {
                 pages.push('http:' + link);

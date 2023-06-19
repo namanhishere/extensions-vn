@@ -16,12 +16,12 @@ https://hoang3409.is-a.dev/extensions-vn/
 
 <div align="center">
 
-| Name                         | Link                           |
-| ---------------------------- | ------------------------------ |
-| NetTruyen                    | https://www.nettruyenco.vn/    |
-| BaoTangTruyen                | https://baotangtruyengo.com/   |
-| SayHentai                    | https://sayhentai.me/          |
-| HentaiVN (Bypass Cloudflare) | https://hentaivn.tv/           |
+| Name                         | Link                          |
+| ---------------------------- | ----------------------------- |
+| NetTruyen                    | https://www.nettruyenmax.com/ |
+| BaoTangTruyen                | https://baotangtruyen3.com/   |
+| SayHentai                    | https://sayhentai.me/         |
+| HentaiVN (Bypass Cloudflare) | https://hentaivn.tv/          |
 
 </div>
 
