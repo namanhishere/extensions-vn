@@ -3056,7 +3056,7 @@ class SayHentai extends paperback_extensions_common_1.Source {
             url = `${query.includedTags[0].id}?page=${page}`;
         }
         else {
-            url = `${exports.DOMAIN}search?s=${query.title}&page=${page}`;
+            url = `${exports.DOMAIN}search?s=${encodeURIComponent(query.title)}&page=${page}`;
         }
         const request = createRequestObject({
             url: url,
