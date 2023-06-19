@@ -27,7 +27,7 @@ const userAgent =
     'Mozilla/5.0 (iPhone; CPU iPhone OS 14_7_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Mobile/15E148 Safari/604.1';
 
 export const BaoTangTruyenInfo: SourceInfo = {
-    version: '1.0.6',
+    version: '1.0.7',
     name: 'Bảo Tàng Truyện',
     icon: 'icon.png',
     author: 'Hoang3409',
@@ -152,7 +152,9 @@ export class BaoTangTruyen extends Source {
             method: 'GET',
         });
         if (query.title) {
-            request.url = `${DOMAIN}tim-truyen?keyword=${query.title}&page=${page}`;
+            request.url = `${DOMAIN}tim-truyen?keyword=${encodeURIComponent(
+                query.title
+            )}&page=${page}`;
         }
         if (query.includedTags![0]?.id) {
             request.url = `${DOMAIN}tim-truyen/${
