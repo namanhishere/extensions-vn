@@ -124,7 +124,9 @@ export class SayHentai extends Source {
         if (query.includedTags!.length > 0) {
             url = `${query.includedTags![0]!.id}?page=${page}`;
         } else {
-            url = `${DOMAIN}search?s=${query.title}&page=${page}`;
+            url = `${DOMAIN}search?s=${encodeURIComponent(
+                query.title
+            )}&page=${page}`;
         }
 
         const request = createRequestObject({
