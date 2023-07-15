@@ -1,462 +1,253 @@
 import {
     Chapter,
     ChapterDetails,
+    ChapterProviding,
     ContentRating,
+    HomePageSectionsProviding,
     HomeSection,
-    LanguageCode,
-    Manga,
-    MangaTile,
-    MangaUpdates,
+    MangaProviding,
     PagedResults,
     Request,
+    RequestManager,
     Response,
     SearchRequest,
-    Source,
+    SearchResultsProviding,
     SourceInfo,
-    Tag,
-    TagSection,
-    TagType,
-} from 'paperback-extensions-common';
+    SourceManga,
+    DUISection,
+    SourceStateManager,
+    DUINavigationButton,
+    PartialSourceManga
+} from '@paperback/types'
+import {convertTime} from '../utils/time'
 
-import { convertTime } from '../utils/time';
-import tags from './tags.json';
-
-const DOMAIN = 'https://www.nettruyenmax.com';
+const DOMAIN = 'https://animemoiapi.onrender.com/api/NetTruyen'
 
 export const NettruyenInfo: SourceInfo = {
-    version: '1.3.0',
-    name: 'NetTruyen',
+    description: '',
     icon: 'icon.jpg',
+    websiteBaseURL: '',
+    version: ('0.0.1'),
+    name: 'Nettruyen',
+    language: 'vi',
     author: 'Hoang3409',
-    authorWebsite: 'https://github.com/hoang3402',
-    description: 'Extension that pulls manga from NetTruyen.',
-    websiteBaseURL: DOMAIN,
-    contentRating: ContentRating.MATURE,
-    sourceTags: [
-        {
-            text: 'Recommended',
-            type: TagType.GREEN,
-        },
-        {
-            text: 'Notifications',
-            type: TagType.BLUE,
-        },
-    ],
-};
-
-export class Nettruyen extends Source {
-    requestManager = createRequestManager({
-        requestsPerSecond: 5,
-        requestTimeout: 20000,
-        interceptor: {
-            interceptRequest: async (request: Request): Promise<Request> => {
-                request.headers = {
-                    ...(request.headers ?? {}),
-                    ...{
-                        referer: DOMAIN,
-                    },
-                };
-                return request;
-            },
-
-            interceptResponse: async (
-                response: Response
-            ): Promise<Response> => {
-                return response;
-            },
-        },
-    });
-
-    override async getHomePageSections(
-        sectionCallback: (section: HomeSection) => void
-    ): Promise<void> {
-        let newAdded: HomeSection = createHomeSection({
-            id: 'new_added',
-            title: 'Truyện Mới Thêm',
-            view_more: true,
-        });
-
-        //New Updates
-        let url = `${DOMAIN}`;
-        let request = createRequestObject({
-            url: url,
-            method: 'GET',
-        });
-        let data = await this.requestManager.schedule(request, 1);
-        let $ = this.cheerio.load(data.data);
-
-        newAdded.items = this.parseNewUpdatedSection($);
-        sectionCallback(newAdded);
-    }
-
-    override async getMangaDetails(mangaId: string): Promise<Manga> {
-        try {
-            const Tags = await this.getSearchTags();
-            const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
-            const request = createRequestObject({
-                url: url,
-                method: 'GET',
-            });
-            const data = await this.requestManager.schedule(request, 1);
-            let $ = this.cheerio.load(data.data);
-
-            var temp = $(
-                '#item-detail > div.detail-info > div > div.col-xs-4.col-image > img'
-            );
-            var image = 'http:' + temp.attr('src')!;
-            var titles = [temp.attr('alt')!];
-            var des = $('#item-detail > div.detail-content > p')
-                .text()
-                .replaceAll('\n', ' ');
-            var id = mangaId;
-            var tags: Tag[] = [];
-            for (let tag of $('.kind.row > .col-xs-8 > a').toArray()) {
-                const label = $(tag).text();
-                const id = Tags[0]!.tags.find((tag) => tag.label == label);
-                if (!id) continue;
-                tags.push(
-                    createTag({
-                        id: id.id,
-                        label: label,
-                    })
-                );
-            }
-            var rating = $('span[itemprop="ratingValue"]').text();
-            var views = $('ul.list-info > li.row > p.col-xs-8')
-                .last()
-                .text()
-                .replaceAll('.', '');
-
-            if ($('ul.list-info > li.othername.row')) {
-                $('ul.list-info > li.othername.row > h2')
-                    .text()
-                    .split(';')
-                    .map((item: string) => titles.push(item.trim()));
-            }
-
-            return createManga({
-                id: id,
-                author: 'Nettruyen ăn cắp của ai đó',
-                artist: 'chịu á',
-                desc: des,
-                titles: titles,
-                image: image,
-                status: 1,
-                rating: Number.parseFloat(rating),
-                hentai: false,
-                tags: [
-                    createTagSection({
-                        id: '0',
-                        label: 'Thể loại',
-                        tags: tags,
-                    }),
-                ],
-                views: Number.parseInt(views),
-            });
-        } catch (e) {
-            throw new Error('Error: ' + e);
-        }
-    }
-
-    override async getChapters(mangaId: string): Promise<Chapter[]> {
-        const chapters: Chapter[] = [];
-
-        const url = `${DOMAIN}/truyen-tranh/${mangaId}`;
-        const request = createRequestObject({
-            url: url,
-            method: 'GET',
-        });
-        const data = await this.requestManager.schedule(request, 1);
-        let $ = this.cheerio.load(data.data);
-        const chapterList = $('#nt_listchapter > nav > ul > li').toArray();
-
-        for (let chapter of chapterList) {
-            chapters.push(
-                createChapter({
-                    id: $(chapter)
-                        .find('a')
-                        .attr('href')
-                        .replace(`${DOMAIN}`, ''),
-                    name: $(chapter).find('a').text(),
-                    mangaId: mangaId,
-                    chapNum: chapterList.length - chapterList.indexOf(chapter),
-                    langCode: LanguageCode.VIETNAMESE,
-                    time: convertTime($('div.col-xs-4', chapter).text()),
-                })
-            );
-        }
-
-        return chapters;
-    }
-
-    override async getChapterDetails(
-        mangaId: string,
-        chapterId: string
-    ): Promise<ChapterDetails> {
-        const request = createRequestObject({
-            url: DOMAIN,
-            param: chapterId,
-            method: 'GET',
-        });
-
-        const data = await this.requestManager.schedule(request, 1);
-        let $ = this.cheerio.load(data.data);
-
-        const pages: string[] = [];
-        // src || data-original
-        for (let image of $('.page-chapter').toArray()) {
-            var link = $('div.page-chapter > img', image).attr(
-                'data-original'
-            )!;
-            if (link.indexOf('http') === -1) {
-                pages.push('http:' + link);
-            } else {
-                pages.push(link);
-            }
-        }
-
-        return createChapterDetails({
-            pages: pages,
-            longStrip: false,
-            id: chapterId,
-            mangaId: mangaId,
-        });
-    }
-
-    override async getSearchResults(
-        query: SearchRequest,
-        metadata: any
-    ): Promise<PagedResults> {
-        const page: number = metadata?.page ?? 1;
-        let advanced: boolean;
-        const tiles: MangaTile[] = [];
-        let url = '';
-        let param = '';
-
-        if (query.includedTags!.length > 0) {
-            advanced = true;
-            url = `${DOMAIN}/tim-truyen-nang-cao`;
-            param = `?genres=${query
-                .includedTags!.map((tag) => tag.id)
-                .join(
-                    ','
-                )}&notgenres=&gender=-1&status=-1&minchapter=1&sort=0?page=${page}`;
-        } else {
-            advanced = false;
-            url = `${DOMAIN}/Comic/Services/SuggestSearch.ashx`;
-            param = `?q=${encodeURIComponent(query.title!)}`;
-        }
-
-        const request = createRequestObject({
-            url: url,
-            param: param,
-            method: 'GET',
-        });
-
-        let data: Response;
-
-        try {
-            data = await this.requestManager.schedule(request, 1);
-        } catch (error) {
-            console.log(`searchRequest failed with error: ${error}`);
-            return createPagedResults({
-                results: getServerUnavailableMangaTiles(),
-            });
-        }
-
-        let $ = this.cheerio.load(data.data);
-
-        if (advanced) {
-            for (let item of $('.item').toArray()) {
-                var img = $('img', item).attr('data-original')!;
-                if (img === undefined) {
-                    img = $('img', item).attr('src')!;
-                }
-                tiles.push(
-                    createMangaTile({
-                        id: $('a', item)
-                            .attr('href')
-                            ?.replace(`${DOMAIN}/truyen-tranh/`, '')!,
-                        title: createIconText({
-                            text: $('h3 > a', item).text(),
-                        }),
-                        image: 'http:' + img,
-                    })
-                );
-            }
-        } else {
-            for (let item of $('li').toArray()) {
-                tiles.push(
-                    createMangaTile({
-                        id: $('a', item)
-                            .attr('href')
-                            ?.replace(`${DOMAIN}/truyen-tranh/`, '')!,
-                        title: createIconText({
-                            text: $('a > h3', item).text(),
-                        }),
-                        image: 'http:' + $('a > img', item).attr('src')!,
-                    })
-                );
-            }
-        }
-
-        if (tiles.length == 0) {
-            return createPagedResults({
-                results: getServerUnavailableMangaTiles(),
-            });
-        }
-
-        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
-
-        return createPagedResults({
-            results: tiles,
-            metadata: metadata,
-        });
-    }
-
-    override async getViewMoreItems(
-        homepageSectionId: string,
-        metadata: any
-    ): Promise<PagedResults> {
-        const page: number = metadata?.page ?? 1;
-
-        switch (homepageSectionId) {
-            case 'new_added':
-                break;
-            default:
-                throw new Error('Làm gì có page này?!');
-        }
-
-        const request = createRequestObject({
-            url: `${DOMAIN}/tim-truyen-nang-cao`,
-            param: `?page=${page}`,
-            method: 'GET',
-        });
-
-        const data = await this.requestManager.schedule(request, 1);
-        const $ = this.cheerio.load(data.data);
-        const tiles: MangaTile[] = [];
-
-        for (let manga of $('div.item', 'div.row').toArray()) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga)
-                .first()
-                .text();
-            const id = $('figure.clearfix > div.image > a', manga)
-                .attr('href')
-                ?.split('/')
-                .pop();
-            const image = $('figure.clearfix > div.image > a > img', manga)
-                .first()
-                .attr('data-original');
-            const subtitle = $(
-                'figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a',
-                manga
-            )
-                .last()
-                .text()
-                .trim();
-            if (!id || !title) continue;
-            tiles.push(
-                createMangaTile({
-                    id: id,
-                    image: !image
-                        ? 'https://i.imgur.com/GYUxEX8.png'
-                        : 'http:' + image,
-                    title: createIconText({ text: title }),
-                    subtitleText: createIconText({ text: subtitle }),
-                })
-            );
-        }
-
-        metadata = tiles.length === 0 ? undefined : { page: page + 1 };
-
-        return createPagedResults({
-            results: tiles,
-            metadata: metadata,
-        });
-    }
-
-    parseNewUpdatedSection($: any): MangaTile[] {
-        let newUpdatedItems: MangaTile[] = [];
-
-        for (let manga of $('div.item', 'div.row').toArray().splice(0, 10)) {
-            const title = $('figure.clearfix > figcaption > h3 > a', manga)
-                .first()
-                .text();
-            const id = $('figure.clearfix > div.image > a', manga)
-                .attr('href')
-                ?.split('/')
-                .pop();
-            const image = $('figure.clearfix > div.image > a > img', manga)
-                .first()
-                .attr('data-original');
-            const subtitle = $(
-                'figure.clearfix > figcaption > ul > li.chapter:nth-of-type(1) > a',
-                manga
-            )
-                .last()
-                .text()
-                .trim();
-            if (!id || !title) continue;
-            newUpdatedItems.push(
-                createMangaTile({
-                    id: id,
-                    image: !image
-                        ? 'https://i.imgur.com/GYUxEX8.png'
-                        : 'http:' + image,
-                    title: createIconText({ text: title }),
-                    subtitleText: createIconText({ text: subtitle }),
-                })
-            );
-        }
-
-        return newUpdatedItems;
-    }
-
-    override async getSearchTags(): Promise<TagSection[]> {
-        return [
-            createTagSection({
-                id: '0',
-                label: 'Thể loại',
-                tags: tags.map((tag) => createTag(tag)),
-            }),
-        ];
-    }
-
-    override async filterUpdatedManga(
-        mangaUpdatesFoundCallback: (updates: MangaUpdates) => void,
-        time: Date,
-        ids: string[]
-    ): Promise<void> {
-        const request = createRequestObject({
-            url: `${DOMAIN}/hot`,
-            method: 'GET',
-        });
-        const data = await this.requestManager.schedule(request, 1);
-        const $ = this.cheerio.load(data.data);
-
-        var newIds: string[] = [];
-        for (const item of $('.row .item').toArray()) {
-            newIds.push(
-                $('a', item)
-                    .attr('href')
-                    ?.replace(`${DOMAIN}/truyen-tranh/`, '')!
-            );
-        }
-
-        var result = newIds.filter((id) => ids.includes(id));
-        mangaUpdatesFoundCallback(createMangaUpdates({ ids: result }));
-    }
+    contentRating: ContentRating.EVERYONE
 }
 
-export function getServerUnavailableMangaTiles(): MangaTile[] {
-    // This tile is used as a placeholder when the server is unavailable
-    return [
-        createMangaTile({
-            id: 'placeholder-id',
-            title: createIconText({ text: 'Server' }),
-            image: '',
-            subtitleText: createIconText({ text: 'unavailable' }),
-        }),
-    ];
+export class Nettruyen implements SearchResultsProviding, MangaProviding, ChapterProviding, HomePageSectionsProviding {
+    constructor(public cheerio: CheerioAPI) {
+    }
+
+    requestsPerSecond = 5
+    requestTimeout = 20000
+
+    requestManager: RequestManager = App.createRequestManager({
+        requestsPerSecond: this.requestsPerSecond,
+        requestTimeout: this.requestTimeout,
+        interceptor: {
+            interceptRequest: async (request: Request): Promise<Request> => {
+                return request
+            },
+            interceptResponse: async (response: Response): Promise<Response> => {
+                return response
+            }
+        }
+    })
+
+    stateManager = App.createSourceStateManager()
+
+    async getSourceMenu(): Promise<DUISection> {
+        return App.createDUISection({
+            id: 'sourceMenu',
+            header: 'Source Menu',
+            isHidden: false,
+            rows: async () => [
+                this.sourceSettings(this.stateManager)
+            ]
+        })
+    }
+
+    sourceSettings = (stateManager: SourceStateManager): DUINavigationButton => {
+        return App.createDUINavigationButton({
+            id: 'nettruyen_settings',
+            label: 'Source Settings',
+            form: App.createDUIForm({
+                sections: async () => [
+                    App.createDUISection({
+                        id: 'what_thumb',
+                        isHidden: false,
+                        footer: 'Test DUI',
+                        rows: async () => []
+                    })
+                ]
+            })
+        })
+    }
+
+    async getHomePageSections(sectionCallback: (section: HomeSection) => void): Promise<void> {
+        const sections = []
+        sections.push(App.createHomeSection({
+            id: 'new',
+            title: 'Mới thêm',
+            containsMoreItems: true,
+            type: ''
+        }))
+
+        const promises: Promise<void>[] = []
+
+        for (const section of sections) {
+            // Let the app load empty tagSections
+            sectionCallback(section)
+            let apiPath: string, params: string
+            switch (section.id) {
+                default:
+                    apiPath = `${DOMAIN}`
+                    params = '?page=1'
+                    break
+            }
+            const request = App.createRequest({
+                url: apiPath,
+                param: params,
+                method: 'GET'
+            })
+            // Get the section data
+            promises.push(this.requestManager.schedule(request, 1).then((data) => {
+                const result = typeof data.data === 'string' ? JSON.parse(data.data) : data.data
+                const items = []
+                for (const item of result.content.mangas) {
+                    items.push(App.createPartialSourceManga({
+                        title: item.title[0].title,
+                        image: item.cover,
+                        mangaId: item.url,
+                        subtitle: undefined
+                    }))
+                }
+                section.items = items
+                sectionCallback(section)
+            }))
+        }
+
+        await Promise.all(promises)
+    }
+
+    async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults> {
+        const page: number = metadata?.page ?? 0
+        const request = App.createRequest({
+            url: `${DOMAIN}`,
+            param: `?page=${page}`,
+            method: 'GET'
+        })
+        const data = await this.requestManager.schedule(request, 1)
+        const result = typeof data.data === 'string' ? JSON.parse(data.data) : data.data
+        const items: PartialSourceManga[] = []
+        for (const item of result.content.mangas) {
+            items.push(App.createPartialSourceManga({
+                title: item.title[0].title,
+                image: item.cover,
+                mangaId: item.url,
+                subtitle: undefined
+            }))
+        }
+        // If no series were returned we are on the last page
+        metadata = items.length === 0 ? undefined : {page: page + 1}
+        return App.createPagedResults({
+            results: items,
+            metadata: metadata
+        })
+    }
+
+    async getMangaDetails(mangaId: string): Promise<SourceManga> {
+        // mangaId like "gokusotsu-kraken-72204"
+        const request = App.createRequest({
+            url: `${DOMAIN}/Manga?url=${mangaId}`,
+            method: 'GET'
+        })
+
+        const response = await this.requestManager.schedule(request, 1)
+        const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
+        return App.createSourceManga({
+            id: mangaId,
+            mangaInfo: App.createMangaInfo({
+                desc: data.description,
+                image: data.cover,
+                status: '',
+                titles: data.title.forEach((item: any) => {
+                    return item.title
+                })
+            })
+        })
+    }
+
+    async getChapters(mangaId: string): Promise<Chapter[]> {
+        const request = App.createRequest({
+            url: `${DOMAIN}/Chapter`,
+            param: `?url=${mangaId}`,
+            method: 'GET'
+        })
+        const response = await this.requestManager.schedule(request, 1)
+        const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
+        const chapters: Chapter[] = []
+        for (const item of data.content) {
+            chapters.push(App.createChapter({
+                id: item.url,
+                chapNum: parseFloat(item.metadata.number),
+                name: item.title,
+                time: convertTime(item.timeUpdate)
+            }))
+        }
+        return chapters
+    }
+
+    async getChapterDetails(mangaId: string, chapterId: string): Promise<ChapterDetails> {
+        const request = App.createRequest({
+            url: `${DOMAIN}/ChapterDetail`,
+            param: `?url=${chapterId}`,
+            method: 'GET'
+        })
+        const response = await this.requestManager.schedule(request, 1)
+        const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
+        const images: string[] = []
+        for (const image of data) {
+            images.push(`${DOMAIN}/GetImage?url=${encodeURIComponent(image)}`)
+        }
+        return App.createChapterDetails({
+            id: chapterId,
+            mangaId: mangaId,
+            pages: images
+        })
+    }
+
+    async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
+        const page: number = metadata?.page ?? 0
+
+        const request = App.createRequest({
+            method: 'POST',
+            url: `${DOMAIN}/Search`,
+            data: {
+                'query': encodeURIComponent(query.title || ''),
+                'page': page,
+                'genres': [],
+                'exclude': [],
+                'status': 0
+            }
+        })
+        
+        const response = await this.requestManager.schedule(request, 1)
+        const result = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
+        const tiles = []
+        for (const item of result.content) {
+            tiles.push(App.createPartialSourceManga({
+                title: item.title[0].title,
+                image: item.cover,
+                mangaId: item.url,
+                subtitle: undefined
+            }))
+        }
+        
+        metadata = tiles.length === 0 ? undefined : { page: page + 1 }
+        return App.createPagedResults({
+            results: tiles,
+            metadata
+        })
+    }
 }
