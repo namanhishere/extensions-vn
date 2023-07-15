@@ -11,9 +11,6 @@ module.exports = {
     },
     plugins: ['modules-newline', '@typescript-eslint'],
     rules: {
-        'unicorn/filename-case': ['ignore', {
-            'case': 'kebabCase'
-        }],
         '@typescript-eslint/indent': ['error', 4],
         'linebreak-style': ['error', 'unix'],
         quotes: ['error', 'single'],

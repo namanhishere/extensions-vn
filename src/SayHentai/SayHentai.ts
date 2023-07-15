@@ -15,7 +15,7 @@ import {
     SourceInfo,
     TagSection,
     TagType,
-} from 'paperback-extensions-common';
+} from '@paperback/types';
 import {
     getChapterDetails,
     getChapters,

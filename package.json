@@ -32,7 +32,7 @@
   },
   "dependencies": {
     "gh-pages": "^5.0.0",
-    "paperback-cli": "^2.0.0-alpha.13",
-    "paperback-extensions-common": "^4.3.5"
+    "@paperback/toolchain": "0.8.0-alpha.47",
+    "@paperback/types": "0.8.0-alpha.47"
   }
 }
