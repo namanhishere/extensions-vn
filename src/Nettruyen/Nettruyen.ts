@@ -111,27 +111,26 @@ export class Nettruyen implements SearchResultsProviding, MangaProviding, Chapte
                 method: 'GET'
             })
             // Get the section data
-            promises.push(this.requestManager.schedule(request, 1).then((data) => {
-                const result = typeof data.data === 'string' ? JSON.parse(data.data) : data.data
-                const items = []
-                for (const item of result.content.mangas) {
-                    items.push(App.createPartialSourceManga({
-                        title: item.title[0].title,
-                        image: item.cover,
-                        mangaId: item.url,
-                        subtitle: undefined
-                    }))
-                }
-                section.items = items
-                sectionCallback(section)
-            }))
+            const response = await this.requestManager.schedule(request, 1)
+            const result = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
+            const items = []
+            for (const item of result.mangas) {
+                items.push(App.createPartialSourceManga({
+                    title: item.title[0].title,
+                    image: item.cover,
+                    mangaId: item.url,
+                    subtitle: undefined
+                }))
+            }
+            section.items = items
+            sectionCallback(section)
         }
 
         await Promise.all(promises)
     }
 
     async getViewMoreItems(homepageSectionId: string, metadata: any): Promise<PagedResults> {
-        const page: number = metadata?.page ?? 0
+        const page: number = metadata?.page ?? 1
         const request = App.createRequest({
             url: `${DOMAIN}`,
             param: `?page=${page}`,
@@ -140,7 +139,7 @@ export class Nettruyen implements SearchResultsProviding, MangaProviding, Chapte
         const data = await this.requestManager.schedule(request, 1)
         const result = typeof data.data === 'string' ? JSON.parse(data.data) : data.data
         const items: PartialSourceManga[] = []
-        for (const item of result.content.mangas) {
+        for (const item of result.mangas) {
             items.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
@@ -165,15 +164,17 @@ export class Nettruyen implements SearchResultsProviding, MangaProviding, Chapte
 
         const response = await this.requestManager.schedule(request, 1)
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
+        const titles: string[] = []
+        for (const item of data.title) {
+            titles.push(item.title)
+        }
         return App.createSourceManga({
             id: mangaId,
             mangaInfo: App.createMangaInfo({
-                desc: data.description,
+                desc: data.description || 'no description',
                 image: data.cover,
                 status: '',
-                titles: data.title.forEach((item: any) => {
-                    return item.title
-                })
+                titles: titles
             })
         })
     }
@@ -187,10 +188,10 @@ export class Nettruyen implements SearchResultsProviding, MangaProviding, Chapte
         const response = await this.requestManager.schedule(request, 1)
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
         const chapters: Chapter[] = []
-        for (const item of data.content) {
+        for (const item of data) {
             chapters.push(App.createChapter({
-                id: item.url,
-                chapNum: parseFloat(item.metadata.number),
+                id: item.url, 
+                chapNum: 0,
                 name: item.title,
                 time: convertTime(item.timeUpdate)
             }))
@@ -218,31 +219,35 @@ export class Nettruyen implements SearchResultsProviding, MangaProviding, Chapte
     }
 
     async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
-        const page: number = metadata?.page ?? 0
-
+        const page: number = metadata?.page ?? 1
+        const postData = {
+            query: encodeURIComponent(query.title || ''),
+            page: page,
+            genres: [],
+            exclude: [],
+            status: 0
+        }
         const request = App.createRequest({
             method: 'POST',
             url: `${DOMAIN}/Search`,
-            data: {
-                'query': encodeURIComponent(query.title || ''),
-                'page': page,
-                'genres': [],
-                'exclude': [],
-                'status': 0
+            data: postData,
+            headers: {
+                'Content-Type': 'application/json'              
             }
         })
         
         const response = await this.requestManager.schedule(request, 1)
+        console.log(response.data)
         const result = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
-        const tiles = []
-        for (const item of result.content) {
+        const tiles: PartialSourceManga[] = []
+        result.forEach((item: any) => {
             tiles.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
                 mangaId: item.url,
                 subtitle: undefined
             }))
-        }
+        })
         
         metadata = tiles.length === 0 ? undefined : { page: page + 1 }
         return App.createPagedResults({

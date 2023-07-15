@@ -8,7 +8,8 @@
     "bundle": "npx paperback bundle",
     "serve": "npx paperback serve",
     "test": "npx paperback test",
-    "nodemon": "nodemon"
+    "nodemon": "nodemon",
+    "log": "paperback logcat --ip=192.168.1.5"
   },
   "author": "Netsky",
   "license": "GPL-3.0-or-later",
