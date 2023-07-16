@@ -638,7 +638,7 @@ class Main {
         for (const item of data) {
             chapters.push(App.createChapter({
                 id: item.url,
-                chapNum: 0,
+                chapNum: item.numChap,
                 name: item.title,
                 time: (0, time_1.convertTime)(item.timeUpdate)
             }));
