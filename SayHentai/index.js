@@ -679,27 +679,27 @@ exports.Main = Main;
 },{"./utils/time":64}],63:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nettruyen = exports.NettruyenInfo = void 0;
+exports.SayHentai = exports.SayHentaiInfo = void 0;
 const types_1 = require("@paperback/types");
 const Main_1 = require("../Main");
-const HOST = 'NetTruyen';
-exports.NettruyenInfo = {
+const HOST = 'SayHentai';
+exports.SayHentaiInfo = {
     description: '',
-    icon: 'icon.jpg',
+    icon: 'icon.png',
     websiteBaseURL: '',
     version: (0, Main_1.getExportVersion)('0.0.1'),
-    name: 'Nettruyen',
+    name: 'SayHentai',
     language: 'vi',
     author: 'Hoang3409',
-    contentRating: types_1.ContentRating.EVERYONE
+    contentRating: types_1.ContentRating.ADULT
 };
-class Nettruyen extends Main_1.Main {
+class SayHentai extends Main_1.Main {
     constructor() {
         super(...arguments);
         this.Host = HOST;
     }
 }
-exports.Nettruyen = Nettruyen;
+exports.SayHentai = SayHentai;
 
 },{"../Main":62,"@paperback/types":61}],64:[function(require,module,exports){
 "use strict";

@@ -460,21 +460,15 @@ __exportStar(require("./compat/DyamicUI"), exports);
 },{"./base/index":7,"./compat/DyamicUI":16,"./generated/_exports":60}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nettruyen = exports.NettruyenInfo = void 0;
-const types_1 = require("@paperback/types");
-const time_1 = require("../utils/time");
-const DOMAIN = 'https://animemoiapi.onrender.com/api/NetTruyen';
-exports.NettruyenInfo = {
-    description: '',
-    icon: 'icon.jpg',
-    websiteBaseURL: '',
-    version: ('0.0.1'),
-    name: 'Nettruyen',
-    language: 'vi',
-    author: 'Hoang3409',
-    contentRating: types_1.ContentRating.EVERYONE
+exports.Main = exports.getExportVersion = void 0;
+const time_1 = require("./utils/time");
+const DOMAIN = 'https://animemoiapi.onrender.com/api/';
+const BASE_VERSION = '1.0.0';
+const getExportVersion = (EXTENSION_VERSION) => {
+    return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
-class Nettruyen {
+exports.getExportVersion = getExportVersion;
+class Main {
     constructor(cheerio) {
         this.cheerio = cheerio;
         this.requestsPerSecond = 5;
@@ -534,7 +528,7 @@ class Nettruyen {
             let apiPath, params;
             switch (section.id) {
                 default:
-                    apiPath = `${DOMAIN}`;
+                    apiPath = `${DOMAIN}${this.Host}`;
                     params = '?page=1';
                     break;
             }
@@ -563,7 +557,7 @@ class Nettruyen {
     async getViewMoreItems(homepageSectionId, metadata) {
         const page = metadata?.page ?? 1;
         const request = App.createRequest({
-            url: `${DOMAIN}`,
+            url: `${DOMAIN}${this.Host}`,
             param: `?page=${page}`,
             method: 'GET'
         });
@@ -588,7 +582,7 @@ class Nettruyen {
     async getMangaDetails(mangaId) {
         // mangaId like "gokusotsu-kraken-72204"
         const request = App.createRequest({
-            url: `${DOMAIN}/Manga?url=${mangaId}`,
+            url: `${DOMAIN}${this.Host}/Manga?url=${mangaId}`,
             method: 'GET'
         });
         const response = await this.requestManager.schedule(request, 1);
@@ -609,7 +603,7 @@ class Nettruyen {
     }
     async getChapters(mangaId) {
         const request = App.createRequest({
-            url: `${DOMAIN}/Chapter`,
+            url: `${DOMAIN}${this.Host}/Chapter`,
             param: `?url=${mangaId}`,
             method: 'GET'
         });
@@ -628,7 +622,7 @@ class Nettruyen {
     }
     async getChapterDetails(mangaId, chapterId) {
         const request = App.createRequest({
-            url: `${DOMAIN}/ChapterDetail`,
+            url: `${DOMAIN}${this.Host}/ChapterDetail`,
             param: `?url=${chapterId}`,
             method: 'GET'
         });
@@ -636,7 +630,7 @@ class Nettruyen {
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
         const images = [];
         for (const image of data) {
-            images.push(`${DOMAIN}/GetImage?url=${encodeURIComponent(image)}`);
+            images.push(`${DOMAIN}${this.Host}/GetImage?url=${encodeURIComponent(image)}`);
         }
         return App.createChapterDetails({
             id: chapterId,
@@ -680,9 +674,34 @@ class Nettruyen {
         });
     }
 }
+exports.Main = Main;
+
+},{"./utils/time":64}],63:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Nettruyen = exports.NettruyenInfo = void 0;
+const types_1 = require("@paperback/types");
+const Main_1 = require("../Main");
+const HOST = 'NetTruyen';
+exports.NettruyenInfo = {
+    description: '',
+    icon: 'icon.jpg',
+    websiteBaseURL: '',
+    version: (0, Main_1.getExportVersion)('0.0.1'),
+    name: 'Nettruyen',
+    language: 'vi',
+    author: 'Hoang3409',
+    contentRating: types_1.ContentRating.EVERYONE
+};
+class Nettruyen extends Main_1.Main {
+    constructor() {
+        super(...arguments);
+        this.Host = HOST;
+    }
+}
 exports.Nettruyen = Nettruyen;
 
-},{"../utils/time":63,"@paperback/types":61}],63:[function(require,module,exports){
+},{"../Main":62,"@paperback/types":61}],64:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertTime = void 0;
@@ -737,5 +756,5 @@ function convertTime(time) {
 }
 exports.convertTime = convertTime;
 
-},{}]},{},[62])(62)
+},{}]},{},[63])(63)
 });

@@ -460,6 +460,31 @@ __exportStar(require("./compat/DyamicUI"), exports);
 },{"./base/index":7,"./compat/DyamicUI":16,"./generated/_exports":60}],62:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.HentaiVN = exports.HentaiVNInfo = void 0;
+const types_1 = require("@paperback/types");
+const Main_1 = require("../Main");
+const HOST = 'HentaiVN';
+exports.HentaiVNInfo = {
+    description: '',
+    icon: 'icon.png',
+    websiteBaseURL: '',
+    version: (0, Main_1.getExportVersion)('0.0.1'),
+    name: 'HentaiVN',
+    language: 'vi',
+    author: 'Hoang3409',
+    contentRating: types_1.ContentRating.ADULT
+};
+class HentaiVN extends Main_1.Main {
+    constructor() {
+        super(...arguments);
+        this.Host = HOST;
+    }
+}
+exports.HentaiVN = HentaiVN;
+
+},{"../Main":63,"@paperback/types":61}],63:[function(require,module,exports){
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
 const DOMAIN = 'https://animemoiapi.onrender.com/api/';
@@ -676,32 +701,7 @@ class Main {
 }
 exports.Main = Main;
 
-},{"./utils/time":64}],63:[function(require,module,exports){
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nettruyen = exports.NettruyenInfo = void 0;
-const types_1 = require("@paperback/types");
-const Main_1 = require("../Main");
-const HOST = 'NetTruyen';
-exports.NettruyenInfo = {
-    description: '',
-    icon: 'icon.jpg',
-    websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.1'),
-    name: 'Nettruyen',
-    language: 'vi',
-    author: 'Hoang3409',
-    contentRating: types_1.ContentRating.EVERYONE
-};
-class Nettruyen extends Main_1.Main {
-    constructor() {
-        super(...arguments);
-        this.Host = HOST;
-    }
-}
-exports.Nettruyen = Nettruyen;
-
-},{"../Main":62,"@paperback/types":61}],64:[function(require,module,exports){
+},{"./utils/time":64}],64:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertTime = void 0;
@@ -756,5 +756,5 @@ function convertTime(time) {
 }
 exports.convertTime = convertTime;
 
-},{}]},{},[63])(63)
+},{}]},{},[62])(62)
 });
