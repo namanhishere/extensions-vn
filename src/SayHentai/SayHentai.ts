@@ -11,7 +11,7 @@ const HOST = 'SayHentai'
 
 export const SayHentaiInfo: SourceInfo = {
     description: '',
-    icon: 'icon.jpg',
+    icon: 'icon.png',
     websiteBaseURL: '',
     version: getExportVersion('0.0.1'),
     name: 'SayHentai',

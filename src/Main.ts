@@ -97,7 +97,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             let apiPath: string, params: string
             switch (section.id) {
                 default:
-                    apiPath = `${DOMAIN}`
+                    apiPath = `${DOMAIN}${this.Host}`
                     params = '?page=1'
                     break
             }
