@@ -3,23 +3,23 @@ import {
     SourceInfo
 } from '@paperback/types'
 import {
-    getExportVersion, 
+    getExportVersion,
     Main
 } from '../Main'
 
-const HOST = 'NetTruyen'
+const HOST = 'SayHentai'
 
-export const NettruyenInfo: SourceInfo = {
+export const SayHentaiInfo: SourceInfo = {
     description: '',
     icon: 'icon.jpg',
     websiteBaseURL: '',
     version: getExportVersion('0.0.1'),
-    name: 'Nettruyen',
+    name: 'SayHentai',
     language: 'vi',
     author: 'Hoang3409',
-    contentRating: ContentRating.EVERYONE
+    contentRating: ContentRating.ADULT
 }
 
-export class Nettruyen extends Main {
+export class SayHentai extends Main {
     Host = HOST
 }
