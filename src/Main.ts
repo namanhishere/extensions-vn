@@ -187,7 +187,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         for (const item of data) {
             chapters.push(App.createChapter({
                 id: item.url,
-                chapNum: 0,
+                chapNum: item.numChap,
                 name: item.title,
                 time: convertTime(item.timeUpdate)
             }))
