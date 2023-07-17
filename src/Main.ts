@@ -226,7 +226,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         }
         const request = App.createRequest({
             method: 'POST',
-            url: `${DOMAIN}/Search`,
+            url: `${DOMAIN}${this.Host}/Search`,
             data: postData,
             headers: {
                 'Content-Type': 'application/json'
