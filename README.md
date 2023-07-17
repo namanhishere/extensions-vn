@@ -14,6 +14,8 @@ You can convert your backup to paperback when using this [tool](https://github.c
 https://hoang3409.is-a.dev/extensions-vn/
 ```
 
+[Add to Paperback](paperback://addRepo?displayName=VietNam&url=https%3A%2F%2Fhoang3402.github.io%2Fextensions-vn)
+
 <div align="center">
 
 | Name                         | Link                          |
