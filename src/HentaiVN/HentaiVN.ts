@@ -8,6 +8,7 @@ import {
 } from '../Main'
 
 const HOST = 'HentaiVN'
+import tags from './tags.json'
 
 export const HentaiVNInfo: SourceInfo = {
     description: '',
@@ -22,4 +23,5 @@ export const HentaiVNInfo: SourceInfo = {
 
 export class HentaiVN extends Main {
     Host = HOST
+    Tags = tags
 }

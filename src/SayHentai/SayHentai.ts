@@ -1,6 +1,8 @@
 import {
     ContentRating,
-    SourceInfo
+    SourceInfo,
+    Tag,
+    TagSection
 } from '@paperback/types'
 import {
     getExportVersion,
@@ -8,6 +10,7 @@ import {
 } from '../Main'
 
 const HOST = 'SayHentai'
+import tags from './tags.json'
 
 export const SayHentaiInfo: SourceInfo = {
     description: '',
@@ -22,4 +25,5 @@ export const SayHentaiInfo: SourceInfo = {
 
 export class SayHentai extends Main {
     Host = HOST
+    Tags = tags
 }

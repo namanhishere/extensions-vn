@@ -8,6 +8,7 @@ import {
 } from '../Main'
 
 const HOST = 'NetTruyen'
+import tags from './tags.json'
 
 export const NettruyenInfo: SourceInfo = {
     description: '',
@@ -22,4 +23,5 @@ export const NettruyenInfo: SourceInfo = {
 
 export class Nettruyen extends Main {
     Host = HOST
+    Tags = tags
 }

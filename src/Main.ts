@@ -15,7 +15,8 @@ import {
     DUISection,
     SourceStateManager,
     DUINavigationButton,
-    PartialSourceManga
+    PartialSourceManga,
+    TagSection
 } from '@paperback/types'
 import {convertTime} from './utils/time'
 
@@ -25,7 +26,6 @@ const BASE_VERSION = '1.0.0'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
-
 
 export abstract class Main implements SearchResultsProviding, MangaProviding, ChapterProviding, HomePageSectionsProviding {
     constructor(public cheerio: CheerioAPI) {
@@ -49,6 +49,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
     
     // Host
     abstract Host: string
+    abstract Tags: any;
     
     stateManager = App.createSourceStateManager()
 
@@ -250,5 +251,16 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             results: tiles,
             metadata
         })
+    }
+
+    async getSearchTags(): Promise<TagSection[]> {
+        return [App.createTagSection({
+            id: '0',
+            label: 'Thể loại',
+            tags: this.Tags.map((x: any) => App.createTag({
+                id: x.Id.toString(),
+                label: x.Name
+            }))
+        })]
     }
 }
