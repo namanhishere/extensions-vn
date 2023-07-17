@@ -1,8 +1,6 @@
 import {
     ContentRating,
-    SourceInfo,
-    Tag,
-    TagSection
+    SourceInfo
 } from '@paperback/types'
 import {
     getExportVersion,

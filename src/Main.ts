@@ -22,7 +22,7 @@ import {convertTime} from './utils/time'
 
 const DOMAIN = 'https://animemoiapi.onrender.com/api/'
 
-const BASE_VERSION = '1.0.0'
+const BASE_VERSION = '1.1.0'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
@@ -234,7 +234,6 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         })
 
         const response = await this.requestManager.schedule(request, 1)
-        console.log(response.data)
         const result = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
         const tiles: PartialSourceManga[] = []
         result.forEach((item: any) => {
