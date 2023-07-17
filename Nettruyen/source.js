@@ -463,7 +463,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
 const DOMAIN = 'https://animemoiapi.onrender.com/api/';
-const BASE_VERSION = '1.1.0';
+const BASE_VERSION = '1.2.0';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -641,12 +641,25 @@ class Main {
     async getSearchResults(query, metadata) {
         const page = metadata?.page ?? 1;
         const postData = {
-            query: encodeURIComponent(query.title || ''),
+            query: '',
             page: page,
             genres: [],
             exclude: [],
             status: 0
         };
+        if (query.title) {
+            postData.query = encodeURIComponent(query.title);
+        }
+        if (query.includedTags[0]) {
+            query.includedTags.forEach((genre) => {
+                postData.genres.push(genre.id);
+            });
+        }
+        if (query.excludedTags[0]) {
+            query.excludedTags.forEach((genre) => {
+                postData.exclude.push(genre.id);
+            });
+        }
         const request = App.createRequest({
             method: 'POST',
             url: `${DOMAIN}${this.Host}/Search`,
@@ -673,14 +686,38 @@ class Main {
         });
     }
     async getSearchTags() {
-        return [App.createTagSection({
-                id: '0',
-                label: 'Thể loại',
-                tags: this.Tags.map((x) => App.createTag({
-                    id: x.Id.toString(),
-                    label: x.Name
-                }))
-            })];
+        const result = [];
+        const tags = this.Tags.map((x) => App.createTag({
+            id: x.Id.toString(),
+            label: x.Name
+        }));
+        let label = 'Thể loại';
+        if (this.SearchWithGenres) {
+            label += ' - Có thể tìm kiếm với nhiều thể loại';
+        }
+        else {
+            label += ' - Chỉ có thể tìm kiếm với 1 thể loại';
+        }
+        if (this.SearchWithTitleAndGenre) {
+            label += '- Có thể tìm kiếm với tên truyện cùng với thể loại';
+        }
+        else {
+            label += '- Không thể tìm kiếm cùng lúc tên truyện và thể loại';
+        }
+        result.push(App.createTagSection({
+            id: '0',
+            label: label,
+            tags: tags
+        }));
+        // other tags - paperback not acp dup tags
+        // if (this.SearchWithNotGenres) {
+        //     result.push(App.createTagSection({
+        //         id: '1', 
+        //         label: 'Thể loại - Có thể loại bỏ những thể loại bạn không mong muốn', 
+        //         tags: tags
+        //     }))
+        // }
+        return result;
     }
 }
 exports.Main = Main;
@@ -711,6 +748,9 @@ class Nettruyen extends Main_1.Main {
         super(...arguments);
         this.Host = HOST;
         this.Tags = tags_json_1.default;
+        this.SearchWithGenres = true;
+        this.SearchWithNotGenres = true;
+        this.SearchWithTitleAndGenre = false;
     }
 }
 exports.Nettruyen = Nettruyen;
@@ -1004,6 +1044,8 @@ module.exports=[
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertTime = void 0;
 function convertTime(time) {
+    if (time === '')
+        return new Date();
     let date;
     // 29/12/22
     if (time.split('/').length == 3) {
