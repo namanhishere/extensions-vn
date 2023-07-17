@@ -1,0 +1,207 @@
+[
+    {
+        "Id": 0,
+        "Description": "genre/action",
+        "Name": "Action"
+    },
+    {
+        "Id": 1,
+        "Description": "genre/adult",
+        "Name": "Adult"
+    },
+    {
+        "Id": 3,
+        "Description": "genre/comedy",
+        "Name": "Comedy"
+    },
+    {
+        "Id": 4,
+        "Description": "genre/cooking",
+        "Name": "Cooking"
+    },
+    {
+        "Id": 5,
+        "Description": "genre/detective",
+        "Name": "Detective"
+    },
+    {
+        "Id": 6,
+        "Description": "genre/doujinshi",
+        "Name": "Doujinshi"
+    },
+    {
+        "Id": 7,
+        "Description": "genre/drama",
+        "Name": "Drama"
+    },
+    {
+        "Id": 8,
+        "Description": "genre/ecchi",
+        "Name": "Ecchi"
+    },
+    {
+        "Id": 9,
+        "Description": "genre/fantasy",
+        "Name": "Fantasy"
+    },
+    {
+        "Id": 10,
+        "Description": "genre/gender-bender",
+        "Name": "Gender Bender"
+    },
+    {
+        "Id": 11,
+        "Description": "genre/harem",
+        "Name": "Harem"
+    },
+    {
+        "Id": 12,
+        "Description": "genre/historical",
+        "Name": "Historical"
+    },
+    {
+        "Id": 13,
+        "Description": "genre/horror",
+        "Name": "Horror"
+    },
+    {
+        "Id": 14,
+        "Description": "genre/josei",
+        "Name": "Josei"
+    },
+    {
+        "Id": 15,
+        "Description": "genre/manga",
+        "Name": "Manga"
+    },
+    {
+        "Id": 16,
+        "Description": "genre/manhua",
+        "Name": "Manhua"
+    },
+    {
+        "Id": 17,
+        "Description": "genre/manhwa",
+        "Name": "Manhwa"
+    },
+    {
+        "Id": 18,
+        "Description": "genre/martial-arts",
+        "Name": "Martial Arts"
+    },
+    {
+        "Id": 19,
+        "Description": "genre/mature",
+        "Name": "Mature"
+    },
+    {
+        "Id": 20,
+        "Description": "genre/mecha",
+        "Name": "Mecha"
+    },
+    {
+        "Id": 21,
+        "Description": "genre/mystery",
+        "Name": "Mystery"
+    },
+    {
+        "Id": 22,
+        "Description": "genre/one-shot",
+        "Name": "One shot"
+    },
+    {
+        "Id": 23,
+        "Description": "genre/psychological",
+        "Name": "Psychological"
+    },
+    {
+        "Id": 24,
+        "Description": "genre/romance",
+        "Name": "Romance"
+    },
+    {
+        "Id": 25,
+        "Description": "genre/school-life",
+        "Name": "School Life"
+    },
+    {
+        "Id": 26,
+        "Description": "genre/sci-fi",
+        "Name": "Sci-fi"
+    },
+    {
+        "Id": 27,
+        "Description": "genre/seinen",
+        "Name": "Seinen"
+    },
+    {
+        "Id": 28,
+        "Description": "genre/shoujo",
+        "Name": "Shoujo"
+    },
+    {
+        "Id": 29,
+        "Description": "genre/shoujo-ai",
+        "Name": "Shoujo Ai"
+    },
+    {
+        "Id": 30,
+        "Description": "genre/shounen",
+        "Name": "Shounen"
+    },
+    {
+        "Id": 31,
+        "Description": "genre/shounen-ai",
+        "Name": "Shounen Ai"
+    },
+    {
+        "Id": 32,
+        "Description": "genre/slice-of-life",
+        "Name": "Slice of Life"
+    },
+    {
+        "Id": 33,
+        "Description": "genre/smut",
+        "Name": "Smut"
+    },
+    {
+        "Id": 34,
+        "Description": "genre/soft-yaoi",
+        "Name": "Soft Yaoi"
+    },
+    {
+        "Id": 35,
+        "Description": "genre/soft-yuri",
+        "Name": "Soft Yuri"
+    },
+    {
+        "Id": 36,
+        "Description": "genre/sports",
+        "Name": "Sports"
+    },
+    {
+        "Id": 37,
+        "Description": "genre/supernatural",
+        "Name": "Supernatural"
+    },
+    {
+        "Id": 38,
+        "Description": "genre/tragedy",
+        "Name": "Tragedy"
+    },
+    {
+        "Id": 39,
+        "Description": "genre/webtoon",
+        "Name": "Webtoon"
+    },
+    {
+        "Id": 40,
+        "Description": "genre/yaoi",
+        "Name": "Yaoi"
+    },
+    {
+        "Id": 41,
+        "Description": "genre/yuri",
+        "Name": "Yuri"
+    }
+]
