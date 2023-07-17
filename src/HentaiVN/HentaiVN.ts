@@ -24,4 +24,8 @@ export const HentaiVNInfo: SourceInfo = {
 export class HentaiVN extends Main {
     Host = HOST
     Tags = tags
+
+    SearchWithGenres = true;
+    SearchWithNotGenres = false;
+    SearchWithTitleAndGenre = true;
 }

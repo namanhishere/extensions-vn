@@ -22,7 +22,7 @@ import {convertTime} from './utils/time'
 
 const DOMAIN = 'https://animemoiapi.onrender.com/api/'
 
-const BASE_VERSION = '1.1.0'
+const BASE_VERSION = '1.2.0'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
@@ -49,7 +49,10 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
     
     // Host
     abstract Host: string
-    abstract Tags: any;
+    abstract Tags: any
+    abstract SearchWithGenres: boolean
+    abstract SearchWithNotGenres: boolean
+    abstract SearchWithTitleAndGenre: boolean
     
     stateManager = App.createSourceStateManager()
 
@@ -217,13 +220,27 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
 
     async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
         const page: number = metadata?.page ?? 1
-        const postData = {
-            query: encodeURIComponent(query.title || ''),
+        const postData: any = {
+            query: '',
             page: page,
             genres: [],
             exclude: [],
             status: 0
         }
+        if (query.title) {
+            postData.query = encodeURIComponent(query.title)
+        }
+        if (query.includedTags[0]) {
+            query.includedTags.forEach((genre) => {
+                postData.genres.push(genre.id)
+            })
+        }
+        if (query.excludedTags[0]) {
+            query.excludedTags.forEach((genre) => {
+                postData.exclude.push(genre.id)
+            })
+        }
+        
         const request = App.createRequest({
             method: 'POST',
             url: `${DOMAIN}${this.Host}/Search`,
@@ -253,13 +270,39 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
     }
 
     async getSearchTags(): Promise<TagSection[]> {
-        return [App.createTagSection({
-            id: '0',
-            label: 'Thể loại',
-            tags: this.Tags.map((x: any) => App.createTag({
-                id: x.Id.toString(),
-                label: x.Name
-            }))
-        })]
+        const result: TagSection[] = []
+        const tags = this.Tags.map((x: any) => App.createTag({
+            id: x.Id.toString(),
+            label: x.Name
+        }))
+        
+        let label = 'Thể loại'
+        if (this.SearchWithGenres) {
+            label += ' - Có thể tìm kiếm với nhiều thể loại'
+        } else {
+            label += ' - Chỉ có thể tìm kiếm với 1 thể loại'
+        }
+        if (this.SearchWithTitleAndGenre) {
+            label += '- Có thể tìm kiếm với tên truyện cùng với thể loại'
+        } else {
+            label += '- Không thể tìm kiếm cùng lúc tên truyện và thể loại'
+        }
+        
+        result.push(App.createTagSection({
+            id: '0', 
+            label: label, 
+            tags: tags
+        }))
+
+        // other tags - paperback not acp dup tags
+        // if (this.SearchWithNotGenres) {
+        //     result.push(App.createTagSection({
+        //         id: '1', 
+        //         label: 'Thể loại - Có thể loại bỏ những thể loại bạn không mong muốn', 
+        //         tags: tags
+        //     }))
+        // }
+        
+        return result
     }
 }

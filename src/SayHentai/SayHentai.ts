@@ -24,4 +24,8 @@ export const SayHentaiInfo: SourceInfo = {
 export class SayHentai extends Main {
     Host = HOST
     Tags = tags
+    
+    SearchWithGenres = false
+    SearchWithNotGenres = false
+    SearchWithTitleAndGenre = false
 }

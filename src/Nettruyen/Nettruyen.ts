@@ -24,4 +24,8 @@ export const NettruyenInfo: SourceInfo = {
 export class Nettruyen extends Main {
     Host = HOST
     Tags = tags
+    
+    SearchWithGenres = true
+    SearchWithNotGenres = true
+    SearchWithTitleAndGenre = false
 }

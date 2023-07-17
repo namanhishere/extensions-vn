@@ -1,4 +1,6 @@
 export function convertTime(time: string): Date {
+    if (time === '') return new Date()
+    
     let date
     // 29/12/22
     if (time.split('/').length == 3) {
