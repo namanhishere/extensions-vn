@@ -673,16 +673,30 @@ class Main {
             metadata
         });
     }
+    async getSearchTags() {
+        return [App.createTagSection({
+                id: '0',
+                label: 'Thể loại',
+                tags: this.Tags.map((x) => App.createTag({
+                    id: x.Id.toString(),
+                    label: x.Name
+                }))
+            })];
+    }
 }
 exports.Main = Main;
 
-},{"./utils/time":64}],63:[function(require,module,exports){
+},{"./utils/time":65}],63:[function(require,module,exports){
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SayHentai = exports.SayHentaiInfo = void 0;
 const types_1 = require("@paperback/types");
 const Main_1 = require("../Main");
 const HOST = 'SayHentai';
+const tags_json_1 = __importDefault(require("./tags.json"));
 exports.SayHentaiInfo = {
     description: '',
     icon: 'icon.png',
@@ -697,11 +711,221 @@ class SayHentai extends Main_1.Main {
     constructor() {
         super(...arguments);
         this.Host = HOST;
+        this.Tags = tags_json_1.default;
     }
 }
 exports.SayHentai = SayHentai;
 
-},{"../Main":62,"@paperback/types":61}],64:[function(require,module,exports){
+},{"../Main":62,"./tags.json":64,"@paperback/types":61}],64:[function(require,module,exports){
+module.exports=[
+    {
+        "Id": 0,
+        "Description": "genre/action",
+        "Name": "Action"
+    },
+    {
+        "Id": 1,
+        "Description": "genre/adult",
+        "Name": "Adult"
+    },
+    {
+        "Id": 3,
+        "Description": "genre/comedy",
+        "Name": "Comedy"
+    },
+    {
+        "Id": 4,
+        "Description": "genre/cooking",
+        "Name": "Cooking"
+    },
+    {
+        "Id": 5,
+        "Description": "genre/detective",
+        "Name": "Detective"
+    },
+    {
+        "Id": 6,
+        "Description": "genre/doujinshi",
+        "Name": "Doujinshi"
+    },
+    {
+        "Id": 7,
+        "Description": "genre/drama",
+        "Name": "Drama"
+    },
+    {
+        "Id": 8,
+        "Description": "genre/ecchi",
+        "Name": "Ecchi"
+    },
+    {
+        "Id": 9,
+        "Description": "genre/fantasy",
+        "Name": "Fantasy"
+    },
+    {
+        "Id": 10,
+        "Description": "genre/gender-bender",
+        "Name": "Gender Bender"
+    },
+    {
+        "Id": 11,
+        "Description": "genre/harem",
+        "Name": "Harem"
+    },
+    {
+        "Id": 12,
+        "Description": "genre/historical",
+        "Name": "Historical"
+    },
+    {
+        "Id": 13,
+        "Description": "genre/horror",
+        "Name": "Horror"
+    },
+    {
+        "Id": 14,
+        "Description": "genre/josei",
+        "Name": "Josei"
+    },
+    {
+        "Id": 15,
+        "Description": "genre/manga",
+        "Name": "Manga"
+    },
+    {
+        "Id": 16,
+        "Description": "genre/manhua",
+        "Name": "Manhua"
+    },
+    {
+        "Id": 17,
+        "Description": "genre/manhwa",
+        "Name": "Manhwa"
+    },
+    {
+        "Id": 18,
+        "Description": "genre/martial-arts",
+        "Name": "Martial Arts"
+    },
+    {
+        "Id": 19,
+        "Description": "genre/mature",
+        "Name": "Mature"
+    },
+    {
+        "Id": 20,
+        "Description": "genre/mecha",
+        "Name": "Mecha"
+    },
+    {
+        "Id": 21,
+        "Description": "genre/mystery",
+        "Name": "Mystery"
+    },
+    {
+        "Id": 22,
+        "Description": "genre/one-shot",
+        "Name": "One shot"
+    },
+    {
+        "Id": 23,
+        "Description": "genre/psychological",
+        "Name": "Psychological"
+    },
+    {
+        "Id": 24,
+        "Description": "genre/romance",
+        "Name": "Romance"
+    },
+    {
+        "Id": 25,
+        "Description": "genre/school-life",
+        "Name": "School Life"
+    },
+    {
+        "Id": 26,
+        "Description": "genre/sci-fi",
+        "Name": "Sci-fi"
+    },
+    {
+        "Id": 27,
+        "Description": "genre/seinen",
+        "Name": "Seinen"
+    },
+    {
+        "Id": 28,
+        "Description": "genre/shoujo",
+        "Name": "Shoujo"
+    },
+    {
+        "Id": 29,
+        "Description": "genre/shoujo-ai",
+        "Name": "Shoujo Ai"
+    },
+    {
+        "Id": 30,
+        "Description": "genre/shounen",
+        "Name": "Shounen"
+    },
+    {
+        "Id": 31,
+        "Description": "genre/shounen-ai",
+        "Name": "Shounen Ai"
+    },
+    {
+        "Id": 32,
+        "Description": "genre/slice-of-life",
+        "Name": "Slice of Life"
+    },
+    {
+        "Id": 33,
+        "Description": "genre/smut",
+        "Name": "Smut"
+    },
+    {
+        "Id": 34,
+        "Description": "genre/soft-yaoi",
+        "Name": "Soft Yaoi"
+    },
+    {
+        "Id": 35,
+        "Description": "genre/soft-yuri",
+        "Name": "Soft Yuri"
+    },
+    {
+        "Id": 36,
+        "Description": "genre/sports",
+        "Name": "Sports"
+    },
+    {
+        "Id": 37,
+        "Description": "genre/supernatural",
+        "Name": "Supernatural"
+    },
+    {
+        "Id": 38,
+        "Description": "genre/tragedy",
+        "Name": "Tragedy"
+    },
+    {
+        "Id": 39,
+        "Description": "genre/webtoon",
+        "Name": "Webtoon"
+    },
+    {
+        "Id": 40,
+        "Description": "genre/yaoi",
+        "Name": "Yaoi"
+    },
+    {
+        "Id": 41,
+        "Description": "genre/yuri",
+        "Name": "Yuri"
+    }
+]
+
+},{}],65:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertTime = void 0;
