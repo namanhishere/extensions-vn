@@ -119,7 +119,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
                 items.push(App.createPartialSourceManga({
                     title: item.title[0].title,
                     image: item.cover,
-                    mangaId: this.UseId ? item.id : item.url,
+                    mangaId: this.UseId ? item.id.toString() : item.url,
                     subtitle: undefined
                 }))
             }
@@ -144,7 +144,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             items.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: this.UseId ? item.id : item.url,
+                mangaId: this.UseId ? item.id.toString() : item.url,
                 subtitle: undefined
             }))
         }
@@ -258,7 +258,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             tiles.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: this.UseId ? item.id : item.url,
+                mangaId: this.UseId ? item.id.toString() : item.url,
                 subtitle: undefined
             }))
         })

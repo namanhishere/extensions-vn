@@ -14,7 +14,7 @@ export const BaoTangTruyenInfo: SourceInfo = {
     description: '',
     icon: 'icon.jpg',
     websiteBaseURL: '',
-    version: getExportVersion('0.0.1'),
+    version: getExportVersion('0.0.2'),
     name: 'BaoTangTruyen',
     language: 'vi',
     author: 'Hoang3409',

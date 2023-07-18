@@ -25,6 +25,8 @@ export class Nettruyen extends Main {
     Host = HOST
     Tags = tags
     
+    UseId = false
+    
     SearchWithGenres = true
     SearchWithNotGenres = true
     SearchWithTitleAndGenre = false
