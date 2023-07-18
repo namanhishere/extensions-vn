@@ -459,6 +459,533 @@ __exportStar(require("./compat/DyamicUI"), exports);
 
 },{"./base/index":7,"./compat/DyamicUI":16,"./generated/_exports":60}],62:[function(require,module,exports){
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaoTangTruyen = exports.BaoTangTruyenInfo = void 0;
+const types_1 = require("@paperback/types");
+const Main_1 = require("../Main");
+const HOST = 'BaoTangTruyen';
+const tags_json_1 = __importDefault(require("./tags.json"));
+exports.BaoTangTruyenInfo = {
+    description: '',
+    icon: 'icon.jpg',
+    websiteBaseURL: '',
+    version: (0, Main_1.getExportVersion)('0.0.1'),
+    name: 'BaoTangTruyen',
+    language: 'vi',
+    author: 'Hoang3409',
+    contentRating: types_1.ContentRating.EVERYONE
+};
+class BaoTangTruyen extends Main_1.Main {
+    constructor() {
+        super(...arguments);
+        this.Host = HOST;
+        this.Tags = tags_json_1.default;
+        this.UseId = true;
+        this.SearchWithGenres = false;
+        this.SearchWithNotGenres = false;
+        this.SearchWithTitleAndGenre = false;
+    }
+}
+exports.BaoTangTruyen = BaoTangTruyen;
+
+},{"../Main":64,"./tags.json":63,"@paperback/types":61}],63:[function(require,module,exports){
+module.exports=[
+    {
+        "Id": 0,
+        "Name": "Tất cả",
+        "Description": ""
+    },
+    {
+        "Id": 1,
+        "Name": "Action",
+        "Description": "action"
+    },
+    {
+        "Id": 2,
+        "Name": "Anime",
+        "Description": "anime"
+    },
+    {
+        "Id": 3,
+        "Name": "Mecha",
+        "Description": "mecha"
+    },
+    {
+        "Id": 4,
+        "Name": "Sci-fi",
+        "Description": "scifi"
+    },
+    {
+        "Id": 5,
+        "Name": "Shounen",
+        "Description": "shounen"
+    },
+    {
+        "Id": 6,
+        "Name": "Cổ Đại",
+        "Description": "co-dai"
+    },
+    {
+        "Id": 7,
+        "Name": "Comedy",
+        "Description": "comedy"
+    },
+    {
+        "Id": 8,
+        "Name": "Manhua",
+        "Description": "manhua"
+    },
+    {
+        "Id": 9,
+        "Name": "Ngôn Tình",
+        "Description": "ngon-tinh"
+    },
+    {
+        "Id": 10,
+        "Name": "Romance",
+        "Description": "romance"
+    },
+    {
+        "Id": 11,
+        "Name": "Truyện Màu",
+        "Description": "truyen-mau"
+    },
+    {
+        "Id": 12,
+        "Name": "Drama",
+        "Description": "drama"
+    },
+    {
+        "Id": 13,
+        "Name": "School Life",
+        "Description": "school-life"
+    },
+    {
+        "Id": 14,
+        "Name": "Seinen",
+        "Description": "seinen"
+    },
+    {
+        "Id": 15,
+        "Name": "Manhwa",
+        "Description": "manhwa"
+    },
+    {
+        "Id": 16,
+        "Name": "Comic",
+        "Description": "comic"
+    },
+    {
+        "Id": 17,
+        "Name": "Chuyển Sinh",
+        "Description": "chuyen-sinh"
+    },
+    {
+        "Id": 18,
+        "Name": "Fantasy",
+        "Description": "fantasy"
+    },
+    {
+        "Id": 19,
+        "Name": "Supernatural",
+        "Description": "supernatural"
+    },
+    {
+        "Id": 20,
+        "Name": "Webtoon",
+        "Description": "webtoon"
+    },
+    {
+        "Id": 21,
+        "Name": "Xuyên Không",
+        "Description": "xuyen-khong"
+    },
+    {
+        "Id": 22,
+        "Name": "Shoujo",
+        "Description": "shoujo"
+    },
+    {
+        "Id": 23,
+        "Name": "Sports",
+        "Description": "sports"
+    },
+    {
+        "Id": 24,
+        "Name": "Manga",
+        "Description": "manga"
+    },
+    {
+        "Id": 25,
+        "Name": "Smut",
+        "Description": "smut"
+    },
+    {
+        "Id": 26,
+        "Name": "Historical",
+        "Description": "historical"
+    },
+    {
+        "Id": 27,
+        "Name": "Adventure",
+        "Description": "adventure"
+    },
+    {
+        "Id": 28,
+        "Name": "Slice of Life",
+        "Description": "slice-of-life"
+    },
+    {
+        "Id": 29,
+        "Name": "Tragedy",
+        "Description": "tragedy"
+    },
+    {
+        "Id": 30,
+        "Name": "Mystery",
+        "Description": "mystery"
+    },
+    {
+        "Id": 31,
+        "Name": "Horror",
+        "Description": "horror"
+    },
+    {
+        "Id": 32,
+        "Name": "Martial Arts",
+        "Description": "martial-arts"
+    },
+    {
+        "Id": 33,
+        "Name": "Shoujo Ai",
+        "Description": "shoujo-ai"
+    },
+    {
+        "Id": 34,
+        "Name": "Việt Nam",
+        "Description": "viet-nam"
+    },
+    {
+        "Id": 35,
+        "Name": "Đam Mỹ",
+        "Description": "dam-my"
+    },
+    {
+        "Id": 36,
+        "Name": "Shounen Ai",
+        "Description": "shounen-ai"
+    },
+    {
+        "Id": 37,
+        "Name": "Soft Yuri",
+        "Description": "soft-yuri"
+    },
+    {
+        "Id": 38,
+        "Name": "Yuri",
+        "Description": "yuri"
+    },
+    {
+        "Id": 39,
+        "Name": "Gender Bender",
+        "Description": "gender-bender"
+    },
+    {
+        "Id": 40,
+        "Name": "Yaoi",
+        "Description": "yaoi"
+    },
+    {
+        "Id": 41,
+        "Name": "Psychological",
+        "Description": "psychological"
+    },
+    {
+        "Id": 42,
+        "Name": "Doujinshi",
+        "Description": "doujinshi"
+    },
+    {
+        "Id": 43,
+        "Name": "Soft Yaoi",
+        "Description": "soft-yaoi"
+    },
+    {
+        "Id": 44,
+        "Name": "Josei",
+        "Description": "josei"
+    },
+    {
+        "Id": 45,
+        "Name": "Thiếu Nhi",
+        "Description": "thieu-nhi"
+    },
+    {
+        "Id": 46,
+        "Name": "Truyện scan",
+        "Description": "truyen-scan"
+    },
+    {
+        "Id": 47,
+        "Name": "Cooking",
+        "Description": "cooking"
+    },
+    {
+        "Id": 48,
+        "Name": "Trinh Thám",
+        "Description": "trinh-tham"
+    },
+    {
+        "Id": 49,
+        "Name": "Tất cả"
+    },
+    {
+        "Id": 50,
+        "Name": "Action",
+        "Description": "action"
+    },
+    {
+        "Id": 51,
+        "Name": "Anime",
+        "Description": "anime"
+    },
+    {
+        "Id": 52,
+        "Name": "Mecha",
+        "Description": "mecha"
+    },
+    {
+        "Id": 53,
+        "Name": "Sci-fi",
+        "Description": "scifi"
+    },
+    {
+        "Id": 54,
+        "Name": "Shounen",
+        "Description": "shounen"
+    },
+    {
+        "Id": 55,
+        "Name": "Cổ Đại",
+        "Description": "co-dai"
+    },
+    {
+        "Id": 56,
+        "Name": "Comedy",
+        "Description": "comedy"
+    },
+    {
+        "Id": 57,
+        "Name": "Manhua",
+        "Description": "manhua"
+    },
+    {
+        "Id": 58,
+        "Name": "Ngôn Tình",
+        "Description": "ngon-tinh"
+    },
+    {
+        "Id": 59,
+        "Name": "Romance",
+        "Description": "romance"
+    },
+    {
+        "Id": 60,
+        "Name": "Truyện Màu",
+        "Description": "truyen-mau"
+    },
+    {
+        "Id": 61,
+        "Name": "Drama",
+        "Description": "drama"
+    },
+    {
+        "Id": 62,
+        "Name": "School Life",
+        "Description": "school-life"
+    },
+    {
+        "Id": 63,
+        "Name": "Seinen",
+        "Description": "seinen"
+    },
+    {
+        "Id": 64,
+        "Name": "Manhwa",
+        "Description": "manhwa"
+    },
+    {
+        "Id": 65,
+        "Name": "Comic",
+        "Description": "comic"
+    },
+    {
+        "Id": 66,
+        "Name": "Chuyển Sinh",
+        "Description": "chuyen-sinh"
+    },
+    {
+        "Id": 67,
+        "Name": "Fantasy",
+        "Description": "fantasy"
+    },
+    {
+        "Id": 68,
+        "Name": "Supernatural",
+        "Description": "supernatural"
+    },
+    {
+        "Id": 69,
+        "Name": "Webtoon",
+        "Description": "webtoon"
+    },
+    {
+        "Id": 70,
+        "Name": "Xuyên Không",
+        "Description": "xuyen-khong"
+    },
+    {
+        "Id": 71,
+        "Name": "Shoujo",
+        "Description": "shoujo"
+    },
+    {
+        "Id": 72,
+        "Name": "Sports",
+        "Description": "sports"
+    },
+    {
+        "Id": 73,
+        "Name": "Manga",
+        "Description": "manga"
+    },
+    {
+        "Id": 74,
+        "Name": "Smut",
+        "Description": "smut"
+    },
+    {
+        "Id": 75,
+        "Name": "Historical",
+        "Description": "historical"
+    },
+    {
+        "Id": 76,
+        "Name": "Adventure",
+        "Description": "adventure"
+    },
+    {
+        "Id": 77,
+        "Name": "Slice of Life",
+        "Description": "slice-of-life"
+    },
+    {
+        "Id": 78,
+        "Name": "Tragedy",
+        "Description": "tragedy"
+    },
+    {
+        "Id": 79,
+        "Name": "Mystery",
+        "Description": "mystery"
+    },
+    {
+        "Id": 80,
+        "Name": "Horror",
+        "Description": "horror"
+    },
+    {
+        "Id": 81,
+        "Name": "Martial Arts",
+        "Description": "martial-arts"
+    },
+    {
+        "Id": 82,
+        "Name": "Shoujo Ai",
+        "Description": "shoujo-ai"
+    },
+    {
+        "Id": 83,
+        "Name": "Việt Nam",
+        "Description": "viet-nam"
+    },
+    {
+        "Id": 84,
+        "Name": "Đam Mỹ",
+        "Description": "dam-my"
+    },
+    {
+        "Id": 85,
+        "Name": "Shounen Ai",
+        "Description": "shounen-ai"
+    },
+    {
+        "Id": 86,
+        "Name": "Soft Yuri",
+        "Description": "soft-yuri"
+    },
+    {
+        "Id": 87,
+        "Name": "Yuri",
+        "Description": "yuri"
+    },
+    {
+        "Id": 88,
+        "Name": "Gender Bender",
+        "Description": "gender-bender"
+    },
+    {
+        "Id": 89,
+        "Name": "Yaoi",
+        "Description": "yaoi"
+    },
+    {
+        "Id": 90,
+        "Name": "Psychological",
+        "Description": "psychological"
+    },
+    {
+        "Id": 91,
+        "Name": "Doujinshi",
+        "Description": "doujinshi"
+    },
+    {
+        "Id": 92,
+        "Name": "Soft Yaoi",
+        "Description": "soft-yaoi"
+    },
+    {
+        "Id": 93,
+        "Name": "Josei",
+        "Description": "josei"
+    },
+    {
+        "Id": 94,
+        "Name": "Thiếu Nhi",
+        "Description": "thieu-nhi"
+    },
+    {
+        "Id": 95,
+        "Name": "Truyện scan",
+        "Description": "truyen-scan"
+    },
+    {
+        "Id": 96,
+        "Name": "Cooking",
+        "Description": "cooking"
+    },
+    {
+        "Id": 97,
+        "Name": "Trinh Thám",
+        "Description": "trinh-tham"
+    }
+]
+
+},{}],64:[function(require,module,exports){
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
@@ -722,249 +1249,7 @@ class Main {
 }
 exports.Main = Main;
 
-},{"./utils/time":65}],63:[function(require,module,exports){
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SayHentai = exports.SayHentaiInfo = void 0;
-const types_1 = require("@paperback/types");
-const Main_1 = require("../Main");
-const HOST = 'SayHentai';
-const tags_json_1 = __importDefault(require("./tags.json"));
-exports.SayHentaiInfo = {
-    description: '',
-    icon: 'icon.png',
-    websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.1'),
-    name: 'SayHentai',
-    language: 'vi',
-    author: 'Hoang3409',
-    contentRating: types_1.ContentRating.ADULT
-};
-class SayHentai extends Main_1.Main {
-    constructor() {
-        super(...arguments);
-        this.Host = HOST;
-        this.Tags = tags_json_1.default;
-        this.SearchWithGenres = false;
-        this.SearchWithNotGenres = false;
-        this.SearchWithTitleAndGenre = false;
-    }
-}
-exports.SayHentai = SayHentai;
-
-},{"../Main":62,"./tags.json":64,"@paperback/types":61}],64:[function(require,module,exports){
-module.exports=[
-    {
-        "Id": 0,
-        "Description": "genre/action",
-        "Name": "Action"
-    },
-    {
-        "Id": 1,
-        "Description": "genre/adult",
-        "Name": "Adult"
-    },
-    {
-        "Id": 3,
-        "Description": "genre/comedy",
-        "Name": "Comedy"
-    },
-    {
-        "Id": 4,
-        "Description": "genre/cooking",
-        "Name": "Cooking"
-    },
-    {
-        "Id": 5,
-        "Description": "genre/detective",
-        "Name": "Detective"
-    },
-    {
-        "Id": 6,
-        "Description": "genre/doujinshi",
-        "Name": "Doujinshi"
-    },
-    {
-        "Id": 7,
-        "Description": "genre/drama",
-        "Name": "Drama"
-    },
-    {
-        "Id": 8,
-        "Description": "genre/ecchi",
-        "Name": "Ecchi"
-    },
-    {
-        "Id": 9,
-        "Description": "genre/fantasy",
-        "Name": "Fantasy"
-    },
-    {
-        "Id": 10,
-        "Description": "genre/gender-bender",
-        "Name": "Gender Bender"
-    },
-    {
-        "Id": 11,
-        "Description": "genre/harem",
-        "Name": "Harem"
-    },
-    {
-        "Id": 12,
-        "Description": "genre/historical",
-        "Name": "Historical"
-    },
-    {
-        "Id": 13,
-        "Description": "genre/horror",
-        "Name": "Horror"
-    },
-    {
-        "Id": 14,
-        "Description": "genre/josei",
-        "Name": "Josei"
-    },
-    {
-        "Id": 15,
-        "Description": "genre/manga",
-        "Name": "Manga"
-    },
-    {
-        "Id": 16,
-        "Description": "genre/manhua",
-        "Name": "Manhua"
-    },
-    {
-        "Id": 17,
-        "Description": "genre/manhwa",
-        "Name": "Manhwa"
-    },
-    {
-        "Id": 18,
-        "Description": "genre/martial-arts",
-        "Name": "Martial Arts"
-    },
-    {
-        "Id": 19,
-        "Description": "genre/mature",
-        "Name": "Mature"
-    },
-    {
-        "Id": 20,
-        "Description": "genre/mecha",
-        "Name": "Mecha"
-    },
-    {
-        "Id": 21,
-        "Description": "genre/mystery",
-        "Name": "Mystery"
-    },
-    {
-        "Id": 22,
-        "Description": "genre/one-shot",
-        "Name": "One shot"
-    },
-    {
-        "Id": 23,
-        "Description": "genre/psychological",
-        "Name": "Psychological"
-    },
-    {
-        "Id": 24,
-        "Description": "genre/romance",
-        "Name": "Romance"
-    },
-    {
-        "Id": 25,
-        "Description": "genre/school-life",
-        "Name": "School Life"
-    },
-    {
-        "Id": 26,
-        "Description": "genre/sci-fi",
-        "Name": "Sci-fi"
-    },
-    {
-        "Id": 27,
-        "Description": "genre/seinen",
-        "Name": "Seinen"
-    },
-    {
-        "Id": 28,
-        "Description": "genre/shoujo",
-        "Name": "Shoujo"
-    },
-    {
-        "Id": 29,
-        "Description": "genre/shoujo-ai",
-        "Name": "Shoujo Ai"
-    },
-    {
-        "Id": 30,
-        "Description": "genre/shounen",
-        "Name": "Shounen"
-    },
-    {
-        "Id": 31,
-        "Description": "genre/shounen-ai",
-        "Name": "Shounen Ai"
-    },
-    {
-        "Id": 32,
-        "Description": "genre/slice-of-life",
-        "Name": "Slice of Life"
-    },
-    {
-        "Id": 33,
-        "Description": "genre/smut",
-        "Name": "Smut"
-    },
-    {
-        "Id": 34,
-        "Description": "genre/soft-yaoi",
-        "Name": "Soft Yaoi"
-    },
-    {
-        "Id": 35,
-        "Description": "genre/soft-yuri",
-        "Name": "Soft Yuri"
-    },
-    {
-        "Id": 36,
-        "Description": "genre/sports",
-        "Name": "Sports"
-    },
-    {
-        "Id": 37,
-        "Description": "genre/supernatural",
-        "Name": "Supernatural"
-    },
-    {
-        "Id": 38,
-        "Description": "genre/tragedy",
-        "Name": "Tragedy"
-    },
-    {
-        "Id": 39,
-        "Description": "genre/webtoon",
-        "Name": "Webtoon"
-    },
-    {
-        "Id": 40,
-        "Description": "genre/yaoi",
-        "Name": "Yaoi"
-    },
-    {
-        "Id": 41,
-        "Description": "genre/yuri",
-        "Name": "Yuri"
-    }
-]
-
-},{}],65:[function(require,module,exports){
+},{"./utils/time":65}],65:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertTime = void 0;
@@ -1021,5 +1306,5 @@ function convertTime(time) {
 }
 exports.convertTime = convertTime;
 
-},{}]},{},[63])(63)
+},{}]},{},[62])(62)
 });
