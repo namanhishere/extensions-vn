@@ -472,7 +472,7 @@ exports.BaoTangTruyenInfo = {
     description: '',
     icon: 'icon.jpg',
     websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.1'),
+    version: (0, Main_1.getExportVersion)('0.0.2'),
     name: 'BaoTangTruyen',
     language: 'vi',
     author: 'Hoang3409',
@@ -1072,7 +1072,7 @@ class Main {
                 items.push(App.createPartialSourceManga({
                     title: item.title[0].title,
                     image: item.cover,
-                    mangaId: this.UseId ? item.id : item.url,
+                    mangaId: this.UseId ? item.id.toString() : item.url,
                     subtitle: undefined
                 }));
             }
@@ -1095,7 +1095,7 @@ class Main {
             items.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: this.UseId ? item.id : item.url,
+                mangaId: this.UseId ? item.id.toString() : item.url,
                 subtitle: undefined
             }));
         }
@@ -1202,7 +1202,7 @@ class Main {
             tiles.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: this.UseId ? item.id : item.url,
+                mangaId: this.UseId ? item.id.toString() : item.url,
                 subtitle: undefined
             }));
         });

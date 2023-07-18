@@ -1432,7 +1432,7 @@ class Main {
                 items.push(App.createPartialSourceManga({
                     title: item.title[0].title,
                     image: item.cover,
-                    mangaId: this.UseId ? item.id : item.url,
+                    mangaId: this.UseId ? item.id.toString() : item.url,
                     subtitle: undefined
                 }));
             }
@@ -1455,7 +1455,7 @@ class Main {
             items.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: this.UseId ? item.id : item.url,
+                mangaId: this.UseId ? item.id.toString() : item.url,
                 subtitle: undefined
             }));
         }
@@ -1562,7 +1562,7 @@ class Main {
             tiles.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: this.UseId ? item.id : item.url,
+                mangaId: this.UseId ? item.id.toString() : item.url,
                 subtitle: undefined
             }));
         });

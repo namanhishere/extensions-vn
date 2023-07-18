@@ -545,7 +545,7 @@ class Main {
                 items.push(App.createPartialSourceManga({
                     title: item.title[0].title,
                     image: item.cover,
-                    mangaId: this.UseId ? item.id : item.url,
+                    mangaId: this.UseId ? item.id.toString() : item.url,
                     subtitle: undefined
                 }));
             }
@@ -568,7 +568,7 @@ class Main {
             items.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: this.UseId ? item.id : item.url,
+                mangaId: this.UseId ? item.id.toString() : item.url,
                 subtitle: undefined
             }));
         }
@@ -675,7 +675,7 @@ class Main {
             tiles.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: this.UseId ? item.id : item.url,
+                mangaId: this.UseId ? item.id.toString() : item.url,
                 subtitle: undefined
             }));
         });
@@ -748,6 +748,7 @@ class Nettruyen extends Main_1.Main {
         super(...arguments);
         this.Host = HOST;
         this.Tags = tags_json_1.default;
+        this.UseId = false;
         this.SearchWithGenres = true;
         this.SearchWithNotGenres = true;
         this.SearchWithTitleAndGenre = false;
