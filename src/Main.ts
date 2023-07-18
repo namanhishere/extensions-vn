@@ -22,7 +22,7 @@ import {convertTime} from './utils/time'
 
 const DOMAIN = 'https://animemoiapi.onrender.com/api/'
 
-const BASE_VERSION = '1.2.0'
+const BASE_VERSION = '1.2.1'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
@@ -53,6 +53,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
     abstract SearchWithGenres: boolean
     abstract SearchWithNotGenres: boolean
     abstract SearchWithTitleAndGenre: boolean
+    abstract UseId: boolean
     
     stateManager = App.createSourceStateManager()
 
@@ -118,7 +119,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
                 items.push(App.createPartialSourceManga({
                     title: item.title[0].title,
                     image: item.cover,
-                    mangaId: item.url,
+                    mangaId: this.UseId ? item.id : item.url,
                     subtitle: undefined
                 }))
             }
@@ -143,7 +144,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             items.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: item.url,
+                mangaId: this.UseId ? item.id : item.url,
                 subtitle: undefined
             }))
         }
@@ -257,7 +258,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             tiles.push(App.createPartialSourceManga({
                 title: item.title[0].title,
                 image: item.cover,
-                mangaId: item.url,
+                mangaId: this.UseId ? item.id : item.url,
                 subtitle: undefined
             }))
         })
