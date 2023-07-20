@@ -6,7 +6,8 @@ Vietnamese sources for Paperback
 
 ### if you use [Tachiyomi](https://tachiyomi.org/)
 
-You can convert your backup to paperback when using this [tool](https://github.com/hoang3402/Tachiyomi-To-Paperbackup-Converter) (Chưa update)
+You can convert your backup to paperback when using
+this [tool](https://github.com/hoang3402/Tachiyomi-To-Paperbackup-Converter) (Chưa update)
 
 ## Link extension
 
@@ -22,6 +23,7 @@ https://hoang3409.is-a.dev/extensions-vn/
 | NetTruyen     | https://www.nettruyenmax.com/ |
 | SayHentai     | https://sayhentai.me/         |
 | HentaiVN      | https://hentaivn.site/        |
+| LxManga       | https://lxmanga.net/          |
 
 </div>
 

@@ -12,9 +12,9 @@ import tags from './tags.json'
 
 export const BaoTangTruyenInfo: SourceInfo = {
     description: '',
-    icon: 'icon.jpg',
+    icon: 'icon.png',
     websiteBaseURL: '',
-    version: getExportVersion('0.0.2'),
+    version: getExportVersion('0.0.3'),
     name: 'BaoTangTruyen',
     language: 'vi',
     author: 'Hoang3409',
