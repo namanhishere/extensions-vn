@@ -472,7 +472,7 @@ exports.HentaiVNInfo = {
     description: '',
     icon: 'icon.png',
     websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.1'),
+    version: (0, Main_1.getExportVersion)('0.0.2'),
     name: 'HentaiVN',
     language: 'vi',
     author: 'Hoang3409',
@@ -483,6 +483,7 @@ class HentaiVN extends Main_1.Main {
         super(...arguments);
         this.Host = HOST;
         this.Tags = tags_json_1.default;
+        this.UseId = false;
         this.SearchWithGenres = true;
         this.SearchWithNotGenres = false;
         this.SearchWithTitleAndGenre = true;
@@ -1350,7 +1351,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
 const DOMAIN = 'https://animemoiapi.onrender.com/api/';
-const BASE_VERSION = '1.2.1';
+const BASE_VERSION = '1.2.2';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };

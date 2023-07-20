@@ -459,6 +459,374 @@ __exportStar(require("./compat/DyamicUI"), exports);
 
 },{"./base/index":7,"./compat/DyamicUI":16,"./generated/_exports":60}],62:[function(require,module,exports){
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LxManga = exports.LxMangaInfo = void 0;
+const types_1 = require("@paperback/types");
+const Main_1 = require("../Main");
+const HOST = 'LxManga';
+const tags_json_1 = __importDefault(require("./tags.json"));
+exports.LxMangaInfo = {
+    description: '',
+    icon: 'icon.ico',
+    websiteBaseURL: '',
+    version: (0, Main_1.getExportVersion)('0.0.1'),
+    name: ' LxManga',
+    language: 'vi',
+    author: 'Hoang3409',
+    contentRating: types_1.ContentRating.ADULT
+};
+class LxManga extends Main_1.Main {
+    constructor() {
+        super(...arguments);
+        this.Host = HOST;
+        this.Tags = tags_json_1.default;
+        this.UseId = false;
+        this.SearchWithGenres = true;
+        this.SearchWithNotGenres = true;
+        this.SearchWithTitleAndGenre = true;
+    }
+}
+exports.LxManga = LxManga;
+
+},{"../Main":64,"./tags.json":63,"@paperback/types":61}],63:[function(require,module,exports){
+module.exports=[
+    {
+        "Id": "1",
+        "Name": "Mature",
+        "Description": ""
+    },
+    {
+        "Id": "2",
+        "Name": "Manhwa",
+        "Description": ""
+    },
+    {
+        "Id": "3",
+        "Name": "Group",
+        "Description": ""
+    },
+    {
+        "Id": "4",
+        "Name": "Housewife",
+        "Description": ""
+    },
+    {
+        "Id": "5",
+        "Name": "NTR",
+        "Description": ""
+    },
+    {
+        "Id": "6",
+        "Name": "Adult",
+        "Description": ""
+    },
+    {
+        "Id": "7",
+        "Name": "Series",
+        "Description": ""
+    },
+    {
+        "Id": "8",
+        "Name": "Complete",
+        "Description": ""
+    },
+    {
+        "Id": "9",
+        "Name": "Ngực Lớn",
+        "Description": ""
+    },
+    {
+        "Id": "10",
+        "Name": "Lãng Mạn",
+        "Description": ""
+    },
+    {
+        "Id": "11",
+        "Name": "Truyện Màu",
+        "Description": ""
+    },
+    {
+        "Id": "12",
+        "Name": "Mind Break",
+        "Description": ""
+    },
+    {
+        "Id": "13",
+        "Name": "Mắt Kính",
+        "Description": ""
+    },
+    {
+        "Id": "14",
+        "Name": "Ngực Nhỏ",
+        "Description": ""
+    },
+    {
+        "Id": "15",
+        "Name": "Fantasy",
+        "Description": ""
+    },
+    {
+        "Id": "16",
+        "Name": "Ecchi",
+        "Description": ""
+    },
+    {
+        "Id": "17",
+        "Name": "Bạo Dâm",
+        "Description": ""
+    },
+    {
+        "Id": "18",
+        "Name": "Harem",
+        "Description": ""
+    },
+    {
+        "Id": "19",
+        "Name": "Hài Hước",
+        "Description": ""
+    },
+    {
+        "Id": "20",
+        "Name": "Cosplay",
+        "Description": ""
+    },
+    {
+        "Id": "21",
+        "Name": "Hầu Gái",
+        "Description": ""
+    },
+    {
+        "Id": "22",
+        "Name": "Loli",
+        "Description": ""
+    },
+    {
+        "Id": "23",
+        "Name": "Shota",
+        "Description": ""
+    },
+    {
+        "Id": "24",
+        "Name": "Gangbang",
+        "Description": ""
+    },
+    {
+        "Id": "25",
+        "Name": "Doujinshi",
+        "Description": ""
+    },
+    {
+        "Id": "26",
+        "Name": "Guro",
+        "Description": ""
+    },
+    {
+        "Id": "27",
+        "Name": "Virgin",
+        "Description": ""
+    },
+    {
+        "Id": "28",
+        "Name": "OneShot",
+        "Description": ""
+    },
+    {
+        "Id": "29",
+        "Name": "Chơi Hai Lỗ",
+        "Description": ""
+    },
+    {
+        "Id": "30",
+        "Name": "Hậu Môn",
+        "Description": ""
+    },
+    {
+        "Id": "31",
+        "Name": "Nữ Sinh",
+        "Description": ""
+    },
+    {
+        "Id": "32",
+        "Name": "Mang Thai",
+        "Description": ""
+    },
+    {
+        "Id": "33",
+        "Name": "Giáo Viên",
+        "Description": ""
+    },
+    {
+        "Id": "34",
+        "Name": "Loạn Luân",
+        "Description": ""
+    },
+    {
+        "Id": "35",
+        "Name": "Truyện Không Che",
+        "Description": ""
+    },
+    {
+        "Id": "36",
+        "Name": "Futanari",
+        "Description": ""
+    },
+    {
+        "Id": "37",
+        "Name": "Yuri",
+        "Description": ""
+    },
+    {
+        "Id": "38",
+        "Name": "Nô Lệ",
+        "Description": ""
+    },
+    {
+        "Id": "39",
+        "Name": "Đồ Bơi",
+        "Description": ""
+    },
+    {
+        "Id": "40",
+        "Name": "Thể Thao",
+        "Description": ""
+    },
+    {
+        "Id": "41",
+        "Name": "Truyện Ngắn",
+        "Description": ""
+    },
+    {
+        "Id": "42",
+        "Name": "Lão Gìa Dâm",
+        "Description": ""
+    },
+    {
+        "Id": "43",
+        "Name": "Hãm Hiếp",
+        "Description": ""
+    },
+    {
+        "Id": "44",
+        "Name": "Monster Girl",
+        "Description": ""
+    },
+    {
+        "Id": "45",
+        "Name": "Y Tá",
+        "Description": ""
+    },
+    {
+        "Id": "46",
+        "Name": "Supernatural",
+        "Description": ""
+    },
+    {
+        "Id": "47",
+        "Name": "3D",
+        "Description": ""
+    },
+    {
+        "Id": "48",
+        "Name": "Truyện Comic",
+        "Description": ""
+    },
+    {
+        "Id": "49",
+        "Name": "Animal girl",
+        "Description": ""
+    },
+    {
+        "Id": "50",
+        "Name": "Thú Vật",
+        "Description": ""
+    },
+    {
+        "Id": "51",
+        "Name": "Kinh Dị",
+        "Description": ""
+    },
+    {
+        "Id": "52",
+        "Name": "Quái Vật",
+        "Description": ""
+    },
+    {
+        "Id": "53",
+        "Name": "Xúc Tua",
+        "Description": ""
+    },
+    {
+        "Id": "54",
+        "Name": "Gender Bender",
+        "Description": ""
+    },
+    {
+        "Id": "55",
+        "Name": "Yaoi",
+        "Description": ""
+    },
+    {
+        "Id": "56",
+        "Name": "CG",
+        "Description": ""
+    },
+    {
+        "Id": "57",
+        "Name": "Trap",
+        "Description": ""
+    },
+    {
+        "Id": "58",
+        "Name": "Furry",
+        "Description": ""
+    },
+    {
+        "Id": "59",
+        "Name": "Mind Control",
+        "Description": ""
+    },
+    {
+        "Id": "60",
+        "Name": "Elf",
+        "Description": ""
+    },
+    {
+        "Id": "61",
+        "Name": "Côn Trùng",
+        "Description": ""
+    },
+    {
+        "Id": "62",
+        "Name": "Kogal",
+        "Description": ""
+    },
+    {
+        "Id": "63",
+        "Name": "Artist",
+        "Description": ""
+    },
+    {
+        "Id": "64",
+        "Name": "Scat",
+        "Description": ""
+    },
+    {
+        "Id": "65",
+        "Name": "Milf",
+        "Description": ""
+    },
+    {
+        "Id": "66",
+        "Name": "LXHENTAI",
+        "Description": ""
+    }
+]
+
+},{}],64:[function(require,module,exports){
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
@@ -722,325 +1090,7 @@ class Main {
 }
 exports.Main = Main;
 
-},{"./utils/time":65}],63:[function(require,module,exports){
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Nettruyen = exports.NettruyenInfo = void 0;
-const types_1 = require("@paperback/types");
-const Main_1 = require("../Main");
-const HOST = 'NetTruyen';
-const tags_json_1 = __importDefault(require("./tags.json"));
-exports.NettruyenInfo = {
-    description: '',
-    icon: 'icon.jpg',
-    websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.1'),
-    name: 'Nettruyen',
-    language: 'vi',
-    author: 'Hoang3409',
-    contentRating: types_1.ContentRating.EVERYONE
-};
-class Nettruyen extends Main_1.Main {
-    constructor() {
-        super(...arguments);
-        this.Host = HOST;
-        this.Tags = tags_json_1.default;
-        this.UseId = false;
-        this.SearchWithGenres = true;
-        this.SearchWithNotGenres = true;
-        this.SearchWithTitleAndGenre = false;
-    }
-}
-exports.Nettruyen = Nettruyen;
-
-},{"../Main":62,"./tags.json":64,"@paperback/types":61}],64:[function(require,module,exports){
-module.exports=[
-    {
-        "Id": "1",
-        "Name": "Action",
-        "Description": "Thể loại này thường có nội dung về đánh nhau, bạo lực, hỗn loạn, với diễn biến nhanh"
-    },
-    {
-        "Id": "2",
-        "Name": "Adult",
-        "Description": "Thể loại Adult đề cập đến vấn đề nhạy cảm, chỉ dành cho tuổi 17+"
-    },
-    {
-        "Id": "3",
-        "Name": "Adventure",
-        "Description": "Thể loại phiêu lưu, mạo hiểm, thường là hành trình của các nhân vật"
-    },
-    {
-        "Id": "4",
-        "Name": "Anime",
-        "Description": "Truyện đã được chuyển thể thành film Anime"
-    },
-    {
-        "Id": "5",
-        "Name": "Chuyển Sinh",
-        "Description": "Thể loại này là những câu chuyện về người ở một thế giới này xuyên đến một thế giới khác, có thể là thế giới mang phong cách trung cổ với kiếm sĩ và ma thuật, hay thế giới trong game, hoặc có thể là bạn chết ở nơi này và được chuyển sinh đến nơi khác"
-    },
-    {
-        "Id": "6",
-        "Name": "Comedy",
-        "Description": "Thể loại có nội dung trong sáng và cảm động, thường có các tình tiết gây cười, các xung đột nhẹ nhàng"
-    },
-    {
-        "Id": "7",
-        "Name": "Comic",
-        "Description": "Truyện tranh Châu Âu và Châu Mĩ"
-    },
-    {
-        "Id": "8",
-        "Name": "Cooking",
-        "Description": "Thể loại có nội dung về nấu ăn, ẩm thực"
-    },
-    {
-        "Id": "9",
-        "Name": "Cổ Đại",
-        "Description": "Truyện có nội dung xảy ra ở thời cổ đại phong kiến."
-    },
-    {
-        "Id": "10",
-        "Name": "Doujinshi",
-        "Description": "Thể loại truyện phóng tác do fan hay có thể cả những Mangaka khác với tác giả truyện gốc. Tác giả vẽ Doujinshi thường dựa trên những nhân vật gốc để viết ra những câu chuyện theo sở thích của mình"
-    },
-    {
-        "Id": "11",
-        "Name": "Drama",
-        "Description": "Thể loại mang đến cho người xem những cảm xúc khác nhau: buồn bã, căng thẳng thậm chí là bi phẫn"
-    },
-    {
-        "Id": "12",
-        "Name": "Đam Mỹ",
-        "Description": "Truyện tình cảm giữa nam và nam."
-    },
-    {
-        "Id": "13",
-        "Name": "Ecchi",
-        "Description": "Thường có những tình huống nhạy cảm nhằm lôi cuốn người xem"
-    },
-    {
-        "Id": "14",
-        "Name": "Fantasy",
-        "Description": "Thể loại xuất phát từ trí tưởng tượng phong phú, từ pháp thuật đến thế giới trong mơ thậm chí là những câu chuyện thần tiên"
-    },
-    {
-        "Id": "15",
-        "Name": "Gender Bender",
-        "Description": "Là một thể loại trong đó giới tính của nhân vật bị lẫn lộn: nam hoá thành nữ, nữ hóa thành nam..."
-    },
-    {
-        "Id": "16",
-        "Name": "Harem",
-        "Description": "Thể loại truyện tình cảm, lãng mạn mà trong đó, nhiều nhân vật nữ thích một nam nhân vật chính"
-    },
-    {
-        "Id": "17",
-        "Name": "Lịch sử",
-        "Description": "Thể loại liên quan đến lịch sử"
-    },
-    {
-        "Id": "18",
-        "Name": "Horror",
-        "Description": "Horror là: rùng rợn, nghe cái tên là bạn đã hiểu thể loại này có nội dung thế nào. Nó làm cho bạn kinh hãi, khiếp sợ, ghê tởm, run rẩy, có thể gây sock - một thể loại không dành cho người yếu tim"
-    },
-    {
-        "Id": "20",
-        "Name": "Josei",
-        "Description": "Thể loại của manga hay anime được sáng tác chủ yếu bởi phụ nữ cho những độc giả nữ từ 18 đến 30. Josei manga có thể miêu tả những lãng mạn thực tế , nhưng trái ngược với hầu hết các kiểu lãng mạn lí tưởng của Shoujo manga với cốt truyện rõ ràng, chín chắn"
-    },
-    {
-        "Id": "21",
-        "Name": "Live action",
-        "Description": "Truyện đã được chuyển thể thành phim"
-    },
-    {
-        "Id": "23",
-        "Name": "Manga",
-        "Description": "Truyện tranh của Nhật Bản"
-    },
-    {
-        "Id": "24",
-        "Name": "Manhua",
-        "Description": "Truyện tranh của Trung Quốc"
-    },
-    {
-        "Id": "25",
-        "Name": "Manhwa",
-        "Description": "Truyện tranh Hàn Quốc, đọc từ trái sang phải"
-    },
-    {
-        "Id": "26",
-        "Name": "Martial Arts",
-        "Description": "Giống với tên gọi, bất cứ gì liên quan đến võ thuật trong truyện từ các trận đánh nhau, tự vệ đến các môn võ thuật như akido, karate, judo hay taekwondo, kendo, các cách né tránh"
-    },
-    {
-        "Id": "27",
-        "Name": "Mature",
-        "Description": "Thể loại dành cho lứa tuổi 17+ bao gồm các pha bạo lực, máu me, chém giết, tình dục ở mức độ vừa"
-    },
-    {
-        "Id": "28",
-        "Name": "Mecha",
-        "Description": "Mecha, còn được biết đến dưới cái tên meka hay mechs, là thể loại nói tới những cỗ máy biết đi (thường là do phi công cầm lái)"
-    },
-    {
-        "Id": "30",
-        "Name": "Mystery",
-        "Description": "Thể loại thường xuất hiện những điều bí ấn không thể lí giải được và sau đó là những nỗ lực của nhân vật chính nhằm tìm ra câu trả lời thỏa đáng"
-    },
-    {
-        "Id": "32",
-        "Name": "Ngôn Tình",
-        "Description": "Truyện thuộc kiểu lãng mạn, kể về những sự kiện vui buồn trong tình yêu của nhân vật chính."
-    },
-    {
-        "Id": "33",
-        "Name": "One shot",
-        "Description": "Những truyện ngắn, thường là 1 chapter"
-    },
-    {
-        "Id": "34",
-        "Name": "Psychological",
-        "Description": "Thể loại liên quan đến những vấn đề về tâm lý của nhân vật ( tâm thần bất ổn, điên cuồng ...)"
-    },
-    {
-        "Id": "35",
-        "Name": "Romance",
-        "Description": "Thường là những câu chuyện về tình yêu, tình cảm lãng mạn. Ớ đây chúng ta sẽ lấy ví dụ như tình yêu giữa một người con trai và con gái, bên cạnh đó đặc điểm thể loại này là kích thích trí tưởng tượng của bạn về tình yêu"
-    },
-    {
-        "Id": "36",
-        "Name": "School Life",
-        "Description": "Trong thể loại này, ngữ cảnh diễn biến câu chuyện chủ yếu ở trường học"
-    },
-    {
-        "Id": "37",
-        "Name": "Sci-fi",
-        "Description": "Bao gồm những chuyện khoa học viễn tưởng, đa phần chúng xoay quanh nhiều hiện tượng mà liên quan tới khoa học, công nghệ, tuy vậy thường thì những câu chuyện đó không gắn bó chặt chẽ với các thành tựu khoa học hiện thời, mà là do con người tưởng tượng ra"
-    },
-    {
-        "Id": "38",
-        "Name": "Seinen",
-        "Description": "Thể loại của manga thường nhằm vào những đối tượng nam 18 đến 30 tuổi, nhưng người xem có thể lớn tuổi hơn, với một vài bộ truyện nhắm đến các doanh nhân nam quá 40. Thể loại này có nhiều phong cách riêng biệt , nhưng thể loại này có những nét riêng biệt, thường được phân vào những phong cách nghệ thuật rộng hơn và phong phú hơn về chủ đề, có các loại từ mới mẻ tiên tiến đến khiêu dâm"
-    },
-    {
-        "Id": "39",
-        "Name": "Shoujo",
-        "Description": "Đối tượng hướng tới của thể loại này là phái nữ. Nội dung của những bộ manga này thường liên quan đến tình cảm lãng mạn, chú trọng đầu tư cho nhân vật (tính cách,...)"
-    },
-    {
-        "Id": "40",
-        "Name": "Shoujo Ai",
-        "Description": "Thể loại quan hệ hoặc liên quan tới đồng tính nữ, thể hiện trong các mối quan hệ trên mức bình thường giữa các nhân vật nữ trong các manga, anime"
-    },
-    {
-        "Id": "41",
-        "Name": "Shounen",
-        "Description": "Đối tượng hướng tới của thể loại này là phái nam. Nội dung của những bộ manga này thường liên quan đến đánh nhau và/hoặc bạo lực (ở mức bình thường, không thái quá)"
-    },
-    {
-        "Id": "42",
-        "Name": "Shounen Ai",
-        "Description": "Thể loại có nội dung về tình yêu giữa những chàng trai trẻ, mang tính chất lãng mạn nhưng ko đề cập đến quan hệ tình dục"
-    },
-    {
-        "Id": "43",
-        "Name": "Slice of Life",
-        "Description": "Nói về cuộc sống đời thường"
-    },
-    {
-        "Id": "44",
-        "Name": "Smut",
-        "Description": "Những truyện có nội dung hơi nhạy cảm, đặc biệt là liên quan đến tình dục"
-    },
-    {
-        "Id": "45",
-        "Name": "Soft Yaoi",
-        "Description": "Boy x Boy. Nặng hơn Shounen Ai tí."
-    },
-    {
-        "Id": "46",
-        "Name": "Soft Yuri",
-        "Description": "Girl x Girl. Nặng hơn Shoujo Ai tí"
-    },
-    {
-        "Id": "47",
-        "Name": "Sports",
-        "Description": "Đúng như tên gọi, những môn thể thao như bóng đá, bóng chày, bóng chuyền, đua xe, cầu lông,... là một phần của thể loại này"
-    },
-    {
-        "Id": "48",
-        "Name": "Supernatural",
-        "Description": "Thể hiện những sức mạnh đáng kinh ngạc và không thể giải thích được, chúng thường đi kèm với những sự kiện trái ngược hoặc thách thức với những định luật vật lý"
-    },
-    {
-        "Id": "49",
-        "Name": "Tạp chí truyện tranh",
-        "Description": "Tạp chí online về manga anime v.v.."
-    },
-    {
-        "Id": "50",
-        "Name": "Thiếu Nhi",
-        "Description": "Truyện tranh dành cho lứa tuổi thiếu nhi"
-    },
-    {
-        "Id": "51",
-        "Name": "Tragedy",
-        "Description": "Thể loại chứa đựng những sự kiện mà dẫn đến kết cục là những mất mát hay sự rủi ro to lớn"
-    },
-    {
-        "Id": "52",
-        "Name": "Trinh Thám",
-        "Description": "Các truyện có nội dung về các vụ án, các thám tử cảnh sát điều tra..."
-    },
-    {
-        "Id": "53",
-        "Name": "Truyện Màu",
-        "Description": "Tổng hợp truyện tranh màu, rõ, đẹp"
-    },
-    {
-        "Id": "54",
-        "Name": "Truyện scan",
-        "Description": "Các truyện đã phát hành tại VN được scan đăng online"
-    },
-    {
-        "Id": "55",
-        "Name": "Việt Nam",
-        "Description": "Truyện tranh Việt Nam"
-    },
-    {
-        "Id": "56",
-        "Name": "Webtoon",
-        "Description": "Là truyện tranh được đăng dài kỳ trên internet của Hàn Quốc chứ không xuất bản theo cách thông thường"
-    },
-    {
-        "Id": "57",
-        "Name": "Xuyên Không",
-        "Description": "Xuyên Không, Xuyên Việt là thể loại nhân vật chính vì một lý do nào đó mà bị đưa đến sinh sống ở một không gian hay một khoảng thời gian khác. Nhân vật chính có thể trực tiếp xuyên qua bằng thân xác mình hoặc sống lại bằng thân xác người khác."
-    },
-    {
-        "Id": "58",
-        "Name": "Yaoi",
-        "Description": "Truyện tranh đồng tính nam có nói về quan hệ thể xác, chia 2 cấp Soft Yaoi và Hard Yaoi (Nhẹ và Nặng)"
-    },
-    {
-        "Id": "59",
-        "Name": "Yuri",
-        "Description": "Truyện tranh đồng tính nữ có nói về quan hệ thể xác, cũng có 2 cấp Soft Yuri và Hard Yuri"
-    },
-    {
-        "Id": "60",
-        "Name": "16+",
-        "Description": "Là thể loại có nhiều cảnh nóng, đề cập đến các vấn đề nhạy cảm giới tính hay các cảnh bạo lực máu me .... Nói chung là truyện có tác động xấu đến tâm sinh lý của những độc giả chưa đủ 16 tuổi"
-    }
-]
-
-},{}],65:[function(require,module,exports){
+},{"./utils/time":65}],65:[function(require,module,exports){
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.convertTime = void 0;
@@ -1097,5 +1147,5 @@ function convertTime(time) {
 }
 exports.convertTime = convertTime;
 
-},{}]},{},[63])(63)
+},{}]},{},[62])(62)
 });
