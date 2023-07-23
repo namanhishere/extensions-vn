@@ -20,6 +20,7 @@ https://hoang3409.is-a.dev/extensions-vn/
 | Name          | Link                          |
 |---------------|-------------------------------|
 | BaoTangTruyen | https://baotangtruyen3.com/   |
+| CManga        | https://cmangaah.com/         |
 | NetTruyen     | https://www.nettruyenmax.com/ |
 | SayHentai     | https://sayhentai.me/         |
 | HentaiVN      | https://hentaivn.site/        |
