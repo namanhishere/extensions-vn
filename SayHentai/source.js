@@ -463,7 +463,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
 const DOMAIN = 'https://animemoiapi.onrender.com/api/';
-const BASE_VERSION = '1.2.2';
+const BASE_VERSION = '1.2.3';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -612,7 +612,7 @@ class Main {
         const chapters = [];
         for (const item of data) {
             chapters.push(App.createChapter({
-                id: item.url,
+                id: this.UseId ? item.id.toString() : item.url,
                 chapNum: item.numChap,
                 name: item.title,
                 time: (0, time_1.convertTime)(item.timeUpdate)
@@ -629,8 +629,15 @@ class Main {
         const response = await this.requestManager.schedule(request, 1);
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
         const images = [];
-        for (const image of data) {
-            images.push(`${DOMAIN}${this.Host}/GetImage?url=${encodeURIComponent(image)}`);
+        if (!this.UseHostImage) {
+            for (const image of data) {
+                images.push(`${DOMAIN}${this.Host}/GetImage?url=${encodeURIComponent(image)}`);
+            }
+        }
+        else {
+            for (const image of data) {
+                images.push(image);
+            }
         }
         return App.createChapterDetails({
             id: chapterId,
@@ -749,6 +756,7 @@ class SayHentai extends Main_1.Main {
         this.Host = HOST;
         this.Tags = tags_json_1.default;
         this.UseId = false;
+        this.UseHostImage = true;
         this.SearchWithGenres = false;
         this.SearchWithNotGenres = false;
         this.SearchWithTitleAndGenre = false;
