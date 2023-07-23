@@ -7,28 +7,28 @@ import {
     Main
 } from '../Main'
 
-const HOST = 'LxManga'
+const HOST = 'CManga'
 import tags from './tags.json'
 
-export const LxMangaInfo: SourceInfo = {
+export const CMangaInfo: SourceInfo = {
     description: '',
-    icon: 'icon.ico',
+    icon: 'icon.png',
     websiteBaseURL: '',
-    version: getExportVersion('0.0.1'),
-    name: ' LxManga',
+    version: getExportVersion('0.0.2'),
+    name: 'CManga',
     language: 'vi',
     author: 'Hoang3409',
     contentRating: ContentRating.ADULT
 }
 
-export class LxManga extends Main {
+export class CManga extends Main {
     Host = HOST
     Tags = tags
 
     UseId = false
     UseHostImage = true
-    
+
     SearchWithGenres = true
-    SearchWithNotGenres = true
+    SearchWithNotGenres = false
     SearchWithTitleAndGenre = true
 }

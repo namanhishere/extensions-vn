@@ -25,9 +25,10 @@ export class HentaiVN extends Main {
     Host = HOST
     Tags = tags
 
-    UseId = false;
+    UseId = false
+    UseHostImage = false
     
-    SearchWithGenres = true;
-    SearchWithNotGenres = false;
-    SearchWithTitleAndGenre = true;
+    SearchWithGenres = true
+    SearchWithNotGenres = false
+    SearchWithTitleAndGenre = true
 }

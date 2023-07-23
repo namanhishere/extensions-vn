@@ -22,7 +22,7 @@ import {convertTime} from './utils/time'
 
 const DOMAIN = 'https://animemoiapi.onrender.com/api/'
 
-const BASE_VERSION = '1.2.2'
+const BASE_VERSION = '1.2.3'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
@@ -46,7 +46,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             }
         }
     })
-    
+
     // Host
     abstract Host: string
     abstract Tags: any
@@ -54,7 +54,8 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
     abstract SearchWithNotGenres: boolean
     abstract SearchWithTitleAndGenre: boolean
     abstract UseId: boolean
-    
+    abstract UseHostImage: boolean
+
     stateManager = App.createSourceStateManager()
 
     async getSourceMenu(): Promise<DUISection> {
@@ -191,7 +192,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         const chapters: Chapter[] = []
         for (const item of data) {
             chapters.push(App.createChapter({
-                id: item.url,
+                id: this.UseId ? item.id.toString() : item.url,
                 chapNum: item.numChap,
                 name: item.title,
                 time: convertTime(item.timeUpdate)
@@ -209,9 +210,16 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         const response = await this.requestManager.schedule(request, 1)
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
         const images: string[] = []
-        for (const image of data) {
-            images.push(`${DOMAIN}${this.Host}/GetImage?url=${encodeURIComponent(image)}`)
+        if (!this.UseHostImage) {
+            for (const image of data) {
+                images.push(`${DOMAIN}${this.Host}/GetImage?url=${encodeURIComponent(image)}`)
+            }
+        } else {
+            for (const image of data) {
+                images.push(image)
+            }
         }
+
         return App.createChapterDetails({
             id: chapterId,
             mangaId: mangaId,
@@ -241,7 +249,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
                 postData.exclude.push(genre.id)
             })
         }
-        
+
         const request = App.createRequest({
             method: 'POST',
             url: `${DOMAIN}${this.Host}/Search`,
@@ -263,7 +271,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             }))
         })
 
-        metadata = tiles.length === 0 ? undefined : { page: page + 1 }
+        metadata = tiles.length === 0 ? undefined : {page: page + 1}
         return App.createPagedResults({
             results: tiles,
             metadata
@@ -276,7 +284,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
             id: x.Id.toString(),
             label: x.Name
         }))
-        
+
         let label = 'Thể loại'
         if (this.SearchWithGenres) {
             label += ' - Có thể tìm kiếm với nhiều thể loại'
@@ -288,10 +296,10 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         } else {
             label += '- Không thể tìm kiếm cùng lúc tên truyện và thể loại'
         }
-        
+
         result.push(App.createTagSection({
-            id: '0', 
-            label: label, 
+            id: '0',
+            label: label,
             tags: tags
         }))
 
@@ -303,7 +311,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         //         tags: tags
         //     }))
         // }
-        
+
         return result
     }
 }
