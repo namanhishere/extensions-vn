@@ -20,9 +20,9 @@ import {
 } from '@paperback/types'
 import {convertTime} from './utils/time'
 
-const DOMAIN = 'https://animemoiapi.onrender.com/api/'
+const DOMAIN = 'https://hoang3409.link/api/'
 
-const BASE_VERSION = '1.2.3'
+const BASE_VERSION = '1.2.4'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
