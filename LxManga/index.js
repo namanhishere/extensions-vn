@@ -484,10 +484,10 @@ class LxManga extends Main_1.Main {
         this.Host = HOST;
         this.Tags = tags_json_1.default;
         this.UseId = false;
-        this.UseHostImage = true;
         this.SearchWithGenres = true;
         this.SearchWithNotGenres = true;
         this.SearchWithTitleAndGenre = true;
+        this.HostDomain = 'https://lxmanga.net/';
     }
 }
 exports.LxManga = LxManga;
@@ -832,7 +832,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
 const DOMAIN = 'https://hoang3409.link/api/';
-const BASE_VERSION = '1.2.4';
+const BASE_VERSION = '1.2.5';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -847,6 +847,12 @@ class Main {
             requestTimeout: this.requestTimeout,
             interceptor: {
                 interceptRequest: async (request) => {
+                    request.headers = {
+                        ...(request.headers ?? {}),
+                        ...{
+                            'referer': this.HostDomain
+                        }
+                    };
                     return request;
                 },
                 interceptResponse: async (response) => {
@@ -998,15 +1004,8 @@ class Main {
         const response = await this.requestManager.schedule(request, 1);
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
         const images = [];
-        if (!this.UseHostImage) {
-            for (const image of data) {
-                images.push(`${DOMAIN}${this.Host}/GetImage?url=${encodeURIComponent(image)}`);
-            }
-        }
-        else {
-            for (const image of data) {
-                images.push(image);
-            }
+        for (const image of data) {
+            image.toString().startsWith('//') ? images.push(`https:${image}`) : images.push(image);
         }
         return App.createChapterDetails({
             id: chapterId,
