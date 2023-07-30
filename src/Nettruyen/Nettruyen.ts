@@ -26,9 +26,9 @@ export class Nettruyen extends Main {
     Tags = tags
     
     UseId = false
-    UseHostImage = false
     
     SearchWithGenres = true
     SearchWithNotGenres = true
     SearchWithTitleAndGenre = false
+    HostDomain = 'https://www.nettruyenmax.com/';
 }

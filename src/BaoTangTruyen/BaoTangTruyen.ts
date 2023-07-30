@@ -26,9 +26,9 @@ export class BaoTangTruyen extends Main {
     Tags = tags
 
     UseId = true
-    UseHostImage = false
     
     SearchWithGenres = false
     SearchWithNotGenres = false
     SearchWithTitleAndGenre = false
+    HostDomain = 'https://baotangtruyen3.com/'
 }

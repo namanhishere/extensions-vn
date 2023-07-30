@@ -26,9 +26,9 @@ export class CManga extends Main {
     Tags = tags
 
     UseId = false
-    UseHostImage = true
 
     SearchWithGenres = true
     SearchWithNotGenres = false
     SearchWithTitleAndGenre = true
+    HostDomain = 'https://cmangaah.com/'
 }

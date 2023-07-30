@@ -22,7 +22,7 @@ import {convertTime} from './utils/time'
 
 const DOMAIN = 'https://hoang3409.link/api/'
 
-const BASE_VERSION = '1.2.4'
+const BASE_VERSION = '1.2.5'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
@@ -39,6 +39,14 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         requestTimeout: this.requestTimeout,
         interceptor: {
             interceptRequest: async (request: Request): Promise<Request> => {
+
+                request.headers = {
+                    ...(request.headers ?? {}),
+                    ...{
+                        'referer': this.HostDomain
+                    }
+                }
+                
                 return request
             },
             interceptResponse: async (response: Response): Promise<Response> => {
@@ -54,7 +62,8 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
     abstract SearchWithNotGenres: boolean
     abstract SearchWithTitleAndGenre: boolean
     abstract UseId: boolean
-    abstract UseHostImage: boolean
+    abstract HostDomain: string
+    
 
     stateManager = App.createSourceStateManager()
 
@@ -210,14 +219,8 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         const response = await this.requestManager.schedule(request, 1)
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
         const images: string[] = []
-        if (!this.UseHostImage) {
-            for (const image of data) {
-                images.push(`${DOMAIN}${this.Host}/GetImage?url=${encodeURIComponent(image)}`)
-            }
-        } else {
-            for (const image of data) {
-                images.push(image)
-            }
+        for (const image of data) {
+            image.toString().startsWith('//') ? images.push(`https:${image}`) : images.push(image)
         }
 
         return App.createChapterDetails({

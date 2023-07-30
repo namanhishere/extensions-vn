@@ -26,9 +26,9 @@ export class LxManga extends Main {
     Tags = tags
 
     UseId = false
-    UseHostImage = true
     
     SearchWithGenres = true
     SearchWithNotGenres = true
     SearchWithTitleAndGenre = true
+    HostDomain = 'https://lxmanga.net/'
 }

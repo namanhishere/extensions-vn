@@ -23,7 +23,7 @@ https://hoang3409.is-a.dev/extensions-vn/
 | CManga        | https://cmangaah.com/         |
 | NetTruyen     | https://www.nettruyenmax.com/ |
 | SayHentai     | https://sayhentai.me/         |
-| HentaiVN      | https://hentaivn.site/        |
+| HentaiVN      | https://hentaivn.tv/          |
 | LxManga       | https://lxmanga.net/          |
 
 </div>

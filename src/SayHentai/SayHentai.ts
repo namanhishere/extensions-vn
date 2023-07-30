@@ -26,9 +26,9 @@ export class SayHentai extends Main {
     Tags = tags
 
     UseId = false
-    UseHostImage = true
     
     SearchWithGenres = false
     SearchWithNotGenres = false
     SearchWithTitleAndGenre = false
+    HostDomain = 'https://sayhentai.me/';
 }
