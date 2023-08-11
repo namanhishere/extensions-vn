@@ -483,11 +483,11 @@ class HentaiVN extends Main_1.Main {
         super(...arguments);
         this.Host = HOST;
         this.Tags = tags_json_1.default;
-        this.UseId = false;
+        this.HostDomain = 'https://hentaivn.tv/';
+        this.UseId = true;
         this.SearchWithGenres = true;
         this.SearchWithNotGenres = false;
         this.SearchWithTitleAndGenre = true;
-        this.HostDomain = 'https://hentaivn.tv/';
     }
 }
 exports.HentaiVN = HentaiVN;
@@ -495,852 +495,852 @@ exports.HentaiVN = HentaiVN;
 },{"../Main":64,"./tags.json":63,"@paperback/types":61}],63:[function(require,module,exports){
 module.exports=[
     {
-        "Id": "3",
+        "Id": "57",
         "Name": "3D Hentai",
         "Description": "Sống động như người thật"
     },
     {
-        "Id": "5",
+        "Id": "58",
         "Name": "Action",
         "Description": "Thể loại này thường có nội dung về đánh nhau, bạo lực, hỗn loạn, với diễn biến nhanh."
     },
     {
-        "Id": "116",
+        "Id": "59",
         "Name": "Adult",
         "Description": "Thể loại này thường bị che đi phần dưới một cách hoàn toàn, dù vẫn có hoạt động tình dục. Các cảnh tình dục cũng ít chi tiết khi so với những bộ Hentai thuần. Lí do là bởi để nó trở nên phổ biến rộng rãi hơn, thì việc che đi hoàn toàn là có lí do."
     },
     {
-        "Id": "203",
+        "Id": "60",
         "Name": "Adventure",
         "Description": "Phiêu lưu mạo hiểm."
     },
     {
-        "Id": "20",
+        "Id": "61",
         "Name": "Ahegao",
         "Description": "Gương mặt thể hiện lúc lên đỉnh; Hoặc thể hiện những gương mặt khả ố biển hiện là người dâm dục."
     },
     {
-        "Id": "21",
+        "Id": "62",
         "Name": "Anal",
         "Description": "Làm tình ở lỗ hậu, kế bên âm đạo là chính là hậu môn."
     },
     {
-        "Id": "249",
+        "Id": "63",
         "Name": "Angel",
         "Description": "Thiên Thần. Chủ yếu mô tả về các thiên thần có năng lực siêu nhiên."
     },
     {
-        "Id": "131",
+        "Id": "64",
         "Name": "Ảnh động",
         "Description": "Ảnh động"
     },
     {
-        "Id": "127",
+        "Id": "65",
         "Name": "Animal",
         "Description": "Động vật."
     },
     {
-        "Id": "22",
+        "Id": "66",
         "Name": "Animal girl",
         "Description": "Gái thú"
     },
     {
-        "Id": "279",
+        "Id": "67",
         "Name": "Áo Dài",
         "Description": "Áo dài truyền thống Việt Nam!!!"
     },
     {
-        "Id": "277",
+        "Id": "68",
         "Name": "Apron",
         "Description": "Đề cập đến Tạp dề/Tạp đề mà khi nấu ăn người ta sẽ mang trước ngực. Điểm thú vị trong Hentai hầu hết các nhân vật nữ sẽ khỏa thân hoàn toàn và chỉ mặc mỗi tạp dề."
     },
     {
-        "Id": "115",
+        "Id": "69",
         "Name": "Artist CG",
         "Description": "Tranh vẽ, hình vẽ có hoặc không có nội dung. Lưu ý truyện Artist CG không có lời thoại là bị cấm đăng!"
     },
     {
-        "Id": "130",
+        "Id": "70",
         "Name": "Based Game",
         "Description": "Truyện được nhại lại từ game (Doujinshi)."
     },
     {
-        "Id": "257",
+        "Id": "71",
         "Name": "BBM",
         "Description": "Mô tả một gã đàn ông béo."
     },
     {
-        "Id": "251",
+        "Id": "72",
         "Name": "BBW",
         "Description": "Mô tả một người phụ nữ béo xinh đẹp."
     },
     {
-        "Id": "24",
+        "Id": "73",
         "Name": "BDSM",
         "Description": "Thể loại bao gồm việc sử dụng những dụng cụ kích thích có tính tra tấn và có thể gồm những nhân vật bạo dâm"
     },
     {
-        "Id": "25",
+        "Id": "74",
         "Name": "Bestiality",
         "Description": "Làm Tình Với Thú vật và Côn trùng."
     },
     {
-        "Id": "133",
+        "Id": "75",
         "Name": "Big Ass",
         "Description": "Mông to."
     },
     {
-        "Id": "23",
+        "Id": "76",
         "Name": "Big Boobs",
         "Description": "Miêu tả những nhân vật nữ với ngực lớn hơn bình thường"
     },
     {
-        "Id": "32",
+        "Id": "77",
         "Name": "Big Penis",
         "Description": "Dương vật lớn."
     },
     {
-        "Id": "267",
+        "Id": "78",
         "Name": "Blackmail",
         "Description": "Đe dọa, tống tiền, tống tình... đủ thứ trên đời để ép buộc nhân vật nữ phải quan hệ với mình."
     },
     {
-        "Id": "27",
+        "Id": "79",
         "Name": "Bloomers",
         "Description": "Một loại đồng phục thể dục cực kì đặc biệt chỉ có ở Nhật Bản."
     },
     {
-        "Id": "28",
+        "Id": "80",
         "Name": "BlowJobs",
         "Description": "Mút dương vật (Thổi kèn) bằng miệng."
     },
     {
-        "Id": "29",
+        "Id": "81",
         "Name": "Body Swap",
         "Description": "Chuyển đổi cơ thể, thân xác."
     },
     {
-        "Id": "30",
+        "Id": "82",
         "Name": "Bodysuit",
         "Description": "Bodysuit nguyên là những mẫu trang phục lót liền quần ôm sát vô cùng quyến rũ bởi chúng đã góp phần làm tôn vinh những đường cong của cơ thể người phụ nữ."
     },
     {
-        "Id": "254",
+        "Id": "83",
         "Name": "Bondage",
         "Description": "Là một nhánh của BDSM, mô tả nhân vật bị trói buộc một cách khiêu gợi, hành hạ bạo dâm dạng trói."
     },
     {
-        "Id": "33",
+        "Id": "84",
         "Name": "Breast Sucking",
         "Description": "Mút vếu."
     },
     {
-        "Id": "248",
+        "Id": "85",
         "Name": "BreastJobs",
         "Description": "Dùng ngực để chà xát dương vật, để làm cho dương vật kích thích."
     },
     {
-        "Id": "31",
+        "Id": "86",
         "Name": "Brocon",
         "Description": "Thích anh trai/em trai."
     },
     {
-        "Id": "242",
+        "Id": "87",
         "Name": "Brother",
         "Description": "Anh trai. Cùng hoặc không cùng huyết thống."
     },
     {
-        "Id": "241",
+        "Id": "88",
         "Name": "Business Suit",
         "Description": "Đồng phục nơi công sở của nữ."
     },
     {
-        "Id": "39",
+        "Id": "89",
         "Name": "Catgirls",
         "Description": "Nhân vật lai giữa người và mèo: cô gái có thể có tai và đuôi mèo. Hoặc ám chỉ nhân vật nữ có gắn phụ kiện của mèo (móng vuốt, râu…)."
     },
     {
-        "Id": "101",
+        "Id": "90",
         "Name": "Che ít",
         "Description": "Thể loại này Che ít các bộ phận nhạy cảm."
     },
     {
-        "Id": "129",
+        "Id": "91",
         "Name": "Che nhiều",
         "Description": "Thể loại này Che nhiều các bộ phận nhạy cảm."
     },
     {
-        "Id": "34",
+        "Id": "92",
         "Name": "Cheating",
         "Description": "Bị đe dọa tống tình, ngoại tình."
     },
     {
-        "Id": "35",
+        "Id": "93",
         "Name": "Chikan",
         "Description": "Quấy rối tình dục nơi công cộng, chủ yếu xảy ra ở tàu điện ngầm."
     },
     {
-        "Id": "271",
+        "Id": "94",
         "Name": "Chinese Dress",
         "Description": "Là trang phục Xường xám hay áo dài Thượng Hải, một loại trang phục truyền thống rất phổ biến tại Trung Quốc."
     },
     {
-        "Id": "100",
+        "Id": "95",
         "Name": "Có che",
         "Description": "Thể loại này Có che các bộ phận nhạy cảm."
     },
     {
-        "Id": "36",
+        "Id": "96",
         "Name": "Comedy",
         "Description": "Thường có các tình tiết gây cười, hài hước, các xung đột nhẹ nhàng."
     },
     {
-        "Id": "120",
+        "Id": "97",
         "Name": "Comic",
         "Description": "Nét vẽ theo phong cách Comic của châu âu."
     },
     {
-        "Id": "210",
+        "Id": "98",
         "Name": "Condom",
         "Description": "Bao cao su. Một thứ dùng để quan hệ tình dục trở nên an toàn hơn, tránh các bệnh cũng như tránh thai."
     },
     {
-        "Id": "38",
+        "Id": "99",
         "Name": "Cosplay",
         "Description": "Nhân vật sẽ Cosplay."
     },
     {
-        "Id": "2",
+        "Id": "100",
         "Name": "Cousin",
         "Description": "Anh/Chị/Em họ."
     },
     {
-        "Id": "275",
+        "Id": "101",
         "Name": "Crotch Tattoo",
         "Description": "Được hiểu đơn giản là Hình xăm giữa háng. Một loại hình xăm thường thấy ở những con Quỷ và Vampire,.. Nhằm tạo sự kích thích khi nhìn vào."
     },
     {
-        "Id": "269",
+        "Id": "102",
         "Name": "Cunnilingus",
         "Description": "Hành động chạm vào cơ quan sinh dục nữ bằng lưỡi và môi để tạo ra cảm giác thỏa mãn. Hay còn gọi là liếm/bú/mút âm đạo, vét máng."
     },
     {
-        "Id": "40",
+        "Id": "103",
         "Name": "Dark Skin",
         "Description": "Da đen hoặc da rám nắng."
     },
     {
-        "Id": "262",
+        "Id": "104",
         "Name": "Daughter",
         "Description": "Con gái trong gia đình. Là con riêng hoặc cùng huyết thống với người cha."
     },
     {
-        "Id": "268",
+        "Id": "105",
         "Name": "Deepthroat",
         "Description": "Đút dương vật lút cán vào sâu trong miệng, đến tận cuống họng."
     },
     {
-        "Id": "132",
+        "Id": "106",
         "Name": "Demon",
         "Description": "Chúa quỷ."
     },
     {
-        "Id": "212",
+        "Id": "107",
         "Name": "DemonGirl",
         "Description": "Chúa quỷ là nhân vật nữ."
     },
     {
-        "Id": "104",
+        "Id": "108",
         "Name": "Devil",
         "Description": "Quỷ nam."
     },
     {
-        "Id": "105",
+        "Id": "109",
         "Name": "DevilGirl",
         "Description": "Gái quỷ. Trong đó có những nữ quỷ thông thường hoặc Succubus (Quỷ mộng tinh)."
     },
     {
-        "Id": "253",
+        "Id": "110",
         "Name": "Dirty",
         "Description": "Bẩn bựa, nhìn vào họ thôi đã thấy kinh tởm rồi."
     },
     {
-        "Id": "41",
+        "Id": "111",
         "Name": "Dirty Old Man",
         "Description": "Già bẩn bựa. Thể loại này ý chỉ những lão già đã xấu còn đóng vai ác, những hành động của các lão cũng đã nói lên điều đó trong thể loại này."
     },
     {
-        "Id": "260",
+        "Id": "112",
         "Name": "DogGirl",
         "Description": "Mô tả cô gái mang đặc tính của một con chó."
     },
     {
-        "Id": "42",
+        "Id": "113",
         "Name": "Double Penetration",
         "Description": "Hành vi tình dục trong đó cả hai thứ là âm đạo và hậu môn có thể bị chèn cùng một lúc."
     },
     {
-        "Id": "44",
+        "Id": "114",
         "Name": "Doujinshi",
         "Description": "Thể loại truyện phóng tác do fan vẽ, hoàn toàn không liên quan với truyện gốc. Tác giả vẽ Doujinshi thường dựa trên những nhân vật gốc để viết ra những câu chuyện nhại lại theo sở thích của mình."
     },
     {
-        "Id": "4",
+        "Id": "115",
         "Name": "Drama",
         "Description": "Mang đến cho người xem những cảm xúc khác nhau: buồn bã, căng thẳng thậm chí là bi phẫn."
     },
     {
-        "Id": "43",
+        "Id": "116",
         "Name": "Drug",
         "Description": "Thuốc uống. Ví dụ như thuốc ngủ, thuốc mê..."
     },
     {
-        "Id": "45",
+        "Id": "117",
         "Name": "Ecchi",
         "Description": "Thường có những tình huống nhạy cảm nhằm lôi cuốn người xem."
     },
     {
-        "Id": "245",
+        "Id": "118",
         "Name": "Elder Sister",
         "Description": "Là chị gái, có hoặc không có cùng huyết thống."
     },
     {
-        "Id": "125",
+        "Id": "119",
         "Name": "Elf",
         "Description": "Yêu tinh."
     },
     {
-        "Id": "46",
+        "Id": "120",
         "Name": "Exhibitionism",
         "Description": "Lộ bộ phận nhạy cảm trước mặt người khác. Thường là do bị nhìn lén, rình trộm."
     },
     {
-        "Id": "123",
+        "Id": "121",
         "Name": "Fantasy",
         "Description": "Thể loại xuất phát từ trí tưởng tượng phong phú, từ pháp thuật đến thế giới trong mơ thậm chí là những câu chuyện thần tiên."
     },
     {
-        "Id": "243",
+        "Id": "122",
         "Name": "Father",
         "Description": "Người cha. Là cha ruột hoặc chỉ là cha dượng (Cùng mẹ khác cha)."
     },
     {
-        "Id": "47",
+        "Id": "123",
         "Name": "Femdom",
         "Description": "Nhân vật nữ làm chủ đạo, thống trị trong khi làm tình."
     },
     {
-        "Id": "48",
+        "Id": "124",
         "Name": "Fingering",
         "Description": "Việc chèn hoặc cọ xát ngón tay vào âm đạo hoặc hậu môn gây ra kích thích."
     },
     {
-        "Id": "108",
+        "Id": "125",
         "Name": "Footjob",
         "Description": "Cô gái sóc hàng của người nam bằng chân."
     },
     {
-        "Id": "259",
+        "Id": "126",
         "Name": "Foxgirls",
         "Description": "Mô tả cô gái mang đặc tính của một con cáo."
     },
     {
-        "Id": "37",
+        "Id": "127",
         "Name": "Full Color",
         "Description": "Truyện full màu."
     },
     {
-        "Id": "202",
+        "Id": "128",
         "Name": "Furry",
         "Description": "Những sinh vật giống người nhưng mang những nhân cách, đặc điểm và hình dáng của thú vật."
     },
     {
-        "Id": "50",
+        "Id": "129",
         "Name": "Futanari",
         "Description": "Miêu tả những nhân vật nữ mang bộ phận sinh dục nam."
     },
     {
-        "Id": "51",
+        "Id": "130",
         "Name": "GangBang",
         "Description": "Nhiều nam hãm hiếp một nữ (3 nam trở lên)."
     },
     {
-        "Id": "206",
+        "Id": "131",
         "Name": "Garter Belts",
         "Description": "Garter belt hay còn gọi là dây thun bó chân, là món phụ kiện khá quen thuộc với mọi cô nàng. Garter belt có tác dụng gắn kết giữa quần trong và phần tất chân, giúp tất chân không bị tuột."
     },
     {
-        "Id": "52",
+        "Id": "132",
         "Name": "Gender Bender",
         "Description": "Là một thể loại trong đó giới tính của nhân vật bị lẫn lộn: nam hoá thành nữ, nữ hóa thành nam..."
     },
     {
-        "Id": "106",
+        "Id": "133",
         "Name": "Ghost",
         "Description": "Ma."
     },
     {
-        "Id": "56",
+        "Id": "134",
         "Name": "Glasses",
         "Description": "Mắt kính."
     },
     {
-        "Id": "264",
+        "Id": "135",
         "Name": "Gothic Lolita",
         "Description": "Còn được gọi là GothLoli, một loại trang phục bắt nguồn từ Nhật Bản, nhưng dựa trên thời Victoria và Edward, phổ biến rộng rãi ở Nhật và hiện đã có mặt ở khắp nơi trên thế giới."
     },
     {
-        "Id": "53",
+        "Id": "136",
         "Name": "Group",
         "Description": "Làm tình theo nhóm, bao gồm nhiều nữ với một nam, hoặc đôi khi là nhiều cặp làm tình chung một địa điểm. Đôi khi là nhiều nam với một nữ."
     },
     {
-        "Id": "55",
+        "Id": "137",
         "Name": "Guro",
         "Description": "Có những hình ảnh mang tính ghê rợn và bạo lực cao liên quan đến tình dục. Như mổ xẻ xác chết rồi làm tình với nó, thông não, vv..."
     },
     {
-        "Id": "247",
+        "Id": "138",
         "Name": "Hairy",
         "Description": "Âm đạo của nhân vật nữ có nhiều lông."
     },
     {
-        "Id": "57",
+        "Id": "139",
         "Name": "Handjob",
         "Description": "Các hành vi sử dụng một tay để kích thích dương vật của người khác."
     },
     {
-        "Id": "58",
+        "Id": "140",
         "Name": "Harem",
         "Description": "Nhiều nhân vật nữ thích một nam chính. Thường là 2 người trở lên (Với điều kiện không phải tình tay ba)."
     },
     {
-        "Id": "102",
+        "Id": "141",
         "Name": "HentaiVN",
         "Description": "Những truyện được đăng chính thức tại HentaiVN."
     },
     {
-        "Id": "80",
+        "Id": "142",
         "Name": "Historical",
         "Description": "Truyện có thể loại này sẽ có bối cảnh nói về thời xa xưa, hoặc lịch sử."
     },
     {
-        "Id": "122",
+        "Id": "143",
         "Name": "Horror",
         "Description": "Là một loại kinh dị thông thường. Tạo sự rùng rợn và ghê sợ khi xem chúng. Thể loại Horror không có cảnh mổ xẻ tình dục kinh tởm quá mức như Guro. Hầu hết chỉ là giết chóc đơn thuần, hoặc nội dung ma quỷ, máu me ở mức độ khiến chúng ta ghê sợ."
     },
     {
-        "Id": "59",
+        "Id": "144",
         "Name": "Housewife",
         "Description": "Housewife là một thuật ngữ dùng để mô tả một phụ nữ đã lập gia đình không được làm việc bên ngoài của ngôi nhà, thay vào đó cô sẽ làm nội trợ trong khi chồng cô làm việc."
     },
     {
-        "Id": "60",
+        "Id": "145",
         "Name": "Humiliation",
         "Description": "Làm xấu hổ, mang tính ép buộc hoặc đặt một nhân vật nào đó vào tình cảnh tiến thoái lưỡng nan không trốn tránh được."
     },
     {
-        "Id": "61",
+        "Id": "146",
         "Name": "Idol",
         "Description": "Thần tượng. Nội dung truyện có liên quan đến các nữ idol trên sân khấu. Không phải chỉ là các nhân vật từ các game/anime idol, trừ khi họ thể hiện nó trong nội dung truyện."
     },
     {
-        "Id": "244",
+        "Id": "147",
         "Name": "Imouto",
         "Description": "Là em gái, không nhất thiết phải là em gái cùng huyết thống."
     },
     {
-        "Id": "62",
+        "Id": "148",
         "Name": "Incest",
         "Description": "Loạn luân, quan hệ với thành viên có cùng huyết thống."
     },
     {
-        "Id": "26",
+        "Id": "149",
         "Name": "Insect (Côn Trùng)",
         "Description": "Côn trùng"
     },
     {
-        "Id": "280",
+        "Id": "150",
         "Name": "Isekai",
         "Description": "Isekai được hiểu là Dị giới. Trong thể loại này nhân vật chính sẽ Xuyên không sang thế giới khác, hoặc trực tiếp Chuyển sinh (đầu thai) sang đây."
     },
     {
-        "Id": "99",
+        "Id": "151",
         "Name": "Không che",
         "Description": "Thể loại này Không che các bộ phận nhạy cảm. Hoàn toàn Uncensored."
     },
     {
-        "Id": "110",
+        "Id": "152",
         "Name": "Kimono",
         "Description": "Mặc một bộ đồ mang đặc tính Kimono."
     },
     {
-        "Id": "265",
+        "Id": "153",
         "Name": "Kuudere",
         "Description": "Kiểu nhân vật bề ngoài cực kì lạnh lùng để che giấu cảm xúc bên trong. Chỉ mở lòng khi chinh phục được nàng."
     },
     {
-        "Id": "63",
+        "Id": "154",
         "Name": "Lolicon",
         "Description": "Truyện xyz với bé gái hoặc mang hình dạng bé gái."
     },
     {
-        "Id": "64",
+        "Id": "155",
         "Name": "Maids",
         "Description": "Trang phục hầu gái là rất phổ biến ở Nhật Bản và thường được mặc trong anime và manga."
     },
     {
-        "Id": "273",
+        "Id": "156",
         "Name": "Manhua",
         "Description": "Truyện Trung quốc, đặc biệt là cổ trang. Tất cả truyện do người Trung vẽ đều thuộc tag Manhua, kể cả vẽ theo phong cách và bối cảnh Nhật Bản."
     },
     {
-        "Id": "114",
+        "Id": "157",
         "Name": "Manhwa",
         "Description": "Truyện hàn quốc. Thể loại này đã bị cấm đăng vì lí do bản quyền!"
     },
     {
-        "Id": "65",
+        "Id": "158",
         "Name": "Masturbation",
         "Description": "Tự sướng hay còn gọi là thủ dâm. Đây là hành động tự làm sướng bản thân (dương vật, âm đạo) mà không cần bất kỳ đối tác nào."
     },
     {
-        "Id": "119",
+        "Id": "159",
         "Name": "Mature",
         "Description": "Bao gồm các pha bạo lực, máu me, chém giết, tình dục ở mức độ vừa."
     },
     {
-        "Id": "124",
+        "Id": "160",
         "Name": "Miko",
         "Description": "Gái giữ đền, gái vu nữ."
     },
     {
-        "Id": "126",
+        "Id": "161",
         "Name": "Milf",
         "Description": "Lái máy bay bà già."
     },
     {
-        "Id": "121",
+        "Id": "162",
         "Name": "Mind Break",
         "Description": "Đánh mất bản thân, sa ngã vì dục vọng."
     },
     {
-        "Id": "113",
+        "Id": "163",
         "Name": "Mind Control",
         "Description": "Bị điều khiển tâm trí như thuật thôi miên hay công cụ, ứng dụng hack não các kiểu..."
     },
     {
-        "Id": "263",
+        "Id": "164",
         "Name": "Mizugi",
         "Description": "Đồ bơi đặc trưng tại trường học chỉ có ở Nhật Bản."
     },
     {
-        "Id": "66",
+        "Id": "165",
         "Name": "Monster",
         "Description": "Con quái vật, loài động vật bị đột biến hoặc con người, sinh vật thần thoại, hay người ngoài hành tinh."
     },
     {
-        "Id": "67",
+        "Id": "166",
         "Name": "Monstergirl",
         "Description": "Gái quái vật."
     },
     {
-        "Id": "103",
+        "Id": "167",
         "Name": "Mother",
         "Description": "Mẹ/Má. Là mẹ ruột, cũng có thể là mẹ nuôi/mẹ kế."
     },
     {
-        "Id": "205",
+        "Id": "168",
         "Name": "Nakadashi",
         "Description": "Tinh dịch tuôn ra nhiều đến mức tràn ra ngoài âm đạo."
     },
     {
-        "Id": "1",
+        "Id": "169",
         "Name": "Netori",
         "Description": "Main đi NTR (Cắm sừng) người khác."
     },
     {
-        "Id": "201",
+        "Id": "170",
         "Name": "Non-hen",
         "Description": "Là truyện bình thường không có các cảnh hở hang, không có bất kỳ yếu tố người lớn nào. Thể loại này đã bị cấm đăng bởi nội quy!"
     },
     {
-        "Id": "68",
+        "Id": "171",
         "Name": "NTR",
         "Description": "Cướp bồ của Main, cắm sừng,.."
     },
     {
-        "Id": "272",
+        "Id": "172",
         "Name": "Nun",
         "Description": "Là Sơ (Sister) trong nhà thờ. Hay còn được gọi là Nữ Tu."
     },
     {
-        "Id": "69",
+        "Id": "173",
         "Name": "Nurse",
         "Description": "Y tá hoặc mặc trang phục y tá."
     },
     {
-        "Id": "211",
+        "Id": "174",
         "Name": "Old Man",
         "Description": "Ở thể loại này bạn sẽ được thấy những ông già bình thường, không bẩn bựa tí nào."
     },
     {
-        "Id": "71",
+        "Id": "175",
         "Name": "Oneshot",
         "Description": "Các truyện chỉ có 1 chap."
     },
     {
-        "Id": "70",
+        "Id": "176",
         "Name": "Oral",
         "Description": "Quan hệ tình dục bằng đường miệng. Người chủ động là nhân vật nam."
     },
     {
-        "Id": "209",
+        "Id": "177",
         "Name": "Osananajimi",
         "Description": "Bạn thời thơ ấu. Nội dung ở đây nói tới một người bạn thời thơ ấu của nam chính. Thường thì họ luôn có tình cảm với nam chính."
     },
     {
-        "Id": "72",
+        "Id": "178",
         "Name": "Paizuri",
         "Description": "Quan hệ tình dục với ngực."
     },
     {
-        "Id": "204",
+        "Id": "179",
         "Name": "Pantyhose",
         "Description": "Một dạng quần tất, thường là màu đen, dùng để mặc đè lên quần lót."
     },
     {
-        "Id": "276",
+        "Id": "180",
         "Name": "Ponytail",
         "Description": "Trong Anime/Manga thì chúng ta thường thấy đây là kiểu tóc buộc một bên phải hoặc trái. Hoặc buộc phía sau: Kiểu tóc đuôi ngựa."
     },
     {
-        "Id": "73",
+        "Id": "181",
         "Name": "Pregnant",
         "Description": "Có thai."
     },
     {
-        "Id": "98",
+        "Id": "182",
         "Name": "Rape",
         "Description": "Hiếp dâm."
     },
     {
-        "Id": "258",
+        "Id": "183",
         "Name": "Rimjob",
         "Description": "Liếm lỗ hậu, làm nhiều động tác bằng miệng khiến lỗ hậu cảm thấy sướng."
     },
     {
-        "Id": "117",
+        "Id": "184",
         "Name": "Romance",
         "Description": "Thường là những câu chuyện về tình yêu. Ở đây chúng ta sẽ lấy ví dụ như tình yêu giữa một người con trai và con gái, bên cạnh đó đặc điểm thể loại này là kích thích trí tưởng tượng của bạn về tình yêu."
     },
     {
-        "Id": "207",
+        "Id": "185",
         "Name": "Ryona",
         "Description": "Làm tổn thương cơ thể người khác (Như đấm, đá, hành hạ) mà không có sự đồng ý từ người đó, và người đó cũng không chống lại."
     },
     {
-        "Id": "134",
+        "Id": "186",
         "Name": "Scat",
         "Description": "Shit - chất thải của con người sau mỗi bữa ăn. Tại thể loại này người ta sẽ làm tình với Shit, và các hoạt động tình dục liên quan đến nó. Hãy cân nhắc kĩ trước khi xem truyện có thể loại này. (Scat đã bị cấm kể từ 14/3/2019)."
     },
     {
-        "Id": "74",
+        "Id": "187",
         "Name": "School Uniform",
         "Description": "Đồng phục trường học."
     },
     {
-        "Id": "75",
+        "Id": "188",
         "Name": "SchoolGirl",
         "Description": "Gái có đồng phục nữ sinh, hoặc là nữ sinh dù mặc trang phục khác."
     },
     {
-        "Id": "87",
+        "Id": "189",
         "Name": "Series",
         "Description": "Truyện có nhiều chap và nội dung liên quan đến nhau."
     },
     {
-        "Id": "88",
+        "Id": "190",
         "Name": "Sex Toys",
         "Description": "Đồ chơi tình dục."
     },
     {
-        "Id": "246",
+        "Id": "191",
         "Name": "Shimapan",
         "Description": "Quần lót có kẻ sọc như xanh, hồng, đỏ,.."
     },
     {
-        "Id": "118",
+        "Id": "192",
         "Name": "Short Hentai",
         "Description": "Truyện ngắn. Dù là chung một bộ truyện, nhưng lại chứa các nội dung khác nhau."
     },
     {
-        "Id": "77",
+        "Id": "193",
         "Name": "Shota",
         "Description": "Truyện về nhân vật nam ở tuổi vị thành niên hoặc mang dáng vóc của trẻ vị thành niên."
     },
     {
-        "Id": "76",
+        "Id": "194",
         "Name": "Shoujo",
         "Description": "Không chỉ nam giới, thể loại này còn rất phù hợp cho nữ giới."
     },
     {
-        "Id": "79",
+        "Id": "195",
         "Name": "Siscon",
         "Description": "Cuồng chị gái, yêu em gái. Vượt quá giới hạn của anh chị em."
     },
     {
-        "Id": "78",
+        "Id": "196",
         "Name": "Sister",
         "Description": "Chị gái, em gái."
     },
     {
-        "Id": "82",
+        "Id": "197",
         "Name": "Slave",
         "Description": "Nô lệ tình dục."
     },
     {
-        "Id": "213",
+        "Id": "198",
         "Name": "Sleeping",
         "Description": "Làm tình với người đang ngủ say hoặc giả vờ ngủ."
     },
     {
-        "Id": "84",
+        "Id": "199",
         "Name": "Small Boobs",
         "Description": "Ngực tương đối nhỏ hoặc ngực phẳng lì như cái sân bay."
     },
     {
-        "Id": "278",
+        "Id": "200",
         "Name": "Son",
         "Description": "Là con trai trong gia đình. Có hoặc không có cùng huyết thống (con nuôi) (cha dượng, mẹ kế)."
     },
     {
-        "Id": "83",
+        "Id": "201",
         "Name": "Sports",
         "Description": "Liên quan đến các môn thể thao, vận động thể thao."
     },
     {
-        "Id": "81",
+        "Id": "202",
         "Name": "Stockings",
         "Description": "Là một loại vớ (tất) ngắn hoặc dài, thường là màu đen."
     },
     {
-        "Id": "85",
+        "Id": "203",
         "Name": "Supernatural",
         "Description": "Thể hiện những sức mạnh đáng kinh ngạc và không thể giải thích được, chúng thường đi kèm với những sự kiện trái ngược hoặc thách thức với những định luật vật lý."
     },
     {
-        "Id": "250",
+        "Id": "204",
         "Name": "Sweating",
         "Description": "Chảy mồ hôi rất nhiều. Trong cảnh làm tình thì chủ yếu là nhân vật nữ tuôn ra rất nhiều mồ hôi trông rất ướt át."
     },
     {
-        "Id": "86",
+        "Id": "205",
         "Name": "Swimsuit",
         "Description": "Bao gồm tất cả các loại đồ bơi."
     },
     {
-        "Id": "266",
+        "Id": "206",
         "Name": "Tall Girl",
         "Description": "Gái cao ráo, chân dài tới nách. Thường có chiều cao hơn nam chính."
     },
     {
-        "Id": "91",
+        "Id": "207",
         "Name": "Teacher",
         "Description": "Giáo viên."
     },
     {
-        "Id": "89",
+        "Id": "208",
         "Name": "Tentacles",
         "Description": "Sinh vật có xúc tua/xúc tu (thường là quái vật) hiếp dâm các cô gái bằng những chiếc vòi."
     },
     {
-        "Id": "109",
+        "Id": "209",
         "Name": "Time Stop",
         "Description": "Ngưng thời gian."
     },
     {
-        "Id": "90",
+        "Id": "210",
         "Name": "Tomboy",
         "Description": "Cô nàng với vẻ ngoài và tính cách giống với nam giới (thường là tóc ngắn)"
     },
     {
-        "Id": "252",
+        "Id": "211",
         "Name": "Tracksuit",
         "Description": "Một loại quần áo quen thuộc dùng để mặc khi tập luyện thể thao."
     },
     {
-        "Id": "256",
+        "Id": "212",
         "Name": "Transformation",
         "Description": "Nhân vật biến thân sang một hình thể khác."
     },
     {
-        "Id": "92",
+        "Id": "213",
         "Name": "Trap",
         "Description": "Nhân vật nam ăn mặc giống nữ, hoặc có các tính cách giống nữ."
     },
     {
-        "Id": "274",
+        "Id": "214",
         "Name": "Truyện Việt",
         "Description": "Truyện Việt Nam. Được vẽ bởi họa sĩ người Việt. Kể cả những truyện theo phong cách của nước khác, miễn rằng do người Việt vẽ thì đó là Truyện Việt."
     },
     {
-        "Id": "111",
+        "Id": "215",
         "Name": "Tsundere",
         "Description": "Tính cách, ứng xử ngược lại với cảm xúc."
     },
     {
-        "Id": "93",
+        "Id": "216",
         "Name": "Twins",
         "Description": "Song sinh. Có ngoại hình giống y hệt nhau."
     },
     {
-        "Id": "261",
+        "Id": "217",
         "Name": "Twintails",
         "Description": "Tóc hai bím. Một ví dụ là nhân vật Hatsune Miku."
     },
     {
-        "Id": "107",
+        "Id": "218",
         "Name": "Vampire",
         "Description": "Ma cà rồng"
     },
     {
-        "Id": "208",
+        "Id": "219",
         "Name": "Vanilla",
         "Description": "Truyện có thể loại này câu chuyện chủ yếu xoay quanh nhân vật nam và nữ, và không có gì bất thường xảy ra như cướp, tập thể, tay ba,.. Thể loại Vanilla không nhất thiết phải là yêu nhau."
     },
     {
-        "Id": "95",
+        "Id": "220",
         "Name": "Virgin",
         "Description": "Gái trinh. Lưu ý có những cô gái khi làm tình lần đầu không có máu trinh là vì đã mất trinh trước đó do tai nạn, hoặc do thủ dâm làm rách màng trinh."
     },
     {
-        "Id": "270",
+        "Id": "221",
         "Name": "Webtoon",
         "Description": "Đây những truyện có cách đọc đặc biệt là kéo xuống đến hết. Không như các thể loại khác với cách đọc truyền thống và thường in ra sách, thì Webtoon chỉ phát hành trực tuyến - Đó cũng là lý do nó có cách đọc đặc biệt như vậy."
     },
     {
-        "Id": "94",
+        "Id": "222",
         "Name": "X-ray",
         "Description": "X-Quang, rọi xuyên bên trong khi làm tình."
     },
     {
-        "Id": "112",
+        "Id": "223",
         "Name": "Yandere",
         "Description": "Các cô gái dễ thương ngày nào của chúng ta sẵn sàng ra tay thủ tiêu tình địch, hay mù quáng hơn là hạ thủ người yêu để anh ấy mãi của riêng mình. Truyện thuộc thể loại không nhất thiết nhân vật nữ phải giết bạn tình, đôi khi chỉ là biểu hiện mà thôi."
     },
     {
-        "Id": "96",
+        "Id": "224",
         "Name": "Yaoi",
         "Description": "Trai x Trai. Thể loại này còn được gọi là BL (Boy Love) hoặc Đam Mỹ."
     },
     {
-        "Id": "97",
+        "Id": "225",
         "Name": "Yuri",
         "Description": "Trong Hentai thì thể loại này không chỉ dành riêng cho Nữ x Nữ, mà một số truyện còn có sự xuất hiện của nhân vật nam (Harem). Chúng ta sẽ thấy 2 nhân vật nữ làm tình với nhau cùng lúc hoặc không cùng lúc với nhân vật nam."
     },
     {
-        "Id": "128",
+        "Id": "226",
         "Name": "Zombie",
         "Description": "Xác sống."
     }
@@ -1352,7 +1352,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
 const DOMAIN = 'https://hoang3409.link/api/';
-const BASE_VERSION = '1.2.5';
+const BASE_VERSION = '1.3.0';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
