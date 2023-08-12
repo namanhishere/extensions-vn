@@ -202,7 +202,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         for (const item of data) {
             chapters.push(App.createChapter({
                 id: this.UseId ? item.id.toString() : item.url,
-                chapNum: item.numChap,
+                chapNum: item.numChap ?? item.chapNumber,
                 name: item.title,
                 time: convertTime(item.timeUpdate)
             }))
@@ -220,7 +220,9 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data
         const images: string[] = []
         for (const image of data) {
-            image.toString().startsWith('//') ? images.push(`https:${image}`) : images.push(image)
+            let img = ''
+            image.toString().startsWith('//') ? img = `https:${image}` : img = image
+            images.push(img)
         }
 
         return App.createChapterDetails({

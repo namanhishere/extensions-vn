@@ -2,6 +2,13 @@ export function convertTime(time: string): Date {
     if (time === '') return new Date()
     
     let date
+    
+    // 2023-08-12T00:00:00
+    if (time.includes('T') && time.includes('-')) {
+        date = new Date(time)
+        return date
+    }
+    
     // 29/12/22
     if (time.split('/').length == 3) {
         date = time.split('/')
