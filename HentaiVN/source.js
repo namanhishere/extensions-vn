@@ -472,22 +472,30 @@ exports.HentaiVNInfo = {
     description: '',
     icon: 'icon.png',
     websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.2'),
+    version: (0, Main_1.getExportVersion)('0.0.3'),
     name: 'HentaiVN',
     language: 'vi',
     author: 'Hoang3409',
     contentRating: types_1.ContentRating.ADULT
 };
+const Domain = 'hentaivn.tv';
 class HentaiVN extends Main_1.Main {
     constructor() {
         super(...arguments);
         this.Host = HOST;
         this.Tags = tags_json_1.default;
-        this.HostDomain = 'https://hentaivn.tv/';
+        this.HostDomain = `https://${Domain}.tv/`;
         this.UseId = true;
         this.SearchWithGenres = true;
         this.SearchWithNotGenres = false;
         this.SearchWithTitleAndGenre = true;
+    }
+    async getChapterDetails(mangaId, chapterId) {
+        const data = await super.getChapterDetails(mangaId, chapterId);
+        for (let img in data) {
+            img = img.replace('hhentai.net', Domain);
+        }
+        return data;
     }
 }
 exports.HentaiVN = HentaiVN;
@@ -1508,7 +1516,7 @@ class Main {
         for (const item of data) {
             chapters.push(App.createChapter({
                 id: this.UseId ? item.id.toString() : item.url,
-                chapNum: item.numChap,
+                chapNum: item.numChap ?? item.chapNumber,
                 name: item.title,
                 time: (0, time_1.convertTime)(item.timeUpdate)
             }));
@@ -1525,7 +1533,9 @@ class Main {
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
         const images = [];
         for (const image of data) {
-            image.toString().startsWith('//') ? images.push(`https:${image}`) : images.push(image);
+            let img = '';
+            image.toString().startsWith('//') ? img = `https:${image}` : img = image;
+            images.push(img);
         }
         return App.createChapterDetails({
             id: chapterId,
@@ -1625,6 +1635,11 @@ function convertTime(time) {
     if (time === '')
         return new Date();
     let date;
+    // 2023-08-12T00:00:00
+    if (time.includes('T') && time.includes('-')) {
+        date = new Date(time);
+        return date;
+    }
     // 29/12/22
     if (time.split('/').length == 3) {
         date = time.split('/');

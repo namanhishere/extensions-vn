@@ -619,7 +619,7 @@ class Main {
         for (const item of data) {
             chapters.push(App.createChapter({
                 id: this.UseId ? item.id.toString() : item.url,
-                chapNum: item.numChap,
+                chapNum: item.numChap ?? item.chapNumber,
                 name: item.title,
                 time: (0, time_1.convertTime)(item.timeUpdate)
             }));
@@ -636,7 +636,9 @@ class Main {
         const data = typeof response.data === 'string' ? JSON.parse(response.data) : response.data;
         const images = [];
         for (const image of data) {
-            image.toString().startsWith('//') ? images.push(`https:${image}`) : images.push(image);
+            let img = '';
+            image.toString().startsWith('//') ? img = `https:${image}` : img = image;
+            images.push(img);
         }
         return App.createChapterDetails({
             id: chapterId,
@@ -1055,6 +1057,11 @@ function convertTime(time) {
     if (time === '')
         return new Date();
     let date;
+    // 2023-08-12T00:00:00
+    if (time.includes('T') && time.includes('-')) {
+        date = new Date(time);
+        return date;
+    }
     // 29/12/22
     if (time.split('/').length == 3) {
         date = time.split('/');
