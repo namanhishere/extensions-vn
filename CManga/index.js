@@ -472,7 +472,7 @@ exports.CMangaInfo = {
     description: '',
     icon: 'icon.png',
     websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.2'),
+    version: (0, Main_1.getExportVersion)('0.0.3'),
     name: 'CManga',
     language: 'vi',
     author: 'Hoang3409',
