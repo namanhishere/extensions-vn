@@ -14,7 +14,7 @@ export const CMangaInfo: SourceInfo = {
     description: '',
     icon: 'icon.png',
     websiteBaseURL: '',
-    version: getExportVersion('0.0.2'),
+    version: getExportVersion('0.0.3'),
     name: 'CManga',
     language: 'vi',
     author: 'Hoang3409',

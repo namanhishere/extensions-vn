@@ -14,7 +14,7 @@ export const YurinekoInfo: SourceInfo = {
     description: '',
     icon: 'icon.png',
     websiteBaseURL: '',
-    version: getExportVersion('0.0.1'),
+    version: getExportVersion('0.0.2'),
     name: 'Yurineko',
     language: 'vi',
     author: 'Hoang3409',
