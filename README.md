@@ -25,6 +25,7 @@ https://hoang3409.is-a.dev/extensions-vn/
 | SayHentai     | https://sayhentai.me/         |
 | HentaiVN      | https://hentaivn.tv/          |
 | LxManga       | https://lxmanga.net/          |
+| Yurineko      | https://yurineko.net/         |
 
 </div>
 
