@@ -740,12 +740,13 @@ exports.Nettruyen = exports.NettruyenInfo = void 0;
 const types_1 = require("@paperback/types");
 const Main_1 = require("../Main");
 const HOST = 'NetTruyen';
+const Domain = 'www.nettruyenmax.com';
 const tags_json_1 = __importDefault(require("./tags.json"));
 exports.NettruyenInfo = {
     description: '',
     icon: 'icon.jpg',
     websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.1'),
+    version: (0, Main_1.getExportVersion)('0.1.0'),
     name: 'Nettruyen',
     language: 'vi',
     author: 'Hoang3409',
@@ -756,11 +757,11 @@ class Nettruyen extends Main_1.Main {
         super(...arguments);
         this.Host = HOST;
         this.Tags = tags_json_1.default;
-        this.UseId = false;
+        this.HostDomain = `https://${Domain}/`;
+        this.UseId = true;
         this.SearchWithGenres = true;
         this.SearchWithNotGenres = true;
-        this.SearchWithTitleAndGenre = false;
-        this.HostDomain = 'https://www.nettruyenmax.com/';
+        this.SearchWithTitleAndGenre = true;
     }
 }
 exports.Nettruyen = Nettruyen;
