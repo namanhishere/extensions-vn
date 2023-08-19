@@ -740,12 +740,13 @@ exports.SayHentai = exports.SayHentaiInfo = void 0;
 const types_1 = require("@paperback/types");
 const Main_1 = require("../Main");
 const HOST = 'SayHentai';
+const Domain = 'sayhentai.me';
 const tags_json_1 = __importDefault(require("./tags.json"));
 exports.SayHentaiInfo = {
     description: '',
     icon: 'icon.png',
     websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.0.1'),
+    version: (0, Main_1.getExportVersion)('0.2.0'),
     name: 'SayHentai',
     language: 'vi',
     author: 'Hoang3409',
@@ -756,11 +757,11 @@ class SayHentai extends Main_1.Main {
         super(...arguments);
         this.Host = HOST;
         this.Tags = tags_json_1.default;
-        this.UseId = false;
-        this.SearchWithGenres = false;
+        this.HostDomain = `https://${Domain}/`;
+        this.UseId = true;
+        this.SearchWithGenres = true;
         this.SearchWithNotGenres = false;
-        this.SearchWithTitleAndGenre = false;
-        this.HostDomain = 'https://sayhentai.me/';
+        this.SearchWithTitleAndGenre = true;
     }
 }
 exports.SayHentai = SayHentai;
@@ -768,323 +769,259 @@ exports.SayHentai = SayHentai;
 },{"../Main":62,"./tags.json":64,"@paperback/types":61}],64:[function(require,module,exports){
 module.exports=[
     {
-        "Id": 0,
-        "Description": "18",
+        "Id": "286",
         "Name": "18+"
     },
     {
-        "Id": 1,
-        "Description": "3d",
+        "Id": "347",
         "Name": "3D"
     },
     {
-        "Id": 2,
-        "Description": "action",
+        "Id": "58",
         "Name": "Action"
     },
     {
-        "Id": 3,
-        "Description": "adult",
+        "Id": "59",
         "Name": "Adult"
     },
     {
-        "Id": 4,
-        "Description": "bao-dam",
+        "Id": "348",
         "Name": "Bạo Dâm"
     },
     {
-        "Id": 5,
-        "Description": "choi-hai-lo",
+        "Id": "113",
         "Name": "Chơi Hai Lỗ"
     },
     {
-        "Id": 6,
-        "Description": "comedy",
+        "Id": "96",
         "Name": "Comedy"
     },
     {
-        "Id": 7,
-        "Description": "detective",
+        "Id": "349",
         "Name": "Detective"
     },
     {
-        "Id": 8,
-        "Description": "doujinshi",
+        "Id": "114",
         "Name": "Doujinshi"
     },
     {
-        "Id": 9,
-        "Description": "drama",
+        "Id": "115",
         "Name": "Drama"
     },
     {
-        "Id": 10,
-        "Description": "ecchi",
+        "Id": "117",
         "Name": "Ecchi"
     },
     {
-        "Id": 11,
-        "Description": "fantasy",
+        "Id": "121",
         "Name": "Fantasy"
     },
     {
-        "Id": 12,
-        "Description": "gangbang",
+        "Id": "130",
         "Name": "Gangbang"
     },
     {
-        "Id": 13,
-        "Description": "gender-bender",
+        "Id": "132",
         "Name": "Gender Bender"
     },
     {
-        "Id": 14,
-        "Description": "giao-vien",
+        "Id": "207",
         "Name": "Giáo Viên"
     },
     {
-        "Id": 15,
-        "Description": "group",
+        "Id": "136",
         "Name": "Group"
     },
     {
-        "Id": 16,
-        "Description": "ham-hiep",
+        "Id": "182",
         "Name": "Hãm Hiếp"
     },
     {
-        "Id": 17,
-        "Description": "harem",
+        "Id": "140",
         "Name": "Harem"
     },
     {
-        "Id": 18,
-        "Description": "hau-mon",
+        "Id": "62",
         "Name": "Hậu Môn"
     },
     {
-        "Id": 19,
-        "Description": "historical",
+        "Id": "142",
         "Name": "Historical"
     },
     {
-        "Id": 20,
-        "Description": "horror",
+        "Id": "143",
         "Name": "Horror"
     },
     {
-        "Id": 21,
-        "Description": "housewife",
+        "Id": "144",
         "Name": "Housewife"
     },
     {
-        "Id": 22,
-        "Description": "josei",
+        "Id": "19",
         "Name": "Josei"
     },
     {
-        "Id": 23,
-        "Description": "khong-che",
+        "Id": "151",
         "Name": "Không Che"
     },
     {
-        "Id": 24,
-        "Description": "kinh-di",
+        "Id": "143",
         "Name": "Kinh Dị"
     },
     {
-        "Id": 25,
-        "Description": "lao-gia-dam",
+        "Id": "111",
         "Name": "Lão Già Dâm"
     },
     {
-        "Id": 26,
-        "Description": "loan-luan",
+        "Id": "148",
         "Name": "Loạn Luân"
     },
     {
-        "Id": 27,
-        "Description": "loli",
+        "Id": "154",
         "Name": "Loli"
     },
     {
-        "Id": 28,
-        "Description": "manga",
+        "Id": "21",
         "Name": "Manga"
     },
     {
-        "Id": 29,
-        "Description": "manhua",
+        "Id": "156",
         "Name": "Manhua"
     },
     {
-        "Id": 30,
-        "Description": "manhwa",
+        "Id": "157",
         "Name": "Manhwa"
     },
     {
-        "Id": 31,
-        "Description": "martial-arts",
+        "Id": "24",
         "Name": "Martial Arts"
     },
     {
-        "Id": 32,
-        "Description": "mature",
+        "Id": "159",
         "Name": "Mature"
     },
     {
-        "Id": 33,
-        "Description": "milf",
+        "Id": "161",
         "Name": "Milf"
     },
     {
-        "Id": 34,
-        "Description": "mind-break",
+        "Id": "162",
         "Name": "Mind Break"
     },
     {
-        "Id": 35,
-        "Description": "mystery",
+        "Id": "27",
         "Name": "Mystery"
     },
     {
-        "Id": 36,
-        "Description": "nguc-lon",
+        "Id": "76",
         "Name": "Ngực Lớn"
     },
     {
-        "Id": 37,
-        "Description": "nguc-nho",
+        "Id": "199",
         "Name": "Ngực Nhỏ"
     },
     {
-        "Id": 38,
-        "Description": "no-le",
+        "Id": "197",
         "Name": "Nô Lệ"
     },
     {
-        "Id": 39,
-        "Description": "ntr",
+        "Id": "171",
         "Name": "NTR"
     },
     {
-        "Id": 40,
-        "Description": "nu-sinh",
+        "Id": "188",
         "Name": "Nữ Sinh"
     },
     {
-        "Id": 41,
-        "Description": "old-man",
+        "Id": "174",
         "Name": "Old Man"
     },
     {
-        "Id": 42,
-        "Description": "one-shot",
+        "Id": "175",
         "Name": "One shot"
     },
     {
-        "Id": 43,
-        "Description": "oneshot",
+        "Id": "175",
         "Name": "Oneshot"
     },
     {
-        "Id": 44,
-        "Description": "psychological",
+        "Id": "30",
         "Name": "Psychological"
     },
     {
-        "Id": 45,
-        "Description": "rape",
+        "Id": "182",
         "Name": "Rape"
     },
     {
-        "Id": 46,
-        "Description": "romance",
+        "Id": "184",
         "Name": "Romance"
     },
     {
-        "Id": 47,
-        "Description": "school-life",
+        "Id": "32",
         "Name": "School Life"
     },
     {
-        "Id": 48,
-        "Description": "sci-fi",
+        "Id": "33",
         "Name": "Sci-fi"
     },
     {
-        "Id": 49,
-        "Description": "seinen",
+        "Id": "34",
         "Name": "Seinen"
     },
     {
-        "Id": 50,
-        "Description": "series",
+        "Id": "189",
         "Name": "Series"
     },
     {
-        "Id": 51,
-        "Description": "shoujo",
+        "Id": "194",
         "Name": "Shoujo"
     },
     {
-        "Id": 52,
-        "Description": "shoujo-ai",
+        "Id": "36",
         "Name": "Shoujo Ai"
     },
     {
-        "Id": 53,
-        "Description": "shounen",
+        "Id": "37",
         "Name": "Shounen"
     },
     {
-        "Id": 54,
-        "Description": "slice-of-life",
+        "Id": "39",
         "Name": "Slice of Life"
     },
     {
-        "Id": 55,
-        "Description": "smut",
+        "Id": "40",
         "Name": "Smut"
     },
     {
-        "Id": 56,
-        "Description": "sports",
+        "Id": "201",
         "Name": "Sports"
     },
     {
-        "Id": 57,
-        "Description": "supernatural",
+        "Id": "203",
         "Name": "Supernatural"
     },
     {
-        "Id": 58,
-        "Description": "tragedy",
+        "Id": "47",
         "Name": "Tragedy"
     },
     {
-        "Id": 59,
-        "Description": "virgin",
+        "Id": "220",
         "Name": "Virgin"
     },
     {
-        "Id": 60,
-        "Description": "webtoon",
+        "Id": "221",
         "Name": "Webtoon"
     },
     {
-        "Id": 61,
-        "Description": "y-ta",
+        "Id": "173",
         "Name": "Y Tá"
     },
     {
-        "Id": 62,
-        "Description": "yaoi",
+        "Id": "224",
         "Name": "Yaoi"
     },
     {
-        "Id": 63,
-        "Description": "yuri",
+        "Id": "225",
         "Name": "Yuri"
     }
 ]
