@@ -8,13 +8,14 @@ import {
 } from '../Main'
 
 const HOST = 'NetTruyen'
+const Domain = 'www.nettruyenmax.com'
 import tags from './tags.json'
 
 export const NettruyenInfo: SourceInfo = {
     description: '',
     icon: 'icon.jpg',
     websiteBaseURL: '',
-    version: getExportVersion('0.0.1'),
+    version: getExportVersion('0.1.0'),
     name: 'Nettruyen',
     language: 'vi',
     author: 'Hoang3409',
@@ -24,11 +25,11 @@ export const NettruyenInfo: SourceInfo = {
 export class Nettruyen extends Main {
     Host = HOST
     Tags = tags
-    
-    UseId = false
-    
+
+    HostDomain = `https://${Domain}/`
+    UseId = true
+
     SearchWithGenres = true
     SearchWithNotGenres = true
-    SearchWithTitleAndGenre = false
-    HostDomain = 'https://www.nettruyenmax.com/';
+    SearchWithTitleAndGenre = true
 }
