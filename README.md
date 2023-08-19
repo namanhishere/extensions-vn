@@ -17,18 +17,16 @@ https://hoang3409.is-a.dev/extensions-vn/
 
 <div align="center">
 
-| Name          | Link                          |
-|---------------|-------------------------------|
-| BaoTangTruyen | https://baotangtruyen3.com/   |
-| CManga        | https://cmangaah.com/         |
-| NetTruyen     | https://www.nettruyenmax.com/ |
-| SayHentai     | https://sayhentai.me/         |
-| HentaiVN      | https://hentaivn.tv/          |
-| LxManga       | https://lxmanga.net/          |
-| Yurineko      | https://yurineko.net/         |
+| Name                        | Link                          |
+|-----------------------------|-------------------------------|
+| BaoTangTruyen (maintenance) | https://baotangtruyen3.com/   |
+| CManga                      | https://cmangaah.com/         |
+| NetTruyen                   | https://www.nettruyenmax.com/ |
+| SayHentai                   | https://sayhentai.me/         |
+| HentaiVN                    | https://hentaivn.tv/          |
+| LxManga                     | https://lxmanga.net/          |
+| Yurineko                    | https://yurineko.net/         |
 
 </div>
-
-Đã test trên phiên bản 0.8.3
 
 ## If you want to add your own source, you can refer to it [here](https://github.com/hoang3402/extensions-vn/wiki)
