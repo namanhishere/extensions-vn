@@ -638,6 +638,7 @@ class Main {
         for (const image of data) {
             let img = '';
             image.toString().startsWith('//') ? img = `https:${image}` : img = image;
+            img.replace('http:', 'https:');
             images.push(img);
         }
         return App.createChapterDetails({
@@ -760,7 +761,7 @@ class SayHentai extends Main_1.Main {
         this.HostDomain = `https://${Domain}/`;
         this.UseId = true;
         this.SearchWithGenres = true;
-        this.SearchWithNotGenres = false;
+        this.SearchWithNotGenres = true;
         this.SearchWithTitleAndGenre = true;
     }
 }

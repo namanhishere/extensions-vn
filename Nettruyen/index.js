@@ -638,6 +638,7 @@ class Main {
         for (const image of data) {
             let img = '';
             image.toString().startsWith('//') ? img = `https:${image}` : img = image;
+            img.replace('http:', 'https:');
             images.push(img);
         }
         return App.createChapterDetails({
@@ -746,7 +747,7 @@ exports.NettruyenInfo = {
     description: '',
     icon: 'icon.jpg',
     websiteBaseURL: '',
-    version: (0, Main_1.getExportVersion)('0.1.0'),
+    version: (0, Main_1.getExportVersion)('0.2.2'),
     name: 'Nettruyen',
     language: 'vi',
     author: 'Hoang3409',
