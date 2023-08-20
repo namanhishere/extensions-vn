@@ -222,6 +222,7 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         for (const image of data) {
             let img = ''
             image.toString().startsWith('//') ? img = `https:${image}` : img = image
+            img.replace('http:', 'https:')
             images.push(img)
         }
 

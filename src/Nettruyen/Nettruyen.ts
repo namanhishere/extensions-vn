@@ -15,7 +15,7 @@ export const NettruyenInfo: SourceInfo = {
     description: '',
     icon: 'icon.jpg',
     websiteBaseURL: '',
-    version: getExportVersion('0.1.0'),
+    version: getExportVersion('0.2.2'),
     name: 'Nettruyen',
     language: 'vi',
     author: 'Hoang3409',

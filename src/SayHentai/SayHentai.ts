@@ -30,6 +30,6 @@ export class SayHentai extends Main {
     UseId = true
 
     SearchWithGenres = true
-    SearchWithNotGenres = false
+    SearchWithNotGenres = true
     SearchWithTitleAndGenre = true
 }
