@@ -638,7 +638,7 @@ class Main {
         for (const image of data) {
             let img = '';
             image.toString().startsWith('//') ? img = `https:${image}` : img = image;
-            img.replace('http:', 'https:');
+            img = img.replace('http:', 'https:');
             images.push(img);
         }
         return App.createChapterDetails({
