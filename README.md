@@ -17,15 +17,15 @@ https://hoang3409.is-a.dev/extensions-vn/
 
 <div align="center">
 
-| Name                        | Link                          |
-|-----------------------------|-------------------------------|
-| BaoTangTruyen (maintenance) | https://baotangtruyen3.com/   |
-| CManga                      | https://cmangaah.com/         |
-| NetTruyen                   | https://www.nettruyenmax.com/ |
-| SayHentai                   | https://sayhentai.me/         |
-| HentaiVN                    | https://hentaivn.tv/          |
-| LxManga                     | https://lxmanga.net/          |
-| Yurineko                    | https://yurineko.net/         |
+| Name          | Link                          |
+|---------------|-------------------------------|
+| BaoTangTruyen | https://baotangtruyen3.com/   |
+| CManga        | https://cmangaah.com/         |
+| NetTruyen     | https://www.nettruyenmax.com/ |
+| SayHentai     | https://sayhentai.me/         |
+| HentaiVN      | https://hentaivn.tv/          |
+| LxManga       | https://lxmanga.net/          |
+| Yurineko      | https://yurineko.net/         |
 
 </div>
 
