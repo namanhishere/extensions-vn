@@ -23,7 +23,7 @@ import {convertTime} from './utils/time'
 
 const DOMAIN = 'https://hoang3409.link/api/'
 
-const BASE_VERSION = '1.3.1'
+const BASE_VERSION = '1.3.2'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
@@ -181,15 +181,18 @@ export abstract class Main implements SearchResultsProviding, MangaProviding, Ch
         for (const item of data.title) {
             titles.push(item.title)
         }
-        for (const item of data.genres) {
+        if (data.genres) {
+            for (const item of data.genres) {
             const foundGenre = this.Tags.find((genre: any) => genre.Id === item.toString())
             if (foundGenre) {
-                tags.push(App.createTag({
-                    id: foundGenre.Id, 
-                    label: foundGenre.Name
-                }))
+                    tags.push(App.createTag({
+                        id: foundGenre.Id, 
+                        label: foundGenre.Name
+                    }))
+                }
             }
         }
+        
         return App.createSourceManga({
             id: mangaId,
             mangaInfo: App.createMangaInfo({
