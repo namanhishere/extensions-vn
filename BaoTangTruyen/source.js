@@ -991,7 +991,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Main = exports.getExportVersion = void 0;
 const time_1 = require("./utils/time");
 const DOMAIN = 'https://hoang3409.link/api/';
-const BASE_VERSION = '1.3.1';
+const BASE_VERSION = '1.3.2';
 const getExportVersion = (EXTENSION_VERSION) => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.');
 };
@@ -1126,13 +1126,15 @@ class Main {
         for (const item of data.title) {
             titles.push(item.title);
         }
-        for (const item of data.genres) {
-            const foundGenre = this.Tags.find((genre) => genre.Id === item.toString());
-            if (foundGenre) {
-                tags.push(App.createTag({
-                    id: foundGenre.Id,
-                    label: foundGenre.Name
-                }));
+        if (data.genres) {
+            for (const item of data.genres) {
+                const foundGenre = this.Tags.find((genre) => genre.Id === item.toString());
+                if (foundGenre) {
+                    tags.push(App.createTag({
+                        id: foundGenre.Id,
+                        label: foundGenre.Name
+                    }));
+                }
             }
         }
         return App.createSourceManga({
